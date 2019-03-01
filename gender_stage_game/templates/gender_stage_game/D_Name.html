@@ -1,0 +1,53 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Instructions for Deciders{% endblock %}
+
+{% block content %}
+
+<p>
+    In this experiment, you have been assigned the role of
+    {% if player.role == 'decider' %}
+    <strong> Decider. </strong>
+    {% endif %}
+    You will keep this role for the entire experiment.
+</p>
+<p>
+    All Deciders are assigned a screenname in each round to help Receivers rate the appropriateness of their chosen allocations and write them messages. Receivers do not receive screennames.
+</p>
+<p>
+    For the following round your screenname will be <strong> {{ name }}. </strong>
+</p>
+<p>
+    On the next screen, you will choose how much to take from your Receiver's endowment. While you do this, your Receiver will learn that your screenname is {{ name }}
+    and will be asked to rate how socially appropriate it would be if a Decider named {{ name }} took each potential
+    amount between $0 and {{ Constants.endowment }}, in increments of $0.50.
+</p>
+{% next_button %}
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModal">
+      See Instructions Again
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Instructions</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              {% include Constants.instructions_template %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+{% endblock %}

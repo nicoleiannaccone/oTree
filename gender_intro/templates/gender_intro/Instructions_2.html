@@ -1,0 +1,72 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Instructions{% endblock %}
+
+{% block content %}
+    <p>
+        Roles: Decider or Receiver
+    </p>
+    <ul>
+        <li>
+        In this experiment, there are two possible roles: Decider or Receiver.
+            </li>
+        <li>
+        Your role will be determined randomly at the beginning of the experiment.
+        </li>
+        <li>
+        You will keep this same role for the entire experiment.
+        </li>
+        <li>
+        You will learn your role before making any decisions.
+        </li>
+    </ul>
+
+    <p>
+        Rounds & Matching:
+    </p>
+
+<ul>
+    <li>
+        There will be <strong> 5 rounds </strong> in this experiment.
+    </li>
+    <li>
+        In every round, each Decider will be matched with a new Receiver.
+    </li>
+    <li>
+        You will never be matched with the same player for more than a single round over the course of the experiment.
+    </li>
+</ul>
+
+    <p>
+    The Decider's Choice:
+</p>
+
+<ul>
+    <li>
+        In each of the 5 rounds, the Receiver is given an endowment of <strong> {{ Constants.endowment }} </strong>.
+    </li>
+    <li>
+        The Decider will then have the opportunity to take any part of the Receiver's {{ Constants.endowment }}
+        endowment.
+    </li>
+</ul>
+
+<p>
+    The Receiver's earnings:
+</p>
+
+<ul>
+    <li>
+        After the Decider chooses how much to take from the Receiver's {{ Constants.endowment }} endowment, the Receiver is left with whatever remains.
+    </li>
+        <ul>
+            <li>
+            So if the Decider chooses to take $X of the Receiver's {{ Constants.endowment }}, then in that round the Decider gets $X while the Receiver gets {{ Constants.endowment }} - $X.
+            </li>
+            </ul>
+</ul>
+
+{% next_button %}
+
+{% endblock %}

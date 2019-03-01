@@ -1,0 +1,19 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Practice Question
+{% endblock %}
+
+{% block content %}
+
+<p>
+    Imagine that in Round 1 you are assigned the role of <strong>Decider</strong>.
+</p>
+<p>
+    What role will you play in Round 2?
+</p>
+{% formfield player.role_question %}
+    {% next_button %}
+
+{% endblock %}

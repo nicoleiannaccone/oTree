@@ -1,0 +1,30 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Survey2{% endblock %}
+
+{% block content %}
+
+You said you were gender {{ player.gender }} and your counterpart was gender {{ player.genderCP1 }}.
+
+
+Your first round guess was
+        {% if player.guess1_is_correct %} <strong> correct</strong>, {{ player.guess1_is_correct }}.
+        {% else %}  <strong> incorrect</strong>, {{ player.guess1_is_correct }}.
+        {% endif %}
+
+Your second round guess was
+        {% if player.guess2_is_correct %} <strong> correct</strong>, {{ player.guess2_is_correct }}.
+        {% else %}  <strong> incorrect</strong>, {{ player.guess2_is_correct }}.
+        {% endif %}
+
+Your third round guess was
+        {% if player.guess3_is_correct %} <strong> correct</strong>, {{ player.guess3_is_correct }}.
+        {% else %}  <strong> incorrect</strong>, {{ player.guess3_is_correct }}.
+        {% endif %}
+
+{{ paying_round }}
+
+{% next_button %}
+
+{% endblock %}
