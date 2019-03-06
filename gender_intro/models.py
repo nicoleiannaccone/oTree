@@ -601,46 +601,18 @@ class Group(BaseGroup):
     def check_gender(self):
         decider = self.get_player_by_role('decider')
         receiver = self.get_player_by_role('receiver')
-        if decider.genderCP1 == receiver.participant.vars['gender']:
-            decider.guess1_is_correct = True
-        else:
-            decider.guess1_is_correct = False
-        if receiver.genderCP1 == decider.gender:
-            receiver.guess1_is_correct = True
-        else:
-            receiver.guess1_is_correct = False
-        if decider.genderCP2 == receiver.gender:
-            decider.guess2_is_correct = True
-        else:
-            decider.guess2_is_correct = False
-        if receiver.genderCP2 == decider.gender:
-            receiver.guess2_is_correct = True
-        else:
-            receiver.guess2_is_correct = False
-        if decider.genderCP3 == receiver.gender:
-            decider.guess3_is_correct = True
-        else:
-            decider.guess3_is_correct = False
-        if receiver.genderCP3 == decider.gender:
-            receiver.guess3_is_correct = True
-        else:
-            receiver.guess3_is_correct = False
-        if decider.genderCP4 == receiver.gender:
-            decider.guess4_is_correct = True
-        else:
-            decider.guess4_is_correct = False
-        if receiver.genderCP4 == decider.gender:
-            receiver.guess4_is_correct = True
-        else:
-            receiver.guess4_is_correct = False
-        if decider.genderCP5 == receiver.gender:
-            decider.guess5_is_correct = True
-        else:
-            decider.guess5_is_correct = False
-        if receiver.genderCP5 == decider.gender:
-            receiver.guess5_is_correct = True
-        else:
-            receiver.guess5_is_correct = False
+
+        decider.guess1_is_correct = decider.genderCP1 == receiver.participant.vars['gender']
+        decider.guess2_is_correct = decider.genderCP2 == receiver.gender
+        decider.guess3_is_correct = decider.genderCP3 == receiver.gender
+        decider.guess4_is_correct = decider.genderCP4 == receiver.gender
+        decider.guess5_is_correct = decider.genderCP5 == receiver.gender
+
+        receiver.guess1_is_correct = receiver.genderCP1 == decider.gender
+        receiver.guess2_is_correct = receiver.genderCP2 == decider.gender
+        receiver.guess3_is_correct = receiver.genderCP3 == decider.gender
+        receiver.guess4_is_correct = receiver.genderCP4 == decider.gender
+        receiver.guess5_is_correct = receiver.genderCP5 == decider.gender
 
     def set_guesses(self):
         if self.genderCP1 == 1:
