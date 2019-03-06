@@ -11,9 +11,13 @@ One player decides how much to take from the other
 player, given their screenname and observability of their choice.
 """
 
+# ----> this is Nicole's comments explaining where she copied the Stranger Matching code from
+#From " https://github.com/oTree-org/otree-core/issues/217"
+
+
 # Attempting Stranger Matching:
 ################################
-#From " https://github.com/oTree-org/otree-core/issues/217"
+
 #Why: esentially the match is function of the subsession and related only to subsession,
 # but i want to create reusable code for make more complex matchings. So the logic of the match
 # lives inside the "match_players" module.
@@ -86,11 +90,10 @@ def make_yn_field(label):
                                widget=widgets.RadioSelect
                                )
 
+# This is some method that the Stranger Matching Algorithm is dependent on
 # From https://groups.google.com/forum/#!msg/otree/rciCzbTqSfQ/XC-T7oZrEAAJ
 # What it does: it shifts each second member in each group to the right by one. That guarantees that no one plays with
 # the same game in two subsequent rounds, and each members holds his/her position within in a group.
-
-
 def shifter(m):  # Needed to implement a Perfect Strangers matching.
     group_size_err_msg = 'This code will not correctly work for group size not equal 2'
     assert Constants.players_per_group == 2, group_size_err_msg
@@ -147,7 +150,7 @@ class Constants(BaseConstants):
 
 
 class Subsession(BaseSubsession):
-
+# Perfect Strangers Matching 
     def creating_session(self):
             if self.round_number == 1:
                 self.session.vars['full_data'] = [i for i in shifter(self.get_group_matrix())]
@@ -156,6 +159,7 @@ class Subsession(BaseSubsession):
             print(self.get_group_matrix())
 
 
+# ---> These comments are Nicole's previous attempts at getting Stranger Matching
 #class Subsession(BaseSubsession):
 #    def get_players_by_role(self, role):
 #        return [p for p in self.get_players() if p.role() == role]
