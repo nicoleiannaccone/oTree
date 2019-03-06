@@ -1016,23 +1016,9 @@ class Player(BasePlayer):
         self.participant.vars['genderCP5'] = self.genderCP5
         p1 = self.group.get_player_by_id(1)
         p2 = self.group.get_player_by_id(2)
-        if p1.genderCP1 == p2.gender:
-            p1.guess1_is_correct = True
-        if p1.genderCP2 == p2.gender:
-            p1.guess2_is_correct = True
-        if p1.genderCP3 == p2.gender:
-            p1.guess3_is_correct = True
-        if p1.genderCP4 == p2.gender:
-            p1.guess4_is_correct = True
-        if p1.genderCP5 == p2.gender:
-            p1.guess5_is_correct = True
-        if p2.genderCP1 == p1.gender:
-            p2.guess1_is_correct = True
-        if p2.genderCP2 == p1.gender:
-            p2.guess2_is_correct = True
-        if p2.genderCP3 == p1.gender:
-            p2.guess3_is_correct = True
-        if p2.genderCP4 == p1.gender:
-            p2.guess4_is_correct = True
-        if p2.genderCP5 == p1.gender:
-            p2.guess5_is_correct = True
+        for a, b in [(p1, p2), (p2, p1)]:
+            a.guess1_is_correct = a.genderCP1 == b.gender
+            a.guess2_is_correct = a.genderCP2 == b.gender
+            a.guess3_is_correct = a.genderCP3 == b.gender
+            a.guess4_is_correct = a.genderCP4 == b.gender
+            a.guess5_is_correct = a.genderCP5 == b.gender
