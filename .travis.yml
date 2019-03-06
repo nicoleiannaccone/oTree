@@ -1,0 +1,11 @@
+sudo: false
+language: python
+branches:
+  only:
+    - master
+python:
+  - 3.6
+install:
+  - pip install otree
+script:
+  - otree test

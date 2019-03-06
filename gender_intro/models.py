@@ -195,9 +195,9 @@ class Subsession(BaseSubsession):
                 decider.participant.vars['ordering'] = next(ordering)
                 #            ordering = next(ordering)
                 if decider.participant.vars['ordering'] == 'ordering1':
-                    decider.participant.vars['names'] = Constants.names1
+                    decider.participant.vars['names'] = Constants.names1.copy()
                 if decider.participant.vars['ordering'] == 'ordering2':
-                    decider.participant.vars['names'] = Constants.names2
+                    decider.participant.vars['names'] = Constants.names2.copy()
 
             # To randomly select which round is paid:
             if self.round_number == 1:
