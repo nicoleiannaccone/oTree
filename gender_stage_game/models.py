@@ -885,7 +885,7 @@ class Group(BaseGroup):
             if decider.participant.vars.get('taken5', 0) == c(3):
                                 self.modal_rating5_2 = self.modal_rating_30_2
 
-    def modal_rating_by_round_2(self):
+    def modal_rating_by_round(self):
         decider = self.get_player_by_role('decider')
 
         for i in [1, 2]:
@@ -909,32 +909,9 @@ class Group(BaseGroup):
                     attr_value = getattr(self, "modal_rating%d_%d" % (j, i))
                     setattr(self, attr_name, attr_value)
 
-    def modal_rating_by_round(self):
-        decider = self.get_player_by_role('decider')
-
-        for i in [1,2]:
-            mr_dict = {}
-            for x in 0, 5, 10, 15, 20, 25, 30:
-                k = c(x/10)
-                v = getattr(self, "modal_rating_%02d_%d" % (x, i))
-                mr_dict[k] = v
-
-            if getattr(self, "ordering_%d" % i):
-                for j in [1, 2, 3, 4, 5]:
-                    taken_string = "taken%d" % j
-                    taken_value = decider.participant.vars.get(taken_string, 0)
-
-                    attr_name = "modal_rating%d_%d" % (j,i)
-                    attr_value = mr_dict[taken_value]
-                    setattr(self, attr_name, attr_value)
-
-                    attr_name = "modal_rating%d" % j
-                    attr_value = getattr(self, "modal_rating%d_%d" % (j, i))
-                    setattr(self, attr_name, attr_value)
-
     def label_ratings(self):
         rating_label_dict = {
-            None: 'None Appropriate',
+            None: 'None appropriate',
             1: 'Very Socially Inappropriate',
             2: 'Somewhat Socially Inappropriate',
             3: 'Somewhat Socially Appropriate',
@@ -942,13 +919,11 @@ class Group(BaseGroup):
         }
         self.ratinglabel = rating_label_dict[self.rating]
 
-#        for i in [1,2]:
         for j in [1, 2, 3, 4, 5]:
-            attr_name = "modal_rating_label_%d" % j
-            attr_value0 = getattr(self, "modal_rating%d" % j)
-#                attr_value0 = getattr(self, "modal_rating%d_%d" % (j, i))  # This is evaluating to None
-            attr_value = rating_label_dict[attr_value0]
-            setattr(self, attr_name, attr_value)
+            modal_rating_j = getattr(self, "modal_rating%d" % j)
+            # modal_rating_j = getattr(self, "modal_rating%d_%d" % (j, i))  # This is evaluating to None
+            modal_label_j = rating_label_dict[modal_rating_j]
+            setattr(self, "modal_rating_label_%d" % j, modal_label_j)
 
 #        self.modal_rating_label = rating_label_dict[self.modal_rating]
 
@@ -974,6 +949,7 @@ class Group(BaseGroup):
         self.rating = rating_dict[self.taken]
 
         rating_label_dict = {
+            None: 'Did not rate',
             1: 'Very Socially Inappropriate',
             2: 'Somewhat Socially Inappropriate',
             3: 'Somewhat Socially Appropriate',
