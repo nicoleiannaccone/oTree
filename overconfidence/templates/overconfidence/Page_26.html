@@ -1,0 +1,28 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}    {% endblock %}
+
+{% block content %}
+
+
+<p> Follow-up Questions
+Academic Standing:
+{% formfield player.AcademicYear %}
+
+Age:
+    {% formfield player.Age %}
+
+Sex:
+{% formfield player.Sex %}
+
+Ethnic Background:
+{% formfield player.Ethnicity %}
+
+Major: {% formfield player.Major %}
+
+</p>
+
+{% next_button %}
+
+{% endblock %}

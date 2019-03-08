@@ -1,0 +1,75 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Introduction{% endblock %}
+
+{% block content %}
+
+    <p>
+        Thank you for participating in this study in decision making.
+    </p>
+    <p>
+        For your participation, you will be paid a participation fee of {{ Constants.participation }}.
+        In addition, you may receive some additional money based on your choices and the choice of others during the
+        experiment.
+    </p>
+    <p>
+        <strong> Please turn off your cell phones now and put them away in your bag. </strong>
+    </p>
+    <p>
+        You may not talk, exclaim, or try to communicate with other participants during the experiment.
+        Participants intentionally violating the rules may be asked to leave the experiment.
+        If you have any questions or need assistance of any kind, raise your hand at any time and the experimenter will
+        come to you to answer your question in private.
+    </p>
+    <p>
+        Economics experiments have a strict policy against deception. If we do anything deceptive, or don’t pay you as
+        described, then you can complain to the campus Human Subjects Committee and we will be in serious trouble.
+        These instructions are meant to clarify how the experiment truly works and how you can earn the most money in
+        this experiment.
+        Our primary interest is to observe the decisions of people who have been given an accurate understanding of the
+        experiment and how their decisions will influence their outcomes and earnings.
+
+    </p>
+
+No Communicating:
+<ul>
+    <li> <strong> Do not communicate </strong> with other participants at any point. </li>
+</ul>
+
+If you have Questions at any point:
+<ul>
+    <li> You can raise your hand at any time during the experiment if you have a question. </li>
+    <li> An experimenter will come to you. </li>
+    <li> Ask your question quietly and we will answer your question privately.</li>
+    <li> If necessary, we will announce any clarifications publicly.</li>
+</ul>
+
+
+
+Earning Money
+<ul>
+<li> You will have many opportunities to earn money in this experiment. </li>
+    <li> Your earnings will always be reported in tokens. In cash, each token is worth 25 cents. </li>
+    <li> Your cash earnings will be handed to you by the experimenter after the conclusion of the experiment today.</li>
+</ul>
+
+Anonymity
+<ul>
+    <li> This experiment is anonymous </li>
+    <li> 	We will not collect or record any names or perm numbers. </li>
+    <li> 	None of your responses or actions will ever be shared with other participants during or after the experiment.</li>
+    <li> 	We'll assign a random ID number to each of you. </li>
+    <li> 	These numbers are never connected to your name. </li>
+    <li> 	Even the experimenter doesn't know which ID number belongs to which person. </li>
+</ul>
+
+No Deception
+<ul>
+    <li> Economics experiments have a strict policy against deception. </li>
+    <li> If we do anything deceptive or don't pay you as described, you can complain to the campus Human Subjects Committee and we will be in serious trouble. </li>
+</ul>
+
+{% next_button %}
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Effort
+{% endblock %}
+
+{% block content %}
+
+    <p>
+        {% if group.principal_restrict %}  <!-- principal RESTRICTED -->
+            You are the <strong>Agent</strong>. The Principal has made your effort choice <i>Restricted</i>.
+        {% else %}                         <!-- principal UNRESTRICTED -->
+            You are the <strong>Agent</strong>. The Principal has made your effort choice <i>Unrestricted</i>.
+        {% endif %}
+    </p>
+
+    <div id="effort">
+    {% formfield group.agent_work_effort label='Please choose your level of effort:' %}
+    </div>
+    <p id="payoffMsg"></p>
+
+    <p>
+    {% next_button %}
+    </p>
+
+    {% include Constants.instructions_template %}
+
+{% endblock %}

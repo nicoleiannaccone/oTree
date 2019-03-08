@@ -1,0 +1,65 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Results
+{% endblock %}
+
+{% block content %}
+
+You are player {{ player.id_in_group }}.
+You applied to {{ player.applied_job }}.
+{% if player.is_hired %}
+    You were hired.
+{% else %}
+    You were not hired.
+{% endif %}
+Your wage is {{ player.wage }}.
+
+<table class="table">
+    <tr>
+        <th> Player:
+        </th>
+        <th>
+            Applied to:
+        </th>
+        <th>
+            Total # of Applicants:
+        </th>
+        <th>
+            Hired?
+        </th>
+        <th>
+            Wage:
+        </th>
+    </tr>
+        <tr>
+            <td> Player 1 </td>
+            <td> {{ p1_applied_to }} </td>
+            <td> {% if p1_applied == 1 %} {{ group.num_applicants_jobX }} {% elif p1_applied == 2 %} {{ group.num_applicants_jobY }} {% elif p1_applied == 3 %} {{ group.num_applicants_jobZ }} {% else %} n/a {% endif %}
+            </td>
+            <td> {% if p1_hired == True %} Hired {% else %} Not Hired {% endif %}  </td>
+            <td> {{ p1_wage }} </td>
+        </tr>
+        <tr>
+            <td> Player 2 </td>
+            <td> {{ p2_applied_to }} </td>
+            <td> {% if p2_applied == 1 %} {{ group.num_applicants_jobX }} {% elif p2_applied == 2 %} {{ group.num_applicants_jobY }} {% elif p2_applied == 3 %} {{ group.num_applicants_jobZ }} {% else %} n/a {% endif %}
+            </td>
+            <td> {% if p2_hired == True %} Hired {% else %} Not Hired {% endif %}  </td>
+            <td> {{ p2_wage }} </td>
+        </tr>
+            <tr>
+            <td> Player 3 </td>
+            <td> {{ p3_applied_to }}</td>
+            <td> {% if p3_applied == 1 %} {{ group.num_applicants_jobX }} {% elif p3_applied == 2 %} {{ group.num_applicants_jobY }} {% elif p3_applied == 3 %} {{ group.num_applicants_jobZ }} {% else %} n/a {% endif %}
+            </td>
+            <td> {% if p3_hired == True %} Hired {% else %} Not Hired {% endif %}  </td>
+            <td> {{ p3_wage }} </td>
+            </tr>
+</table>
+
+    {% next_button %}
+{% endblock %}
+
+

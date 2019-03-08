@@ -1,0 +1,21 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}    {% endblock %}
+
+{% block content %}
+
+
+
+<p> Relative Ability
+Compared to the average participant in your discussion section today, how do you think you performed?
+    (Alt: How do you think your ability at the dot grid task compares to the ability of the average player in your section today?)
+{% formfield player.You_Vs_Average %}
+
+On average, what percentage of the colored dot grids do you think that participants in your discussion section guessed correctly?
+    Percentage guessed correctly: (0% to 100%)
+    {% formfield player.AverageCorrect %}
+</p>
+{% next_button %}
+
+{% endblock %}

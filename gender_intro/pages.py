@@ -1,15 +1,14 @@
 from ._builtin import Page, WaitPage
+from .models import Constants
 
 
 class Introduction(Page):
     def is_displayed(self):
         return self.round_number == 1
 
-
 class Instructions_1(Page):
     def is_displayed(self):
         return self.round_number == 1
-
 
 class Instructions_2(Page):
     def is_displayed(self):
@@ -27,14 +26,13 @@ class Instructions_3(Page):
         return self.round_number == 1
 
 
-class Pre_Survey(Page): # Pre-Game
+# Pre-Game
+class Pre_Survey(Page):
     form_model = 'player'
     form_fields = ['age', 'gender', 'major', 'year']  # this means player.name, player.age
 
-
 class Pre_Survey_WaitPage(WaitPage):
     pass
-
 
 class Pre_Survey_Results(Page):
     def vars_for_template(self):
@@ -50,14 +48,12 @@ class Pre_Survey_Results(Page):
             'other_player_gender': self.player.other_player().gender
         }
 
-
 class Practice_Question_0(Page):
     form_model = 'player'
     form_fields = ['offer_question_1', 'taken_question_1']
 
     def is_displayed(self):
         return self.round_number == 1
-
 
 class Practice_Question_1(Page):
     form_model = 'player'
@@ -66,14 +62,12 @@ class Practice_Question_1(Page):
     def is_displayed(self):
         return self.round_number == 1
 
-
 class Practice_Question_2(Page):
     form_model = 'player'
     form_fields = ['role_question']
 
     def is_displayed(self):
         return self.round_number == 1
-
 
 class Comprehension_Results(Page):
     def vars_for_template(self):
@@ -83,14 +77,12 @@ class Comprehension_Results(Page):
             'payoff': self.participant.payoff,
         }
 
-
 class PracticeRound(Page):
     form_model = 'player'
     form_fields = ['taken']
 
     def is_displayed(self):
         return self.round_number == 1
-
 
 class Practice_Take(Page):
     form_model = 'group'
@@ -99,15 +91,15 @@ class Practice_Take(Page):
     def is_displayed(self):
         return self.player.id_in_group == 1 and self.round_number==1
 
-
 class Practice_Rating(Page):
     form_model = 'group'
-    form_fields = ['p_rating00', 'p_rating05', 'p_rating10', 'p_rating15', 'p_rating20', 'p_rating25', 'p_rating30']
-    # this means player.rating1
+    form_fields = ['p_rating00', 'p_rating05', 'p_rating10', 'p_rating15', 'p_rating20', 'p_rating25', 'p_rating30']  # this means player.rating1
 
     def is_displayed(self):
         return self.player.id_in_group == 2 and self.round_number==1
 
+#    def before_next_page(self):
+#        self.group.get_practice_rating()
 
 class Practice_WaitPage(WaitPage):
     def after_all_players_arrive(self):
@@ -124,23 +116,31 @@ class Practice_Message(Page):
     def is_displayed(self):
         return self.player.id_in_group == 2 and self.round_number==1
 
-    def before_next_page(self):
-        self.group.get_my_messages()
+    # def before_next_page(self):
+    #     self.group.get_my_messages()
 
+class Practice_Wait_Page(WaitPage):
+    wait_for_all_groups = True
 
 class Practice_Results(Page):
-    def before_next_page(self):
-        self.group.get_my_messages()
-
     def vars_for_template(self):
-#        self.group.get_practice_rating()
+        decider = self.group.get_player_by_role('decider')
+        receiver = self.group.get_player_by_role('receiver')
+        self.group.get_practice_offer()
         self.group.get_modal_p_ratings()
+        self.player.p_mode_match()
+        self.player.get_gender()
+        return {
+            'my_gender': self.player.gender,
+            'gender': self.participant.vars['gender'],
+            'genderD0': decider.participant.vars.get('gender', 0),
+            'genderR0': receiver.participant.vars.get('gender', 0),
+            'other_player_gender': self.player.other_player().gender
+        }
 
     def is_displayed(self):
         return self.round_number == 1
-
-
-
+#
 #class ShuffleWaitPage(WaitPage):
 #    wait_for_all_groups = True
 #
@@ -152,22 +152,21 @@ class Practice_Results(Page):
 
 ########################################################################################################################
 
-
 page_sequence = [
-   # Introduction,
-   # Pre_Survey,
-   # Pre_Survey_WaitPage,
-   # Pre_Survey_Results,
-   # Instructions_2,
-   # Instructions_3,
-   # Practice_Question_2,
-   # Practice_Question_0,
-   # Practice_Question_1,
-   # Comprehension_Results,
-   # Practice_Take,
-   # Practice_Rating,
-   # Practice_WaitPage,
-   # Practice_Message,
-   # Practice_WaitPage,
-   # Practice_Results,
+     # Introduction,
+     # Pre_Survey,
+     # Pre_Survey_WaitPage,
+     # Pre_Survey_Results,
+     # Instructions_2,
+     # Instructions_3,
+     # Practice_Question_2,
+     # Practice_Question_0,
+     # Practice_Question_1,
+     # Comprehension_Results,
+     # Practice_Take,
+     # Practice_Rating,
+     # Practice_WaitPage,
+     # Practice_Message,
+     # Practice_WaitPage,
+     # Practice_Results,
 ]

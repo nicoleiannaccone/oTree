@@ -1,0 +1,24 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}    {% endblock %}
+
+{% block content %}
+
+<p>
+Likelihood of a Correct Guess
+How likely do you think it is that you answered the guessed the most recent dot grid correctly?
+    Likelihood (0% - 100%):
+    {% formfield.likelihood1 %}
+Remember: On average, your earnings are greatest when you give your true belief about this likelihood.
+
+    Likelihood of a Correct Guess (0% - 100%)
+How many green gumballs would have to be in the gumball machine for you to be willing to base your payment on the “Gumball Lottery” instead of the “Correct-Guess Lottery”?
+    Number of Green Gumballs Needed (0 to 100):
+    {% formfield.gumballs1 %}
+
+</p>
+
+{% next_button %}
+
+{% endblock %}

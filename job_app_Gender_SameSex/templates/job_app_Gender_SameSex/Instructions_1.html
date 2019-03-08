@@ -1,0 +1,58 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+Instructions
+{% endblock %}
+
+{% block content %}
+
+<p>
+    There are 3 jobs available: <strong>Job X</strong>, <strong>Job Y</strong>, and <strong>Job Z</strong>.
+</p>
+<p>
+    Each job has only one position available, and can therefore only hire <strong>one</strong> worker.
+</p>
+<p>
+    At each job, hiring is done by a robot who randomly chooses one of the people who applied to the job.
+</p>
+<p>
+    {% if Constants.treatment == 1 %} There are 3 types of jobs; a high-paying job, a medium-paying job , and a low-paying job:
+        <ul>
+            <li> Job X is a high-paying job: a worker hired at Job X earns a wage of <strong>{{ Constants.wage_H }}</strong>. </li>
+            <li> Job Y is a medium-paying job: a worker hired at Job Y earns a wage of <strong>{{ Constants.wage_M }}</strong>. </li>
+            <li> Job Z is a low-paying job: a worker hired at Job Z earns a wage of <strong>{{ Constants.wage_L }}</strong>. </li>
+        </ul>
+    {% endif %}
+    {% if Constants.treatment == 2 %} There are 2 types of jobs; a high-paying job, and a low-paying job:
+        <ul>
+            <li> Job X is a high-paying job: a worker hired at Job X earns a wage of  <strong>{{ Constants.wage_H }}</strong>. </li>
+            <li> Job Y and Job Z are both low-paying jobs: workers hired at Job Y or Job Z earn a wage of  <strong>{{ Constants.wage_L }}</strong>. </li>
+        </ul>
+    {% endif %}
+    {% if Constants.treatment == 3 %} All jobs are exactly the same. Each job pays a wage of <strong>{{ Constants.wage_M }}</strong>.
+    {% endif %}
+</p>
+<p>
+    In a moment, you and the {{Constants.other_players_per_group }} other players in your group,
+    {% if player.id_in_group == 1 %} {{ name_p2 }} and {{ name_p3 }}, {% endif %}
+    {% if player.id_in_group == 2 %} {{ name_p1 }} and {{ name_p3 }}, {% endif %}
+    {% if player.id_in_group == 3 %} {{ name_p1 }} and {{ name_p2 }}, {% endif %}
+    will be able to simultaneously apply for any of the 3 available jobs.
+</p>
+<p>
+    You do not find out which jobs
+    {% if player.id_in_group == 1 %} {{ name_p2 }} and {{ name_p3 }} {% endif %}
+    {% if player.id_in_group == 2 %} {{ name_p1 }} and {{ name_p3 }} {% endif %}
+    {% if player.id_in_group == 3 %} {{ name_p1 }} and {{ name_p2 }} {% endif %}
+    have chosen to apply to until after all application and hiring decisions have been made.
+</p>
+<p>
+    It doesn't cost anything to apply to a job, but there is only one chance to apply to jobs.
+</p>
+<p>
+    If you apply to a job and don't get hired, you earn a wage of <strong> $0.00 </strong>.
+</p>
+    {% next_button %}
+
+{% endblock %}

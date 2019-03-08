@@ -1,0 +1,21 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}  The Color Task  {% endblock %}
+
+{% block content %}
+<ul>
+<li> In a moment, you will be asked to practice a color-detection task.
+<li> In this task, you will have exactly <strong> {{ Constants.seconds }} seconds </strong> to look at a grid of 400 colored dots. </li>
+
+<li> Each dot in the grid will be one of two different colors. </li>
+
+<li> There will be 10 more dots of one color than dots of the other color. </li>
+
+<li> Your task will be to determine which color there is more of. </li>
+</ul>
+
+
+{% next_button %}
+
+{% endblock %}

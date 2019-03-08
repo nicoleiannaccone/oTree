@@ -1,0 +1,256 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Results
+{% endblock %}
+
+{% block content %}
+
+
+<h4>Appropriateness Ratings</h4>
+<table class="table">
+    <tr>
+        <th>
+            Round:
+        </th>
+        <th> Decider's screenname:
+        </th>
+        <th>
+            Decider took:
+        </th>
+        <th>
+            Decider left:
+        </th>
+        <th>
+            Receiver's Rating:
+        </th>
+        <th>
+            Receiver's Message:
+        </th>
+        <th>
+           Guess Gender of Decider:
+        </th>
+    </tr>
+    <tr>
+        <td>
+            1
+        </td>
+        <td>
+            {{ name_1 }}
+        </td>
+        <td>
+            {{ took1 }}
+        </td>
+        <td>
+            {{ offered1 }}
+        </td>
+        <td>
+            {{ rated1 }}
+        </td>
+        <td>
+            {{ message1 }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            2
+        </td>
+        <td>
+            {{ name_2 }}
+        </td>
+        <td>
+            {{ took2 }}
+        </td>
+        <td>
+            {{ offered2 }}
+        </td>
+        <td>
+            {{ rated2 }}
+        </td>
+        <td>
+            {{ message2 }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            3
+        </td>
+        <td>
+            {{ name_3 }}
+        </td>
+        <td>
+            {{ took3 }}
+        </td>
+        <td>
+            {{ offered3 }}
+        </td>
+        <td>
+            {{ rated3 }}
+        </td>
+        <td>
+            {{ message3 }}
+        </td>
+    </tr>
+        <td>
+            4
+        </td>
+        <td>
+            {{ name_4 }}
+        </td>
+        <td>
+            {{ took4 }}
+        </td>
+        <td>
+            {{ offered4 }}
+        </td>
+        <td>
+            {{ rated4 }}
+        </td>
+        <td>
+            {{ message4 }}
+        </td>
+    <tr>
+        <td>
+            5
+        </td>
+        <td>
+            {{ name_5 }}
+        </td>
+        <td>
+            {{ took5 }}
+        </td>
+        <td>
+            {{ offered5 }}
+        </td>
+        <td>
+            {{ rated5 }}
+        </td>
+        <td>
+            {{ message5 }}
+        </td>
+    </tr>
+
+</table>
+
+
+        {% if player.id_in_group == 1 %}
+        <strong> Round 1 Results: </strong>
+            <p> In Round 1, your screenname was  <strong> {{ name_1 }} </strong> and you decided to take
+            <strong>{{ took1 }}</strong> of the Receiver's endowment for yourself.
+            </p>
+            <p>
+                Your Round 1 Receiver rated this choice as <strong>{{ rated1 }}</strong>, and wrote you the following message:
+            </p>
+            <p>
+            <strong>{{ message1 }}</strong>
+            </p>
+
+        <strong> Round 2 Results: </strong>
+            <p> In Round 2, your screenname was  <strong> {{ name_2 }} </strong> and you decided to take
+                <strong>{{ took2 }}</strong> of the Receiver's endowment for yourself, leaving {{ offered2 }} for the Receiver.
+            </p>
+            <p>
+                Your Round 2 Receiver rated this choice as <strong>{{ rated2 }}</strong>, and wrote you the following message:
+            </p>
+            <p>
+            <strong>{{ message2 }}</strong>
+            </p>
+
+        <strong> Round 3 Results: </strong>
+            <p> In Round 3, your screenname was  <strong> {{ name_3 }} </strong> and you decided to take
+                <strong>{{ took3 }}</strong> of the Receiver's endowment for yourself.
+            </p>
+            <p>
+                Your Round 3 Receiver rated this choice as <strong>{{ rated3 }}</strong>, and wrote you the following message:
+            </p>
+            <p>
+            <strong>{{ message3 }}</strong>
+            </p>
+
+        <strong> Round 4 Results: </strong>
+            <p> In Round 4, your screenname was  <strong> {{ name_4 }} </strong> and you decided to take
+                <strong>{{ took4 }}</strong> of the Receiver's endowment for yourself.
+            </p>
+            <p>
+                Your Round 4 Receiver rated this choice as <strong>{{ rated4 }}</strong>, and wrote you the following message:
+            </p>
+            <p>
+            <strong>{{ message4 }}</strong>
+            </p>
+
+        <strong> Round 5 Results: </strong>
+            <p> In Round 5, your screenname was  <strong> {{ name_5 }} </strong> and you decided to take
+                <strong>{{ took5 }}</strong> of the Receiver's endowment for yourself.
+            </p>
+            <p>
+                Your Round 5 Receiver rated this choice as <strong>{{ rated5 }}</strong>, and wrote you the following message:
+            </p>
+            <p>
+            <strong>{{ message5 }}</strong>
+            </p>
+
+        <strong> Your Earnings so far: </strong>
+            <p>
+                Based on your allocation decisions in rounds 1-5, you earned a total of {{ payoff }}.
+            </p>
+        {% endif %}
+
+        {% if player.id_in_group == 2 %}
+        <strong> Round 1 Earnings: </strong>
+            <p>
+                In Round 1, your Decider, <strong> {{ name_1 }} </strong>, took <strong>{{ took1 }}</strong> of your endowment.
+            </p>
+            <p>
+            You rated this choice as <strong>{{ rated1 }}</strong>.
+                {% comment %}
+            The most common rating that other Receivers assigned to an allocation choice of {{ took1 }} by {{ name_1 }} was _______.
+            </p>
+            Since your rating
+                {% if player.rated1 == group.modalrating00 %} <strong> did </strong>
+                {% else %}  <strong> did not </strong>
+                {% endif %}
+            match the most common rating, you won a prize of {{ Constants.prize }}.
+            {% endcomment %}
+            <p>
+                You earned <strong> {{ offered1 }} </strong> as a result of the Decider's allocation choice.
+            </p>
+        <strong> Round 2 Earnings: </strong>
+            <p>
+                In Round 2, your Decider, <strong> {{ name_2 }} </strong>, took <strong>{{ took2 }}</strong> of your endowment.
+            </p>
+            <p>
+                You earned <strong> {{ offered2 }} </strong> as a result of the Decider's allocation choice.
+            </p>
+        <strong> Round 3 Earnings: </strong>
+            <p>
+                In Round 3, your Decider, <strong> {{ name_3 }} </strong>, took <strong>{{ took3 }}</strong> of your endowment.
+            </p>
+            <p>
+                You earned <strong> {{ offered3 }} </strong> as a result of the Decider's allocation choice.
+            </p>
+        <strong> Round 4 Earnings: </strong>
+            <p>
+                In Round 4, your Decider, <strong> {{ name_4 }} </strong>, took <strong>{{ took4 }}</strong> of your endowment.
+            </p>
+            <p>
+                You earned <strong> {{ offered4 }} </strong> as a result of the Decider's allocation choice.
+            </p>
+        <strong> Round 5 Earnings: </strong>
+            <p>
+                In Round 5, your Decider, <strong> {{ name_5 }} </strong>, took <strong>{{ took5 }}</strong> of your endowment.
+            </p>
+            <p>
+                You earned <strong> {{ offered5 }} </strong> as a result of the Decider's allocation choice.
+            </p>
+            <p>
+                Based on the allocation decisions of your matched Deciders in rounds 1-5, you earned a total of <strong> {{ payoff }} </strong>,
+                plus the prizes you earned whenever your appropriateness rating that matched the most common rating given
+                by other Receivers to the allocation the Decider chose.
+            </p>
+        {% endif %}
+    <p>
+        On the next page, you will have the opportunity to earn additional money by making some guesses about your experiment counterparts.
+    </p>
+        {% next_button %}
+{% endblock %}

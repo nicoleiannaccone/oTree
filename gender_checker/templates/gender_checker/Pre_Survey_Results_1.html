@@ -1,0 +1,18 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Results
+{% endblock %}
+
+{% block content %}
+
+<ul>
+    <li> You said you are player.gender {{ player.gender }}, my_gender_1: {{ my_gender_1 }}, gender_1: {{ gender_1 }}. </li>
+    <li> Your round 1 counterpart's gender is {{ other_player_gender_1 }}. </li>
+    <li> The round 1 Decider's gender is {{ genderD1 }}, while the round 1 receiver's gender is {{ genderR1 }}</li>
+</ul>
+
+{% next_button %}
+
+{% endblock %}

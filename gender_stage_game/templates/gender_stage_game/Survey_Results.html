@@ -8,7 +8,7 @@
 {% block content %}
 
     <p>
-        You guessed your Round 1 counterpart's gender to be <strong>{{ player.genderCP4 }}, {{ player.genderlabel1 }}</strong>.
+        You guessed your Round 1 counterpart's gender to be <strong>{{ player.genderCP1 }}, {{ player.genderlabel1 }}</strong>.
     </p>
     <p>
         This guess was
@@ -59,7 +59,7 @@
         {% endif %}
     </p>
 
-Your overall earnings for these bonus guesses was {{ player.payoff }}, so your total earnings for the experiment is now {{ payoff }}.
+Your overall earnings for these bonus guesses was {{ player.payoff }}, so your total earnings for the experiment is now {{ player.cumulative_payoff }}.
 
 <ul>
     <li> Player.gender: {{ player.gender }} </li>

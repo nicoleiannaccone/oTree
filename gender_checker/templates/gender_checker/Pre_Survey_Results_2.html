@@ -1,0 +1,24 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Results
+{% endblock %}
+
+{% block content %}
+In Round 2:
+<ul>
+    <li> You said you are player.gender {{ player.gender }}, my_gender_2: {{ my_gender_2 }}, gender_2: {{ gender_2 }}. </li>
+    <li> Your round 2 counterpart's gender is {{ other_player_gender_2 }}. </li>
+    <li> The round 2 Decider's gender is {{ genderD2 }}, while the round 2 receiver's gender is {{ genderR2 }}</li>
+</ul>
+
+In Round 1:
+<ul>
+    <li> You said you were my_gender_1: {{ my_gender_1 }}, gender_1: {{ gender_1 }}. </li>
+    <li> Your round 1 counterpart's gender was {{ other_player_gender_1 }}. </li>
+    <li> The round 1 Decider's gender was {{ genderD1 }}, while the round 1 receiver's gender was {{ genderR1 }}</li>
+</ul>
+{% next_button %}
+
+{% endblock %}

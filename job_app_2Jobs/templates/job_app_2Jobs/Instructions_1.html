@@ -1,0 +1,53 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+Instructions
+{% endblock %}
+
+{% block content %}
+
+<p>
+    You have been placed in a job market with two available jobs.
+<ul>
+    <li>
+        In this job market there are only two potential job applicants: You, and your counterpart,
+            {% if player.id_in_group == 1 %} {{ name_p2 }}. {% endif %}
+            {% if player.id_in_group == 2 %} {{ name_p1 }}. {% endif %}
+    </li>
+    <li>
+        You and your counterpart will soon be given the opportunity to apply for a job. </li>
+    <li>
+        Each job has only one position available, and can therefore only hire <strong>one</strong> worker. </li>
+    <li>
+        At each job, hiring decisions are made by a robot who selects and hires one applicant <strong> at random </strong> from the pool of players who chose to apply to that job. </li>
+    <li>
+        It doesn't cost anything to apply to a job, but you will only have one chance to apply to a job in each round.
+    </li>
+    <li>
+    If you apply to a job and don't get hired, you earn a wage of <strong> $0.00 </strong> that round.
+    </li>
+</ul>
+</p>
+<p>
+ There are 2 types of jobs:
+        <ul>
+            <li> Job X is a high-paying job: a worker hired at Job X earns a wage of <strong>{{ Constants.wage_H }}</strong>. </li>
+            <li> Job Z is a low-paying job: a worker hired at Job Z earns a wage of <strong>{{ Constants.wage_L }}</strong>. </li>
+        </ul>
+</p>
+<p>
+    In a moment, you and the {{Constants.other_players_per_group }} other player in your group,
+    {% if player.id_in_group == 1 %} {{ name_p2 }}, {% endif %}
+    {% if player.id_in_group == 2 %} {{ name_p1 }}, {% endif %}
+    will be able to simultaneously apply for either of the 2 available jobs.
+</p>
+<p>
+    Neither your application choice nor that of your counterpart,
+    {% if player.id_in_group == 1 %} {{ name_p2 }}, {% endif %}
+    {% if player.id_in_group == 2 %} {{ name_p1 }}, {% endif %}
+    have chosen to apply to.
+</p>
+    {% next_button %}
+
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Instructions for Deciders{% endblock %}
+
+{% block content %}
+
+<p>
+    In this experiment, you have been assigned the role of <strong> {{ player.role }}. </strong>
+    You will keep this role for the entire experiment.
+</p>
+<p>
+    You will be matched with a new Recipient every round.
+    You will never be matched with the same Recipient more than once in the experiment.
+</p>
+<p>
+    In each round of the experiment, the Recipient is endowed with {{ Constants.endowment }},
+    from which the Decider can take any amount.
+</p>
+<p>
+    On the next screen, you will choose how much of your Round {{ player.round_number }}
+    Receiver's {{Constants.endowment}} you will take, in increments of $0.50. Your Receiver will keep whatever is left.
+</p>
+<p>
+    While you choose how much to take, your Receiver will learn that your screenname is {{ group.name }}.
+    They will then be asked to rate how socially appropriate it would be if {{ group.name }} took each potential
+    amount between $0 and {{ Constants.endowment }}, in increments of $0.50.
+</p>
+<p>
+    Receivers earn a monetary prize if their rating of the appropriateness of the amount you decide to take
+    turns out to be the most common rating given to that particular allocation by all other Receivers matched
+    with Decider {{ group.name }}.
+    You will see how your Round {{ player.round_number }} Receiver rated your chosen allocation at the end of the experiment,
+    after you've finished making all of your allocation decisions.
+</p>
+<p>
+    After you have decided how much of the Receiver's {{ Constants.endowment }} to take, your Receiver will
+    be shown your allocation decision and given the opportunity to write you a free-form message which you
+    will view after you've finished making all of your allocation decisions.
+</p>
+<p>
+    All Deciders get a screenname in each round. Receivers do not have screennames.
+</p>
+<p>
+    In Round {{ player.round_number }}, your screenname is <strong> {{ group.name }}. </strong>
+</p>
+{% next_button %}
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModal">
+      See Instructions Again
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Instructions</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              {% include Constants.instructions_template %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}

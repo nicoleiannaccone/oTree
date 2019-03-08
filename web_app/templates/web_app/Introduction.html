@@ -1,0 +1,34 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Introduction{% endblock %}
+
+{% block content %}
+    <p>
+        Thank you for participating in this study in decision making.
+    </p>
+    <p>
+        For your participation, you will be paid a participation fee of {{ Constants.participation }}.
+        In addition, you may receive some additional money based on your choices and the choice of others during the
+        experiment.
+    </p>
+    <p>
+        <strong> Please turn off your cell phones now. </strong>
+    </p>
+    <p>
+        You may not talk, exclaim, or try to communicate with other participants during the experiment.
+        Participants intentionally violating the rules may be asked to leave the experiment.
+        If you have any questions or need assistance of any kind, raise your hand at any time and the experimenter will
+        come to you to answer your question in private.
+    </p>
+    <p>
+        Economics experiments have a strict policy against deception. If we do anything deceptive, or don’t pay you as
+        described, then you can complain to the campus Human Subjects Committee and we will be in serious trouble.
+        These instructions are meant to clarify how the experiment truly works and how you can earn the most money in
+        this experiment.
+        Our primary interest is to observe the decisions of people who have been given an accurate understanding of the
+        experiment and how their decisions will influence their outcomes and earnings.
+    </p>
+{% next_button %}
+
+{% endblock %}

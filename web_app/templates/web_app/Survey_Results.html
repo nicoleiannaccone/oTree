@@ -1,0 +1,90 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Results
+{% endblock %}
+
+{% block content %}
+
+    <p>
+        You guessed your Round 1 counterpart's gender to be <strong>{{ player.genderlabel1 }} </strong>.
+    </p>
+    <p>
+        Your guess was
+        {% if player.guess1_is_correct %} <strong> correct</strong>
+        {% else %}  <strong> incorrect</strong>
+        {% endif %}
+        , so you
+        {% if player.guess1_is_correct %} win
+        {% else %}  do not win
+        {% endif %}
+        a prize of {{ Constants.prize }} for this guess.
+        Your overall earnings, therefore, are: ________Total Earnings_____
+    </p>
+
+
+    <p>
+        You guessed your Round 2 counterpart's gender to be <strong>{{ player.genderCP2 }} </strong>, {{ player.genderlabel2 }}.
+    </p>
+    <p>
+        Your guess was
+        {% if player.guess2_is_correct %} <strong> correct</strong>
+        {% else %}  <strong> incorrect</strong>
+        {% endif %}
+        , so you
+        {% if player.guess2_is_correct %} win
+        {% else %}  do not win
+        {% endif %}
+        a prize of {{ Constants.prize }} for this guess.
+    </p>
+
+
+    <p>
+        You guessed your Round 3 counterpart's gender to be <strong>{{ player.genderCP3 }} </strong>.
+    </p>
+    <p>
+        Your guess was
+        {% if player.guess3_is_correct %} <strong> correct</strong>
+        {% else %}  <strong> incorrect</strong>
+        {% endif %}
+        , so you
+        {% if player.guess3_is_correct %} win
+        {% else %}  do not win
+        {% endif %}
+        a prize of {{ Constants.prize }} for this guess.
+    </p>
+
+    <p>
+        You guessed your Round 4 counterpart's gender to be <strong>{{ player.genderCP4 }} </strong>.
+    </p>
+    <p>
+        Your guess was
+        {% if player.guess4_is_correct %} <strong> correct</strong>
+        {% else %}  <strong> incorrect</strong>
+        {% endif %}
+        , so you
+        {% if player.guess4_is_correct %} win
+        {% else %}  do not win
+        {% endif %}
+        a prize of {{ Constants.prize }} for this guess.
+    </p>
+
+    <p>
+        You guessed your Round 5 counterpart's gender to be <strong>{{ player.genderCP5 }} </strong>.
+    </p>
+    <p>
+        Your guess was
+        {% if player.guess5_is_correct %} <strong> correct</strong>
+        {% else %}  <strong> incorrect</strong>
+        {% endif %}
+        , so you
+        {% if player.guess5_is_correct %} win
+        {% else %}  do not win
+        {% endif %}
+        a prize of {{ Constants.prize }} for this guess.
+    </p>
+
+{% next_button %}
+
+{% endblock %}

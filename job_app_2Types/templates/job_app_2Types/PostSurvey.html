@@ -1,0 +1,30 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Survey{% endblock %}
+
+{% block content %}
+<p>
+    You now have an opportunity to earn additional money by making the following guesses:
+</p>
+<p>
+    Guess the gender of your counterparts from the experiment below.
+    For each counterpart whose gender you guess correctly, you win a prize of {{ Constants.prize }}.
+</p>
+<p>    Guess of the gender of your first counterpart,
+    {% if player.id_in_group == 1 %} {{ name_p2 }}: {% endif %}
+    {% if player.id_in_group == 2 %} {{ name_p1 }}: {% endif %}
+    {% if player.id_in_group == 3 %} {{ name_p1 }}: {% endif %}
+        {% formfield player.genderCP1 label="My guess:" %}
+</p>
+<p>
+    Your guess of the gender of your second counterpart,
+    {% if player.id_in_group == 1 %} {{ name_p3 }}: {% endif %}
+    {% if player.id_in_group == 2 %} {{ name_p3 }}: {% endif %}
+    {% if player.id_in_group == 3 %} {{ name_p2 }}: {% endif %}
+        {% formfield player.genderCP2 label="My guess:" %}
+</p>
+
+{% next_button %}
+
+{% endblock %}

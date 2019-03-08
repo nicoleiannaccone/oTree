@@ -1,0 +1,27 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Work effort
+{% endblock %}
+
+{% block content %}
+
+    <p>
+        {% if group.principal_restrict %}  <!-- principal RESTRICTED -->
+            The principal <strong> RESTRICTED </strong> your effort.
+        {% else %}                         <!-- principal UNRESTRICTED -->
+            The principal left your effort <strong> UNRESTRICTED </strong>.
+        {% endif %}
+    </p>
+
+    <p>
+        Please choose your effort level.
+    </p>
+
+    {% formfield player.agent_work_effort label='Effort Level' %}
+    {% next_button %}
+
+    {% include Constants.instructions_template %}
+
+{% endblock %}

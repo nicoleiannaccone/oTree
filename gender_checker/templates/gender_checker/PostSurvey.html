@@ -1,0 +1,36 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Survey{% endblock %}
+
+{% block content %}
+
+<p>
+    You now have an opportunity to earn additional money by making the following guesses:
+</p>
+<ul>
+    <li> Guess the gender of your counterpart from each round of the experiment below. </li>
+</ul>
+    For each counterpart whose gender you guess correctly, you win a prize of {{ Constants.prize }}.
+<p>    Your guess of the gender of your Round 1 counterpart, {{ name_1 }}:
+        {% formfield player.genderCP1 label="My guess:" %}
+</p>
+<p>
+    Your guess of the gender of your Round 2 counterpart, {{ name_2 }}:
+        {% formfield player.genderCP2 label="My guess:" %}
+</p>
+<p>
+    Your guess of the gender of your Round 3 counterpart, {{ name_3 }}:
+        {% formfield player.genderCP3 label="My guess:" %}
+</p>
+<p>
+    Your guess of the gender of your Round 4 counterpart, {{ name_4 }}:
+        {% formfield player.genderCP4 label="My guess:" %}
+</p>
+<p>
+    Your guess of the gender of your Round 5 counterpart, {{ name_5 }}:
+        {% formfield player.genderCP5 label="My guess:" %}
+</p>
+{% next_button %}
+
+{% endblock %}

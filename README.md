@@ -48,4 +48,3 @@ particular allocation by all other Receivers who were matched with a Decider wit
 After the Deciders have chosen how much to take from their Receiver's {{ Constants.endowment }} and Receivers have
 finished rating each possible allocation, the Decider's chosen allocation decision will be shown to the Receiver.
 Receivers will then write a message that the Decider will see at the end of the experiment.
-  

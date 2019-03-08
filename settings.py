@@ -12,49 +12,26 @@ SESSION_CONFIG_DEFAULTS = {
 }
 
 SESSION_CONFIGS = [
-    # {
-    #     'name': 'Sacrifice',
-    #     'num_demo_participants': 3,
-    #     'app_sequence': ['sacrifice'],
-    # },
-    # {
-    #     'name': 'Dismissiveness',
-    #     'num_demo_participants': 1,
-    #     'app_sequence': ['overconfidence'],
-    # },
-    #
-    # {
-    #     'name': 'job_app_2Jobs',
-    #     'num_demo_participants': 2,
-    #     'app_sequence': ['job_app_2Jobs'],
-    # },
-    # {
-    #     'name': 'False_Gender_Experiment_0',
-    #     'num_demo_participants': 4,
-    #     'app_sequence': ['web_app'],
-    # },
-    # {
-    #     'name': 'False_Gender_Experiment',
-    #     'num_demo_participants': 2,
-    #     'app_sequence': ['false_gender'],
-    # },
     {
         'name': 'False_Gender_Experiment_Apps',
-        'num_demo_participants': 2,
-        'app_sequence': ['gender_intro', 'gender_stage_game', 'payment_info' ],
+        'num_demo_participants': 6,
+        'app_sequence': ['gender_intro', 'gender_stage_game', 'payment_info'],
     },
-
-    # 'gender_stage_game', 'payment_info'
-    # {
-    #     'name': 'Gender_Checker',
-    #     'num_demo_participants': 2,
-    #     'app_sequence': ['gender_checker'],
-    # },
-    # {
-    #     'name': 'stranger_matching',
-    #     'num_demo_participants': 12,
-    #     'app_sequence': ['stranger_matching'],
-    #},
+    {
+        'name': 'Sacrifice',
+        'num_demo_participants': 3,
+        'app_sequence': ['sacrifice'],
+    },
+    {
+        'name': 'Dismissiveness',
+        'num_demo_participants': 1,
+        'app_sequence': ['overconfidence'],
+    },
+    {
+        'name': 'stranger_matching',
+        'num_demo_participants': 12,
+        'app_sequence': ['stranger_matching'],
+    },
 ]
 # see the end of this file for the inactive session configs
 
@@ -112,4 +89,211 @@ SECRET_KEY = '#yr5(rfig8n&7tl$g9^fnl##jm==h4v@v6dx4z9ov3%tyll!xm'
 
 # if an app is included in SESSION_CONFIGS, you don't need to list it here
 INSTALLED_APPS = ['otree']
+EXTENSION_APPS = ['otree_tools']
 
+# inactive session configs
+# {
+#     'name': 'job_app_2Jobs',
+#     'num_demo_participants': 2,
+#     'app_sequence': ['job_app_2Jobs'],
+# },
+# {
+#     'name': 'False_Gender_Experiment_0',
+#     'num_demo_participants': 4,
+#     'app_sequence': ['web_app'],
+# },
+# {
+#     'name': 'False_Gender_Experiment',
+#     'num_demo_participants': 2,
+#     'app_sequence': ['false_gender'],
+# },
+# {
+#     'name': 'Gender_Checker',
+#     'num_demo_participants': 2,
+#     'app_sequence': ['gender_checker'],
+# },
+#{
+#    'name': 'Job_Application_Game_1Wage',
+#    'num_demo_participants': 3,
+#    'app_sequence': ['job_app_1Type'],
+#},
+#{
+#    'name': 'Job_Application_Game_2Wages',
+#    'num_demo_participants': 3,
+#    'app_sequence': ['job_app_2Types'],
+#},
+#{
+#    'name': 'Job_Application_Game',
+#    'num_demo_participants': 3,
+#    'app_sequence': ['job_application_game'],
+#},
+#{
+#    'name': 'Job_Application_Game_SameSex',
+#    'num_demo_participants': 3,
+#    'app_sequence': ['job_app_Gender_SameSex'],
+#},
+#{
+#    'name': 'Job_Application_Game_MixedSex',
+#    'num_demo_participants': 3,
+#    'app_sequence': ['job_app_Gender_MixedSex'],
+#},
+#{
+#    'name': 'Cooper',
+#    'num_demo_participants': 2,
+#    'app_sequence': ['cost_of_control'],
+#},
+#
+#{
+#    'name': 'my_simple_survey',
+#    'num_demo_participants': 3,
+#    'app_sequence': ['my_simple_survey'],
+#},
+#{
+#    'name': 'public_goods',
+#    'display_name': "Public Goods",
+#    'num_demo_participants': 3,
+#    'app_sequence': ['public_goods', 'payment_info'],
+#},
+#{
+#    'name': 'guess_two_thirds',
+#    'display_name': "Guess 2/3 of the Average",
+#    'num_demo_participants': 3,
+#    'app_sequence': ['guess_two_thirds', 'payment_info'],
+#},
+#{
+#    'name': 'survey',
+#    'num_demo_participants': 1,
+#    'app_sequence': ['survey', 'payment_info'],
+#},
+#{
+#    'name': 'quiz',
+#    'num_demo_participants': 1,
+#    'app_sequence': ['quiz'],
+#},
+#
+### {
+###     'name': 'trust',
+###     'display_name': "Trust Game",
+###     'num_demo_participants': 2,
+###     'app_sequence': ['trust', 'payment_info'],
+### },
+### {
+###     'name': 'prisoner',
+###     'display_name': "Prisoner's Dilemma",
+###     'num_demo_participants': 2,
+###     'app_sequence': ['prisoner', 'payment_info'],
+### },
+### {
+###     'name': 'ultimatum',
+###     'display_name': "Ultimatum (randomized: strategy vs. direct response)",
+###     'num_demo_participants': 2,
+###     'app_sequence': ['ultimatum', 'payment_info'],
+### },
+### {
+###     'name': 'ultimatum_strategy',
+###     'display_name': "Ultimatum (strategy method treatment)",
+###     'num_demo_participants': 2,
+###     'app_sequence': ['ultimatum', 'payment_info'],
+###     'use_strategy_method': True,
+### },
+### {
+###     'name': 'ultimatum_non_strategy',
+###     'display_name': "Ultimatum (direct response treatment)",
+###     'num_demo_participants': 2,
+###     'app_sequence': ['ultimatum', 'payment_info'],
+###     'use_strategy_method': False,
+### },
+### {
+###     'name': 'vickrey_auction',
+###     'display_name': "Vickrey Auction",
+###     'num_demo_participants': 3,
+###     'app_sequence': ['vickrey_auction', 'payment_info'],
+### },
+### {
+###     'name': 'volunteer_dilemma',
+###     'display_name': "Volunteer's Dilemma",
+###     'num_demo_participants': 3,
+###     'app_sequence': ['volunteer_dilemma', 'payment_info'],
+### },
+### {
+###     'name': 'cournot',
+###     'display_name': "Cournot Competition",
+###     'num_demo_participants': 2,
+###     'app_sequence': [
+###         'cournot', 'payment_info'
+###     ],
+### },
+### {
+###     'name': 'principal_agent',
+###     'display_name': "Principal Agent",
+###     'num_demo_participants': 2,
+###     'app_sequence': ['principal_agent', 'payment_info'],
+### },
+### {
+###     'name': 'dictator',
+###     'display_name': "Dictator Game",
+###     'num_demo_participants': 2,
+###     'app_sequence': ['dictator', 'payment_info'],
+### },
+### {
+###     'name': 'matching_pennies',
+###     'display_name': "Matching Pennies",
+###     'num_demo_participants': 2,
+###     'app_sequence': [
+###         'matching_pennies',
+###     ],
+### },
+### {
+###     'name': 'traveler_dilemma',
+###     'display_name': "Traveler's Dilemma",
+###     'num_demo_participants': 2,
+###     'app_sequence': ['traveler_dilemma', 'payment_info'],
+### },
+### {
+###     'name': 'bargaining',
+###     'display_name': "Bargaining Game",
+###     'num_demo_participants': 2,
+###     'app_sequence': ['bargaining', 'payment_info'],
+### },
+### {
+###     'name': 'common_value_auction',
+###     'display_name': "Common Value Auction",
+###     'num_demo_participants': 3,
+###     'app_sequence': ['common_value_auction', 'payment_info'],
+### },
+### {
+###     'name': 'bertrand',
+###     'display_name': "Bertrand Competition",
+###     'num_demo_participants': 2,
+###     'app_sequence': [
+###         'bertrand', 'payment_info'
+###     ],
+### },
+### {
+###     'name': 'real_effort',
+###     'display_name': "Real-effort transcription task",
+###     'num_demo_participants': 1,
+###     'app_sequence': [
+###         'real_effort',
+###     ],
+### },
+### {
+###     'name': 'lemon_market',
+###     'display_name': "Lemon Market Game",
+###     'num_demo_participants': 3,
+###     'app_sequence': [
+###         'lemon_market', 'payment_info'
+###     ],
+### },
+### {
+###     'name': 'public_goods_simple',
+###     'display_name': "Public Goods (simple version from tutorial)",
+###     'num_demo_participants': 3,
+###     'app_sequence': ['public_goods_simple', 'payment_info'],
+### },
+### {
+###     'name': 'trust_simple',
+###     'display_name': "Trust Game (simple version from tutorial)",
+###     'num_demo_participants': 2,
+###     'app_sequence': ['trust_simple'],
+### },

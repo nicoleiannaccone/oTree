@@ -1,0 +1,81 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Practice Round: Your Ratings{% endblock %}
+
+{% block content %}
+<p>
+    Receiver: You
+    Decider: Decider #2
+</p>
+<p>
+    You are the <strong>Receiver</strong>. You have been randomly matched with a Decider, <strong> Decider #2. </strong>
+</p>
+<p>
+    You have received an endowment of <strong> {{ Constants.endowment }} </strong> this round.
+</p>
+<p>
+    The table below presents a list of the possible choices available to Decider #2. For each of the
+choices, you should indicate how socially appropriate you think an allocation of that size from Decider #2 would be considered.
+</p>
+<p>
+    Recall that by socially appropriate we mean behavior that most people agree is the "correct" or "ethical" thing for Decider #2 to do.
+</p>
+<p>
+    If your rating matches the most common rating assigned by other Receivers to the amount Decider #2 chooses to take, you will win a prize of {{ Constants.prize }}.
+</p>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModal">
+      See Instructions Again
+    </button>
+
+<h4>Appropriateness Ratings</h4>
+<table class="table">
+    <tr>
+        <th> Decider #2's Decision
+        </th>
+        <th>
+            Appropriateness Rating
+        </th>
+    </tr>
+    {% for field in form %}
+        <tr>
+            <th>If Decider #2 took {{ field.label }}</th>
+            {% for choice in field %}
+                <td>{{ choice }}</td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+
+{% next_button %}
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModal">
+      See Instructions Again
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Instructions</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              {% include Constants.instructions_template %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+{% endblock %}

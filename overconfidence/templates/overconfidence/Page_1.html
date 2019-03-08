@@ -1,0 +1,18 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}  Welcome  {% endblock %}
+
+{% block content %}
+
+<p>
+<ul>
+    <li>Thank you for participating in this experiment! </li>
+    <li>This experiment shouldn't take more than {{ Constants.minutes }} minutes and you could earn substantial money. </li>
+    <li>Switch off your cell phones and put them in your bag.</li>
+</ul>
+</p>
+
+{% next_button %}
+
+{% endblock %}

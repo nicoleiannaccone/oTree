@@ -1,0 +1,30 @@
+{% load otree %}
+
+
+<p>
+    Percentage of Principals who RESTRICTED: <b>{{ subsession.share_restrict }}</b>
+</p>
+
+<table class=table>
+<tr>
+    <th>Statistic</th>
+    <td>Avg. Effort</td>
+    <td>Share w/ Effort >= 2</td>
+    <td>Share w/ Effort >= 3</td>
+    <td>Avg. Profit</td>
+</tr>
+<tr>
+    <th>Restricted</th>
+    <td>{{ subsession.avg_effort_restrict }}</td>
+    <td>{{ subsession.share_eff_geq2_restrict }}</td>
+    <td>{{ subsession.share_eff_geq3_restrict }}</td>
+    <td>{{ subsession.avg_profit_restrict }}</td>
+</tr>
+<tr>
+    <th>Unrestricted</th>
+    <td>{{ subsession.avg_effort_unrestrict }}</td>
+    <td>{{ subsession.share_eff_geq2_unrestrict }}</td>
+    <td>{{ subsession.share_eff_geq3_unrestrict }}</td>
+    <td>{{ subsession.avg_profit_unrestrict }}</td>
+</tr>
+</table>

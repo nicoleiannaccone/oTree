@@ -4,11 +4,70 @@
 {% block title %}Practice Round: Results{% endblock %}
 
 {% block content %}
+
+
+<table class="table">
+    <tr>
+        <th>
+            {% if player.id_in_group == 1 %}
+            You took:
+            {% else %}
+            Decider took:
+            {% endif %}
+        </th>
+        <th>
+            {% if player.id_in_group == 1 %}
+            You left:
+            {% else %}
+            Decider left:
+            {% endif %}
+        </th>
+        <th>
+            Receiver's Rating:
+        </th>
+        <th>
+            Modal Rating:
+        </th>
+        <th>
+            Receiver's Message:
+        </th>
+        <th>
+            Counterpart's Gender:
+        </th>
+        <th>
+            Own Gender:
+        </th>
+    </tr>
+    <tr>
+        <td>
+            {{ group.p_taken }}
+        </td>
+        <td>
+            {{ group.practice_offer }}
+        </td>
+        <td>
+            {{ group.ratinglabel }}
+        </td>
+        <td>
+            {{ group.modal_p_rating }}
+        </td>
+        <td>
+            {{ group.p_message }}
+        </td>
+        <td>
+            {{ other_player_gender }}
+        </td>
+        <td>
+            {{ gender }}
+        </td>
+    </tr>
+</table>
+
         {% if player.id_in_group == 1 %}
             <p> You decided to take <strong>{{ group.p_taken }}</strong> of the Receiver's endowment for yourself.
             </p>
             <p>
-                The modal rating of this amount was {{ subsession.modal_p_rating }}.
+                The most common rating that Receivers gave to an allocation of this amount was {{ group.modal_p_rating }}.
                 Your Receiver rated this choice as <strong>{{ group.ratinglabel }}</strong>, and wrote you the following message:
             </p>
             <p>
@@ -21,15 +80,37 @@
                 endowment.
             </p>
             <p>
-                You rated this choice as <strong>{{ group.ratinglabel }}</strong>.
+                You rated this choice as {{ group.p_rating }}: <strong>{{ group.ratinglabel }}</strong>.
             </p>
             <p>
-                The most common rating given by other Receivers to an allocation of the amount {{ group.p_taken }}
-                was <strong>{{ subsession.modal_p_rating }}</strong>.
-                Since your own rating matched the most common rating, you win a prize of {{Constants.prize }}.
+                The most common rating that other Receivers assigned to an allocation of the amount {{ group.p_taken }}
+                taken by your Decider was <strong>{{ group.modal_p_rating }}</strong>.
+                {% if player.p_mode_matched == True %}
+                <p> Since your own rating, {{ group.p_rating }}, matched the most common rating you win a prize of {{Constants.prize }}. </p>
+                {% else %}
+<p> Your rating of the amount your Decider took, {{ group.p_rating }}, did not match the modal rating of that amount, {{ group.modal_p_rating }}. </p>
+                {% endif %}
             </p>
         {% endif %}
 
+<p>
+    -- Checking ratings -- Group.p_rating:
+{{ group.p_rating }}
+Modal rating 00:
+{{ group.modal_rating_p00 }}
+Modal rating 05:
+{{ group.modal_rating_p05 }}
+Modal rating 10:
+{{ group.modal_rating_p10 }}
+Modal rating 15:
+{{ group.modal_rating_p15 }}
+Modal rating 20:
+{{ group.modal_rating_p20 }}
+Modal rating 25:
+{{ group.modal_rating_p25 }}
+Modal rating 30:
+{{ group.modal_rating_p30 }}
+</p>
 {% next_button %}
 
     <!-- Button trigger modal -->

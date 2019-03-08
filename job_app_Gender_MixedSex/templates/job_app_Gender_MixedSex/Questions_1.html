@@ -1,0 +1,38 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Comprehension Questions
+{% endblock %}
+
+{% block content %}
+
+Imagine you are Player 1 and you choose to apply to Job Y.
+<p>
+    The other 2 players in your group make the following application decisions:
+</p>
+<table class="table">
+    <tr>
+        <th> Player:
+        </th>
+        <th>
+            Applied to:
+        </th>
+    </tr>
+        <tr>
+            <td> Player 2 </td>
+                <td> Job Z </td>
+        </tr>
+            <tr>
+            <td> Player 3 </td>
+                <td> Job Y </td>
+            </tr>
+</table>
+
+With what percent probability do you think you will get hired at Job Y?
+{% formfield player.question_1 %}
+{% formfield player.question1 %}
+
+    {% next_button %}
+
+{% endblock %}

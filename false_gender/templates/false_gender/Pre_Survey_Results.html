@@ -1,0 +1,17 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Results
+{% endblock %}
+
+{% block content %}
+
+<ul>
+    <li> You said you are gender player.gender {{ player.gender }}, participant variables gender {{ my_gender }}, self.player.gender {{ gender }}. </li>
+    <li> Your first counterpart's gender is self.player.other_player().gender {{ other_player_gender }}. </li>
+</ul>
+
+{% next_button %}
+
+{% endblock %}

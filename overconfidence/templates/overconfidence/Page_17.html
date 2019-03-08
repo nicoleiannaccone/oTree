@@ -1,0 +1,28 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %} Your Counterpart   {% endblock %}
+
+{% block content %}
+<p>
+<ul>
+    <li> For the most recent dot grid, you were paired at random with another subject in this classroom (your "Counterpart"). </li>
+    <li> Tokens Earned = {{ Constants.GuessReward }} if Guess was Correct, 0 if Guess was Incorrect </li>
+    <li> Your ultimate payment (and your Counterpart's payment) for the color task depends on both your guess and the guess of your Counterpart as shown below: </li>
+<li> (This function also applies to your Counterpart: your performance affects the ultimate payment of your Counterpart in exactly the same way that their performance affects your payment.) </li>
+</ul>
+
+    {% if group.treatment == 'partners' %} Your Payoff = Your Score + Your Counterpart's Score {% endif %}
+    {% if group.treatment == 'independents' %} Your Payoff = Your Score  {% endif %}
+    {% if group.treatment == 'rivals' %} Your Payoff = Your Score - Your Counterpart's Score{% endif %}
+
+Your Payment = Tokens you Earned
+
+    {% if group.treatment == 'partners' %}+ Tokens your Counterpart Earned{% endif %}
+    {% if group.treatment == 'independents' %}{% endif %}
+    {% if group.treatment == 'rivals' %}- Tokens your Counterpart Earned{% endif %}
+</p>
+
+{% next_button %}
+
+{% endblock %}

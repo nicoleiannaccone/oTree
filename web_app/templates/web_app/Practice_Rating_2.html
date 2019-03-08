@@ -1,0 +1,190 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Practice Round: Your Ratings{% endblock %}
+
+{% block content %}
+<p>
+    Receiver: You
+    Decider: Decider #2
+</p>
+<p>
+    You are the <strong>Receiver</strong>. You have been randomly matched with a Decider, <strong> Decider #2. </strong>
+</p>
+<p>
+    You have received an endowment of <strong> {{ Constants.endowment }} </strong> this round.
+</p>
+<p>
+    The table below presents a list of the possible choices available to Decider #2. For each of the
+choices, you should indicate how socially appropriate you think an allocation of that size from Decider #2 would be considered.
+</p>
+<p>
+    Recall that by socially appropriate we mean behavior that most people agree is the "correct" or "ethical" thing for Decider #2 to do.
+</p>
+<p>
+    If your rating matches the most common rating assigned by other Receivers to the amount Decider #2 chooses to take, you will win a prize of {{ Constants.prize }}.
+</p>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+      See Instructions Again
+    </button>
+
+
+<h4>Appropriateness Ratings</h4>
+<table class="table">
+    <tr>
+        <th> Decider #2's Decision
+        </th>
+        <th>
+            Appropriateness Rating
+        </th>
+    </tr>
+    <tr>
+        <td>
+            If Decider #2 took <strong> $0.00</strong>:
+        </td>
+        <td>
+            {% formfield group.p_rating00 label="" %}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            If Decider #2 took <strong> $0.50</strong>:
+        </td>
+        <td>
+            {% formfield group.p_rating05 label="" %}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            If Decider #2 took <strong> $1.00</strong>:
+        </td>
+        <td>
+            {% formfield group.p_rating10 label="" %}
+        </td>
+    </tr>
+        <td>
+            If Decider #2 took <strong> $1.50</strong>:
+        </td>
+        <td>
+            {% formfield group.p_rating15 label="" %}
+        </td>
+    <tr>
+        <td>
+            If Decider #2 took <strong> $2.00</strong>:
+        </td>
+        <td>
+            {% formfield group.p_rating20 label="" %}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            If Decider #2 took <strong> $2.50</strong>:
+        </td>
+        <td>
+            {% formfield group.p_rating25 label="" %}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            If Decider #2 took <strong> $3.00</strong>:
+        </td>
+        <td>
+            {% formfield group.p_rating30 label="" %}
+        </td>
+    </tr>
+
+</table>
+
+
+<table class="table">
+    <tr>
+        <td>
+            If {{ group.name }} took <strong> $0.00</strong>:
+        </td>
+        <td>{{ form.p_rating00.label }}</td>
+        {% for choice in form.p_rating00 %}
+            <td>{{ choice }}</td>
+        {% endfor %}
+    </tr>
+    <tr>
+        <td>
+            If {{ group.name }} took <strong> $0.50</strong>:
+        </td>
+        <td>{{ form.p_rating05.label }}</td>
+        {% for choice in form.p_rating05 %}
+            <td>{{ choice }}</td>
+        {% endfor %}
+    </tr>
+    <tr>
+        <td>
+            If {{ group.name }} took <strong> $1.00</strong>:
+        </td>
+        <td>{{ form.p_rating10.label }}</td>
+        {% for choice in form.p_rating10 %}
+            <td>{{ choice }}</td>
+        {% endfor %}
+    </tr>
+    <tr>
+        <td>
+            If {{ group.name }} took <strong> $1.50</strong>:
+        </td>
+        <td>{{ form.p_rating15.label }}</td>
+        {% for choice in form.p_rating15 %}
+            <td>{{ choice }}</td>
+        {% endfor %}
+    </tr>
+    <tr>
+        <td>
+            If {{ group.name }} took <strong> $2.00</strong>:
+        </td>
+        <td>{{ form.p_rating20.label }}</td>
+        {% for choice in form.p_rating20 %}
+            <td>{{ choice }}</td>
+        {% endfor %}
+    </tr>
+    <tr>
+        <td>
+            If {{ group.name }} took <strong> $2.50</strong>:
+        </td>
+        <td>{{ form.p_rating25.label }}</td>
+        {% for choice in form.p_rating25 %}
+            <td>{{ choice }}</td>
+        {% endfor %}
+    </tr>
+    <tr>
+        <td>
+            If {{ group.name }} took <strong> $3.00</strong>:
+        </td>
+        <td>{{ form.p_rating30.label }}</td>
+        {% for choice in form.p_rating30 %}
+            <td>{{ choice }}</td>
+        {% endfor %}
+    </tr>
+</table>
+
+
+{% next_button %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Instructions</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Paste instructions here
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}

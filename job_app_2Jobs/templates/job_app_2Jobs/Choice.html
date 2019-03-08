@@ -1,0 +1,21 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Application Decision
+{% endblock %}
+
+{% block content %}
+
+<p>
+    It is now time for you and your counterpart to make your job application decision.
+</p>
+<p>
+    Please select below the job you would like to apply to:
+</p>
+
+{% formfield player.application_choice_1 %}
+
+    {% next_button %}
+
+{% endblock %}

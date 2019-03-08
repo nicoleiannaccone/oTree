@@ -1,0 +1,24 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}    {% endblock %}
+
+{% block content %}
+<p>
+Likelihood your Counterpart Guessed Right?
+<ul>
+    <li> You will now be asked to write down a probability between 0 and 100% the reflects how likely you think it is that <strong> your Counterpart </strong> guessed the most recent dot grid correctly. </li>
+    <li> 	This is also the minimum number of green gumballs that would need to be in the machine in order for you to be willing to base your earnings for this part on a Gumball Lottery rather than on a lottery where you earn 6 tokens only if your Counterpart's guess about the most recent grid was correct. </li>
+    <li> 	Your earnings from this guess are determined in exactly the same way as for your last guess:
+        the closer the number you write down is to your Counterpart's true performance, the more tokens you can earn. </li>
+</ul>
+        Your Guess: _____
+
+{% formfield.guess_CP_1 %}
+
+</p>
+
+
+{% next_button %}
+
+{% endblock %}
