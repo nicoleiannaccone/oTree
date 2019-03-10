@@ -394,13 +394,14 @@ class Group(BaseGroup):
             ratings_p20.append(r.p_rating20)
             ratings_p25.append(r.p_rating25)
             ratings_p30.append(r.p_rating30)
-        self.modal_rating_p00 = mode(ratings_p00) if ratings_p00 else None
-        self.modal_rating_p05 = mode(ratings_p05) if ratings_p15 else None
-        self.modal_rating_p10 = mode(ratings_p10) if ratings_p10 else None
-        self.modal_rating_p15 = mode(ratings_p15) if ratings_p15 else None
-        self.modal_rating_p20 = mode(ratings_p20) if ratings_p20 else None
-        self.modal_rating_p25 = mode(ratings_p25) if ratings_p25 else None
-        self.modal_rating_p30 = mode(ratings_p30) if ratings_p30 else None
+        self.modal_rating_p00 = Counter(ratings_p00).most_common(1)[0][0] if ratings_p00 else None
+#        self.modal_rating_p00 = mode(ratings_p00) if ratings_p00 else None
+        self.modal_rating_p05 = Counter(ratings_p05).most_common(1)[0][0] if ratings_p05 else None
+        self.modal_rating_p10 = Counter(ratings_p10).most_common(1)[0][0] if ratings_p10 else None
+        self.modal_rating_p15 = Counter(ratings_p15).most_common(1)[0][0] if ratings_p15 else None
+        self.modal_rating_p20 = Counter(ratings_p20).most_common(1)[0][0] if ratings_p20 else None
+        self.modal_rating_p25 = Counter(ratings_p25).most_common(1)[0][0] if ratings_p25 else None
+        self.modal_rating_p30 = Counter(ratings_p30).most_common(1)[0][0] if ratings_p30 else None
         for g in self.subsession.get_groups():
             if g.p_taken == c(0):
                 g.modal_p_rating = self.modal_rating_p00
