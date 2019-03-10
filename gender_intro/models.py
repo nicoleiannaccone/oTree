@@ -147,17 +147,16 @@ class Subsession(BaseSubsession):
 # What it does: it shifts each second member in each group to the right by one. That guarantees that no one plays with
 # the same game in two subsequent rounds, and each members holds his/her position within in a group.
     def creating_session(self):
-            if self.round_number == 1:
-                self.session.vars['full_data'] = [i for i in shifter(self.get_group_matrix())]
-            fd = self.session.vars['full_data']
-            self.set_group_matrix(fd[self.round_number - 1])
-            print(self.get_group_matrix())
-#########################################################################################################################################################################################################################
+        if self.round_number == 1:
+            self.session.vars['full_data'] = [i for i in shifter(self.get_group_matrix())]
+        fd = self.session.vars['full_data']
+        self.set_group_matrix(fd[self.round_number - 1])
+        print(self.get_group_matrix())
 
 ######################################################################################################################
 ########################################### SUBSESSION CLASS #########################################################
 ######################################################################################################################
-######################################################################################################################
+
 #class Subsession(BaseSubsession):
 #    def get_players_by_role(self, role):
 #        return [p for p in self.get_players() if p.role() == role]
@@ -186,9 +185,15 @@ class Subsession(BaseSubsession):
     #        # This next line rematches group members randomly but keeps their ID # within the group constant. Does this mean that their role (Decider versus Receiver) will also be kept constant?
     #        self.group_randomly(fixed_id_in_group=True)
 
+# Stranger matching attempts:
+#     def before_session_starts(self):
+#        if self.round_number > 1:
+#           p_x_g  = match_players.perfect_strangers(self)
+#           for group, players in zip(self.get_groups(), p_x_g):
+#                 group.set_players(players)
 
     # Creating Balanced Treatments -- half of the groups get each ordering:
-    def creating_session(self):
+#    def creating_session(self):
         ordering = itertools.cycle(['ordering1', 'ordering2'])
     ##        p1.participant.vars['ordering'] = 'ordering1'
         for g in self.get_groups():
@@ -200,14 +205,13 @@ class Subsession(BaseSubsession):
             if decider.participant.vars['ordering'] == 'ordering2':
                 decider.participant.vars['names'] = Constants.names2
 
-
 # To randomly select which round is paid:
 #    def creating_session(self):
 #             if self.round_number == 1:
 #                 paying_round = random.randint(1, Constants.num_rounds)
 #                 self.session.vars['paying_round'] = paying_round
 
-
+# Session-Level Variables for calculating the practice-ratings mode
     modal_p_rating = models.IntegerField()
 
     modal_rating = models.IntegerField()
@@ -219,24 +223,10 @@ class Subsession(BaseSubsession):
     modal_rating_p25 = models.IntegerField()
     modal_rating_p30 = models.IntegerField()
 
-
-# Stranger matching attempts:
-#     def before_session_starts(self):
-#        if self.round_number > 1:
-#           p_x_g  = match_players.perfect_strangers(self)
-#           for group, players in zip(self.get_groups(), p_x_g):
-#                 group.set_players(players)
-
-
-
-
-######################################################################################################################
 ######################################################################################################################
 ########################################### GROUP CLASS ##############################################################
 ######################################################################################################################
-######################################################################################################################
 class Group(BaseGroup):
-
     # Roles
     decider = models.StringField()
     receiver = models.StringField()
@@ -353,8 +343,8 @@ class Group(BaseGroup):
     def get_role(self):
         decider = self.get_player_by_role('decider')
         receiver = self.get_player_by_role('receiver')
-        p1 = self.get_player_by_role('decider')
-        p2 = self.get_player_by_role('receiver')
+        p1 = self.get_player_by_id(1)
+        p2 = self.get_player_by_id(2)
 
     def set_practice_payoffs(self):
         decider = self.get_player_by_role('decider')
@@ -387,7 +377,7 @@ class Group(BaseGroup):
         self.ratinglabel = rl_dict[self.p_rating]
 
     def get_modal_p_ratings(self):
-        #        if decider.participant.vars['ordering'] == 'ordering1':
+        # Create a list in which to place each group's practice-ratings for each possible allocation
         ratings_p00 = []
         ratings_p05 = []
         ratings_p10 = []
@@ -395,6 +385,7 @@ class Group(BaseGroup):
         ratings_p20 = []
         ratings_p25 = []
         ratings_p30 = []
+        # For each group in the session, append their practice rating into the corresponding list of all groups' ratings
         for r in self.subsession.get_groups():
             ratings_p00.append(r.p_rating00)
             ratings_p05.append(r.p_rating05)
