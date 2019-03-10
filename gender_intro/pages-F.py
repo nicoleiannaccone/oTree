@@ -160,6 +160,7 @@ page_sequence = [
    # Pre_Survey_Results,
    # Instructions_2,
    # Instructions_3,
+    Instructions_Krupka_1,
    # Practice_Question_2,
    # Practice_Question_0,
    # Practice_Question_1,
