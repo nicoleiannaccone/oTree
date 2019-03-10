@@ -498,6 +498,7 @@ class Player(BasePlayer):
             [2, 'Sophomore'],
             [3, 'Junior'],
             [4, 'Senior'],
+            [5, 'Other'],
         ],
         label='What is your year in school?',
         widget=widgets.RadioSelect
@@ -591,14 +592,15 @@ class Player(BasePlayer):
     guess4_is_correct = models.BooleanField(blank=False)
     guess5_is_correct = models.BooleanField(blank=False)
 
-
+    # Checking whether subject's rating matched the modal rating
     p_mode_matched = models.BooleanField()
     mode_matched = models.BooleanField()
 
+    # Other Variables
+    cumulative_payoff = models.IntegerField()
+
 ########################################################################################################################
 
-# Other Variables
-    cumulative_payoff = models.IntegerField()
 
     # Player Methods
 
@@ -617,6 +619,7 @@ class Player(BasePlayer):
     def other_player(self):
         return self.get_others_in_group()[0]
 
+    # Checking practice questions for correctness
     def check_comprehension(self):
         self.q1_is_correct = (self.question1 == 2)
         self.q2_is_correct = (self.question2 == 1)
@@ -681,10 +684,6 @@ class Player(BasePlayer):
             self.participant.vars['Gender'] = 'Female'
         if self.gender == 3:
             self.participant.vars['Gender'] = 'Other'
-
-    # if self.round_number == 1:
-    #            d_r1 = self.get_player_by_id(1)
-    #            r_r1 = self.get_player_by_id(2)
 
     def set_gender_guesses(self):
         p1 = self.group.get_player_by_id(1)
@@ -755,6 +754,7 @@ class Player(BasePlayer):
         if p2.genderCP5 == p1.gender:
             p2.guess5_is_correct = True
 
+    # Checking whether subject's rating matched the modal rating
     def p_mode_match(self):
         if self.group.p_rating == self.group.modal_p_rating:
                 self.p_mode_matched = True
