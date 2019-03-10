@@ -103,6 +103,28 @@ Ask others nearby if the wallet belongs to them			X
 Leave the wallet where it is		X
 Give the wallet to the shop manager				X
 </p>
+
+{% comment %}
+<h4>Appropriateness Ratings</h4>
+<table class="table">
+    <tr>
+        <th> Individual A's Decision
+        </th>
+        <th>
+            Appropriateness Rating
+        </th>
+    </tr>
+    {% for field in form %}
+        <tr>
+            <th>If Individual A were to: {{ field.label }}</th>
+            {% for choice in field %}
+                <td>{{ choice }}</td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+{% endcomment %}
+
 <p>
 
 Are there any questions about this example situation or about how to indicate your responses?

@@ -286,6 +286,7 @@ class Group(BaseGroup):
         ],
         widget=widgets.RadioSelectHorizontal
     )
+    practice_mode_rating_label = models.StringField()
     ratinglabel = models.StringField()
     p_rating00 = make_rating_field('$0.00')
     p_rating05 = make_rating_field('$0.50')
@@ -394,6 +395,7 @@ class Group(BaseGroup):
             ratings_p20.append(r.p_rating20)
             ratings_p25.append(r.p_rating25)
             ratings_p30.append(r.p_rating30)
+        # Use Counter to calculate the modal practice rating for each allocation (Counter lets a single rating be the modal rating; Statistics's mode does not)
         self.modal_rating_p00 = Counter(ratings_p00).most_common(1)[0][0] if ratings_p00 else None
 #        self.modal_rating_p00 = mode(ratings_p00) if ratings_p00 else None
         self.modal_rating_p05 = Counter(ratings_p05).most_common(1)[0][0] if ratings_p05 else None
@@ -417,6 +419,14 @@ class Group(BaseGroup):
                 g.modal_p_rating = self.modal_rating_p25
             if g.p_taken == c(3):
                 g.modal_p_rating = self.modal_rating_p30
+
+            practice_label_dict = {
+                1: 'Very Socially Inappropriate',
+                2: 'Somewhat Socially Inappropriate',
+                3: 'Somewhat Socially Appropriate',
+                4: 'Very Socially Appropriate'
+            }
+            self.practice_mode_rating_label = practice_label_dict[self.modal_p_rating]
 
     def get_practice_offer(self):
         for p in self.get_players():
