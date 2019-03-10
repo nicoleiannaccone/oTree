@@ -482,88 +482,9 @@ class Group(BaseGroup):
         if self.round_number == 5:
             self.name = p1.participant.vars['name5']
 
-########################################################################################################################
-# GROUP - Gender Guesses:
-########################################################################################################################
-
     def get_partner(self):
         return self.get_others_in_group()[0]
 
-    def check_gender(self):
-        decider = self.get_player_by_role('decider')
-        receiver = self.get_player_by_role('receiver')
-
-        decider.guess1_is_correct = decider.genderCP1 == receiver.gender
-        decider.guess2_is_correct = decider.genderCP2 == receiver.gender
-        decider.guess3_is_correct = decider.genderCP3 == receiver.gender
-        decider.guess4_is_correct = decider.genderCP4 == receiver.gender
-        decider.guess5_is_correct = decider.genderCP5 == receiver.gender
-
-        receiver.guess1_is_correct = receiver.genderCP1 == decider.gender
-        receiver.guess2_is_correct = receiver.genderCP2 == decider.gender
-        receiver.guess3_is_correct = receiver.genderCP3 == decider.gender
-        receiver.guess4_is_correct = receiver.genderCP4 == decider.gender
-        receiver.guess5_is_correct = receiver.genderCP5 == decider.gender
-
-
-    def set_guesses(self):
-        if self.genderCP1 == 1:
-            self.genderlabel1 = 'Male'
-        if self.genderCP1 == 2:
-            self.player.genderlabel1 = 'Female'
-        if self.genderCP1 == 3:
-            self.player.genderlabel1 = 'Other'
-        if self.player.genderCP2 == 1:
-            self.player.genderlabel2 = 'Male'
-        if self.player.genderCP2 == 2:
-            self.player.genderlabel2 = 'Female'
-        if self.player.genderCP2 == 3:
-            self.player.genderlabel2 = 'Other'
-        if self.player.genderCP3 == 1:
-            self.player.genderlabel3 = 'Male'
-        if self.player.genderCP3 == 2:
-            self.player.genderlabel3 = 'Female'
-        if self.player.genderCP3 == 3:
-            self.player.genderlabel3 = 'Other'
-        if self.player.genderCP4 == 1:
-            self.player.genderlabel4 = 'Male'
-        if self.player.genderCP4 == 2:
-            self.player.genderlabel4 = 'Female'
-        if self.player.genderCP4 == 3:
-            self.player.genderlabel4 = 'Other'
-        if self.player.genderCP5 == 1:
-            self.player.genderlabel5 = 'Male'
-        if self.player.genderCP5 == 2:
-            self.player.genderlabel5 = 'Female'
-        if self.player.genderCP5 == 3:
-            self.player.genderlabel5 = 'Other'
-
-    def check_guesses(self):
-        p1 = self.get_player_by_id(1)
-        p2 = self.get_player_by_id(2)
-        if p1.genderCP1 == p2.participant.vars['gender']:
-            p1.guess1_is_correct = True
-        if p1.genderCP2 == p2.gender:
-            p1.guess2_is_correct = True
-        if p1.genderCP3 == p2.gender:
-            p1.guess3_is_correct = True
-        if p1.genderCP4 == p2.gender:
-            p1.guess4_is_correct = True
-        if p1.genderCP5 == p2.gender:
-            p1.guess5_is_correct = True
-        if p2.genderCP1 == p1.gender:
-            p2.guess1_is_correct = True
-        if p2.genderCP2 == p1.gender:
-            p2.guess2_is_correct = True
-        if p2.genderCP3 == p1.gender:
-            p2.guess3_is_correct = True
-        if p2.genderCP4 == p1.gender:
-            p2.guess4_is_correct = True
-        if p2.genderCP5 == p1.gender:
-            p2.guess5_is_correct = True
-########################################################################################################################
-
-######################################################################################################################
 ######################################################################################################################
 ########################################### PLAYER CLASS #############################################################
 ######################################################################################################################
