@@ -646,8 +646,14 @@ class Player(BasePlayer):
     def get_payoffs(self):
         cumulative_payoff = sum([p.payoff for p in self.in_all_rounds()])
 
+    # Checking whether subject's rating matched the modal rating
+    def p_mode_match(self):
+        if self.group.p_rating == self.group.modal_p_rating:
+            self.p_mode_matched = True
+            self.payoff = Constants.prize
+
 ########################################################################################################################
-#  PLAYER - Checking Gender Guesses:
+#  PLAYER - Setting Players' Genders:
 ########################################################################################################################
 
     def get_genders(self):
@@ -685,80 +691,5 @@ class Player(BasePlayer):
         if self.gender == 3:
             self.participant.vars['Gender'] = 'Other'
 
-    def set_gender_guesses(self):
-        p1 = self.group.get_player_by_id(1)
-        p2 = self.group.get_player_by_id(2)
-        if self.genderCP1 == p1.participant.vars['gender']:
-            self.guess1_is_correct = True
-        if self.genderCP1 == p2.participant.vars['gender']:
-            self.guess1_is_correct = True
-
-    def set_guess(self):
-        if self.genderCP1 == 1:
-            self.genderlabel1 = 'Male'
-        if self.genderCP1 == 2:
-            self.genderlabel1 = 'Female'
-        if self.genderCP1 == 3:
-            self.genderlabel1 = 'Other'
-        if self.genderCP2 == 1:
-            self.genderlabel2 = 'Male'
-        if self.genderCP2 == 2:
-            self.genderlabel2 = 'Female'
-        if self.genderCP2 == 3:
-            self.genderlabel2 = 'Other'
-        if self.genderCP3 == 1:
-            self.genderlabel3 = 'Male'
-        if self.genderCP3 == 2:
-            self.genderlabel3 = 'Female'
-        if self.genderCP3 == 3:
-            self.genderlabel3 = 'Other'
-        if self.genderCP4 == 1:
-            self.genderlabel4 = 'Male'
-        if self.genderCP4 == 2:
-            self.genderlabel4 = 'Female'
-        if self.genderCP4 == 3:
-            self.genderlabel4 = 'Other'
-        if self.genderCP5 == 1:
-            self.genderlabel5 = 'Male'
-        if self.genderCP5 == 2:
-            self.genderlabel5 = 'Female'
-        if self.genderCP5 == 3:
-            self.genderlabel5 = 'Other'
-
-    def check_gender_guess(self):
-        self.participant.vars['genderCP1'] = self.genderCP1
-        self.participant.vars['genderCP2'] = self.genderCP2
-        self.participant.vars['genderCP3'] = self.genderCP3
-        self.participant.vars['genderCP4'] = self.genderCP4
-        self.participant.vars['genderCP5'] = self.genderCP5
-        p1 = self.group.get_player_by_id(1)
-        p2 = self.group.get_player_by_id(2)
-        if p1.genderCP1 == p2.gender:
-            p1.guess1_is_correct = True
-        if p1.genderCP2 == p2.gender:
-            p1.guess2_is_correct = True
-        if p1.genderCP3 == p2.gender:
-            p1.guess3_is_correct = True
-        if p1.genderCP4 == p2.gender:
-            p1.guess4_is_correct = True
-        if p1.genderCP5 == p2.gender:
-            p1.guess5_is_correct = True
-        if p2.genderCP1 == p1.gender:
-            p2.guess1_is_correct = True
-        if p2.genderCP2 == p1.gender:
-            p2.guess2_is_correct = True
-        if p2.genderCP3 == p1.gender:
-            p2.guess3_is_correct = True
-        if p2.genderCP4 == p1.gender:
-            p2.guess4_is_correct = True
-        if p2.genderCP5 == p1.gender:
-            p2.guess5_is_correct = True
-
-    # Checking whether subject's rating matched the modal rating
-    def p_mode_match(self):
-        if self.group.p_rating == self.group.modal_p_rating:
-                self.p_mode_matched = True
-                self.payoff = Constants.prize
-
-    ########################################################################################################################
+#######################################################################################################################
     pass
