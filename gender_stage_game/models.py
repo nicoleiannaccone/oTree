@@ -518,12 +518,73 @@ class Group(BaseGroup):
 
     def get_modal_ratings(self):
         decider = self.get_player_by_role('decider')
+        ratings_1 = []
+        ratings_2 = []
+
+        for g in self.subsession.get_groups():
+            if g.ordering_1:
+                ratings_1 = [[g.in_round(1).rating00, g.in_round(1).rating05, g.in_round(1).rating10, g.in_round(1).rating15, g.in_round(1).rating20, g.in_round(1).rating25, g.in_round(1).rating30],
+                               [g.in_round(2).rating00, g.in_round(2).rating05, g.in_round(2).rating10, g.in_round(2).rating15, g.in_round(2).rating20, g.in_round(2).rating25, g.in_round(2).rating30],
+                               [g.in_round(3).rating00, g.in_round(3).rating05, g.in_round(3).rating10, g.in_round(3).rating15, g.in_round(3).rating20, g.in_round(3).rating25, g.in_round(3).rating30],
+                               [g.in_round(4).rating00, g.in_round(4).rating05, g.in_round(4).rating10, g.in_round(4).rating15, g.in_round(4).rating20, g.in_round(4).rating25, g.in_round(4).rating30],
+                               [g.in_round(5).rating00, g.in_round(5).rating05, g.in_round(5).rating10, g.in_round(5).rating15, g.in_round(5).rating20, g.in_round(5).rating25, g.in_round(5).rating30]]
+            if g.ordering_2:
+                ratings_2 = [[g.in_round(1).rating00, g.in_round(1).rating05, g.in_round(1).rating10, g.in_round(1).rating15, g.in_round(1).rating20, g.in_round(1).rating25, g.in_round(1).rating30],
+                               [g.in_round(2).rating00, g.in_round(2).rating05, g.in_round(2).rating10, g.in_round(2).rating15, g.in_round(2).rating20, g.in_round(2).rating25, g.in_round(2).rating30],
+                               [g.in_round(3).rating00, g.in_round(3).rating05, g.in_round(3).rating10, g.in_round(3).rating15, g.in_round(3).rating20, g.in_round(3).rating25, g.in_round(3).rating30],
+                               [g.in_round(4).rating00, g.in_round(4).rating05, g.in_round(4).rating10, g.in_round(4).rating15, g.in_round(4).rating20, g.in_round(4).rating25, g.in_round(4).rating30],
+                               [g.in_round(5).rating00, g.in_round(5).rating05, g.in_round(5).rating10, g.in_round(5).rating15, g.in_round(5).rating20, g.in_round(5).rating25, g.in_round(5).rating30]]
+
         ratings_00_1_1 = []
         ratings_00_2_1 = []
         ratings_00_3_1 = []
         ratings_00_4_1 = []
         ratings_00_5_1 = []
 
+        ratings_00_1_1.append(ratings_1[0][0])
+        ratings_00_2_1.append(ratings_1[1][0])
+        ratings_00_3_1.append(ratings_1[2][0])
+        ratings_00_4_1.append(ratings_1[3][0])
+        ratings_00_5_1.append(ratings_1[4][0])
+
+        ratings_00_1 = []
+        ratings_05_1 = []
+        #...
+        ratings_30_1 = []
+
+        ratings_00_1.append([ratings_1[0][0], ratings_1[1][0], ratings_1[2][0], ratings_1[3][0], ratings_1[4][0]])
+        ratings_05_1.append([ratings_1[0][1], ratings_1[1][1], ratings_1[2][1], ratings_1[3][1], ratings_1[4][1]])
+        #...
+        ratings_30_1.append([ratings_1[0][6], ratings_1[1][6], ratings_1[2][6], ratings_1[3][6], ratings_1[4][6]])
+
+        ratings_00_2 = []
+        ratings_05_2 = []
+        #...
+        ratings_30_2 = []
+
+        ratings_00_2.append([ratings_2[0][0], ratings_2[1][0], ratings_2[2][0], ratings_2[3][0], ratings_2[4][0]])
+        ratings_05_2.append([ratings_2[0][1], ratings_2[1][1], ratings_2[2][1], ratings_2[3][1], ratings_2[4][1]])
+        #...
+        ratings_30_2.append([ratings_2[0][6], ratings_2[1][6], ratings_2[2][6], ratings_2[3][6], ratings_2[4][6]])
+
+        self.modal_rating_00_1_1 = Counter(ratings_00_1[0]).most_common(1)[0][0]
+        self.modal_rating_00_2_1 = Counter(ratings_00_1[1]).most_common(1)[0][0]
+        #...
+        self.modal_rating_00_5_1 = Counter(ratings_00_1[4]).most_common(1)[0][0]
+            #...
+        self.modal_rating_30_1_1 = Counter(ratings_30_1[0]).most_common(1)[0][0]
+        self.modal_rating_30_2_1 = Counter(ratings_30_1[1]).most_common(1)[0][0]
+        #...
+        self.modal_rating_30_5_1 = Counter(ratings_30_1[4]).most_common(1)[0][0]
+
+        ratings_00_1_1 = []
+        ratings_00_2_1 = []
+        ratings_00_3_1 = []
+        ratings_00_4_1 = []
+        ratings_00_5_1 = []
+
+
+        ratings_00_1 = []
         ratings_05_1 = []
         ratings_10_1 = []
         ratings_15_1 = []
