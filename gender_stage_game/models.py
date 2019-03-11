@@ -458,54 +458,6 @@ class Group(BaseGroup):
         else:
             self.ordering_2 = False
 
-    # def get_modal_ratings(self):
-    #     decider = self.get_player_by_role('decider')
-    #     if decider.participant.vars['ordering'] == 'ordering1':
-    #         ratings_00 = []
-    #         ratings_05 = []
-    #         ratings_10 = []
-    #         ratings_15 = []
-    #         ratings_20 = []
-    #         ratings_25 = []
-    #         ratings_30 = []
-    #         for r in self.subsession.get_groups():
-    #             ratings_00.append(r.rating00)
-    #             ratings_05.append(r.rating05)
-    #             ratings_10.append(r.rating10)
-    #             ratings_15.append(r.rating15)
-    #             ratings_20.append(r.rating20)
-    #             ratings_25.append(r.rating25)
-    #             ratings_30.append(r.rating30)
-    #             self.modal_rating_00 = mode(ratings_00) if ratings_00 else None
-    #             self.modal_rating_05 = mode(ratings_05) if ratings_15 else None
-    #             self.modal_rating_10 = mode(ratings_10) if ratings_10 else None
-    #             self.modal_rating_15 = mode(ratings_15) if ratings_15 else None
-    #             self.modal_rating_20 = mode(ratings_20) if ratings_20 else None
-    #             self.modal_rating_25 = mode(ratings_25) if ratings_25 else None
-    #             self.modal_rating_30 = mode(ratings_30) if ratings_30 else None
-    #     if decider.participant.vars['ordering'] == 'ordering2':
-    #         ratings_00 = []
-    #         ratings_05 = []
-    #         ratings_10 = []
-    #         ratings_15 = []
-    #         ratings_20 = []
-    #         ratings_25 = []
-    #         ratings_30 = []
-    #         for r in self.subsession.get_groups():
-    #             ratings_00.append(r.rating00)
-    #             ratings_05.append(r.rating05)
-    #             ratings_10.append(r.rating10)
-    #             ratings_15.append(r.rating15)
-    #             ratings_20.append(r.rating20)
-    #             ratings_25.append(r.rating25)
-    #             ratings_30.append(r.rating30)
-    #             self.modal_rating_00 = mode(ratings_00) if ratings_00 else None
-    #             self.modal_rating_05 = mode(ratings_05) if ratings_15 else None
-    #             self.modal_rating_10 = mode(ratings_10) if ratings_10 else None
-    #             self.modal_rating_15 = mode(ratings_15) if ratings_15 else None
-    #             self.modal_rating_20 = mode(ratings_20) if ratings_20 else None
-    #             self.modal_rating_25 = mode(ratings_25) if ratings_25 else None
-    #             self.modal_rating_30 = mode(ratings_30) if ratings_30 else None
 
     modal_rating_00_1_1 = models.IntegerField()
     modal_rating_00_2_1 = models.IntegerField()
