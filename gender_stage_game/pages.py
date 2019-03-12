@@ -115,10 +115,9 @@ class Results(Page):
     def vars_for_template(self):
         decider = self.group.get_player_by_role('decider')
         receiver = self.group.get_player_by_role('receiver')
-        self.group.get_treatment()
+        ordering = self.group.get_treatment()
         self.group.get_modal_rating()
-#        self.group.get_modal_ratings()
-        self.group.modal_rating_by_round()
+        self.group.modal_rating_by_round(ordering)
         self.player.mode_match()
         self.group.get_names()
         self.group.get_D_names()
@@ -128,6 +127,16 @@ class Results(Page):
         self.group.get_rating()
         self.group.get_my_rating()
         self.group.label_ratings()
+
+        # out = {
+        #     'payoff': self.participant.payoff,
+        # }
+        # for round in [1,2,3,4,5]:
+        #     for varname in ["took", "offered"]:
+        #         out[varname + str(round)] = self.participant.vars.get(varname + str(round), 0)
+        #     out["took" + str(round)] = self.participant.vars.get("taken" + str(round), 0)
+        # return out
+
         return {
             'took1': decider.participant.vars.get('taken1', 0),
             'took2': self.participant.vars.get('taken2', 0),
@@ -308,21 +317,6 @@ class Survey2(Page):
 #######################################################################################################################
 
 page_sequence = [
-##    Introduction,
-##    Pre_Survey,
-##    Pre_Survey_WaitPage,
-##    Pre_Survey_Results,
-##    Instructions_2,
-##    Instructions_3,
-##    Practice_Question_2,
-##    Practice_Question_0,
-##    Practice_Question_1,
-##    Practice_Take,
-##    Practice_Rating,
-##    Practice_WaitPage,
-##    Practice_Message,
-##    Practice_WaitPage,
-##    Practice_Results,
      # D_Name,
      # Wait_Page,
      D_Take,
