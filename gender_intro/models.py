@@ -157,29 +157,29 @@ class Subsession(BaseSubsession):
 ########################################### SUBSESSION CLASS #########################################################
 ######################################################################################################################
 
-#class Subsession(BaseSubsession):
-#    def get_players_by_role(self, role):
-#        return [p for p in self.get_players() if p.role() == role]
+        # class Subsession(BaseSubsession):
+        #    def get_players_by_role(self, role):
+        #        return [p for p in self.get_players() if p.role() == role]
 
-## Attempt #1 at matching. from online forum.
-#    def creating_session(self):
-#        num_groups = len(self.get_groups())
-#        A_players = chunkify(self.get_players_by_role('decider'), num_groups)
-#        B_players = chunkify(self.get_players_by_role('receiver'), num_groups)
-#        random.shuffle(B_players)
-#        self.set_group_matrix([i + j for i, j in zip(A_players, B_players)])
+        ## Attempt #1 at matching. from online forum.
+        #    def creating_session(self):
+        #        num_groups = len(self.get_groups())
+        #        A_players = chunkify(self.get_players_by_role('decider'), num_groups)
+        #        B_players = chunkify(self.get_players_by_role('receiver'), num_groups)
+        #        random.shuffle(B_players)
+        #        self.set_group_matrix([i + j for i, j in zip(A_players, B_players)])
 
-# To assign each new subject to a treatment randomly (ideally this would only apply to the dictators)
-#            if self.round_number == 1:
-#                for g in self.get_groups():
-#                    p = g.get_player_by_id(1)
-#                    p.participant.vars['ordering'] = random.choice(['ordering1', 'ordering2'])
-#                    if p.participant.vars['ordering'] == 'ordering1':
-#                        p.participant.vars['names'] = Constants.names1
-#                    if p.participant.vars['ordering'] == 'ordering2':
-#                        p.participant.vars['names'] = Constants.names2
+        # To assign each new subject to a treatment randomly (ideally this would only apply to the dictators)
+        #            if self.round_number == 1:
+        #                for g in self.get_groups():
+        #                    p = g.get_player_by_id(1)
+        #                    p.participant.vars['ordering'] = random.choice(['ordering1', 'ordering2'])
+        #                    if p.participant.vars['ordering'] == 'ordering1':
+        #                        p.participant.vars['names'] = Constants.names1
+        #                    if p.participant.vars['ordering'] == 'ordering2':
+        #                        p.participant.vars['names'] = Constants.names2
 
-    #        #                p1 = self.group.get_player_by_id(1)
+        #        #                p1 = self.group.get_player_by_id(1)
     #        #                ordering = p1.participant.vars['ordering']
 
     #        # This next line rematches group members randomly but keeps their ID # within the group constant. Does this mean that their role (Decider versus Receiver) will also be kept constant?
@@ -288,6 +288,7 @@ class Group(BaseGroup):
     )
     practice_mode_rating_label = models.StringField()
     ratinglabel = models.StringField()
+
     p_rating00 = make_rating_field('$0.00')
     p_rating05 = make_rating_field('$0.50')
     p_rating10 = make_rating_field('$1.00')
@@ -504,6 +505,11 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
     major = make_string_field('What is your major?')
+
+    krupka_1 = make_rating_field('Take the wallet')
+    krupka_2 = make_rating_field('Ask others nearby if the wallet belongs to them')
+    krupka_3 = make_rating_field('Leave the wallet where it is')
+    krupka_4 = make_rating_field('Give the wallet to the shop manager')
 
 # Practice Questions
     question1 = make_yn_field('When rating a Decider with the screenname Decider A taking $X, the most common rating by other Receivers was "Somewhat Appropriate." If Decider A chose to take $X, would you win a prize for your appropriateness rating?')

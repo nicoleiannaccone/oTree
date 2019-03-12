@@ -26,12 +26,16 @@ class Instructions_3(Page):
         return self.round_number == 1
 
 class Instructions_Krupka_1(Page):
+    form_model = 'player'
+    form_fields = ['krupka_1', 'krupka_2', 'krupka_3', 'krupka_4']
+
     def before_next_page(self):
         if self.request.POST.get('back'):
             if self.request.POST.get('back')[0] == '1':
                 self._is_frozen = False
                 self._index_in_pages -= 2
                 self.participant._index_in_pages -= 2
+
     def is_displayed(self):
         return self.round_number == 1
 
@@ -168,15 +172,15 @@ page_sequence = [
      # Pre_Survey_Results,
      # Instructions_2,
      # Instructions_3,
-     # Instructions_Krupka_1,
+      Instructions_Krupka_1,
      # Practice_Question_2,
      # Practice_Question_0,
      # Practice_Question_1,
      # Comprehension_Results,
-     Practice_Take,
-     Practice_Rating,
-     Practice_WaitPage,
-     Practice_Message,
-     Practice_WaitPage,
-     Practice_Results,
+     # Practice_Take,
+     # Practice_Rating,
+     # Practice_WaitPage,
+     # Practice_Message,
+     # Practice_WaitPage,
+     # Practice_Results,
 ]

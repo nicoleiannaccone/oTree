@@ -7,13 +7,13 @@
 
 Instructions 1:
 <p>
-In the following task you will be asked to evaluate the difference situations and decide whether taking a certain action would be "socially appropriate" and "consistent with moral or proper social behavior" or "socially inappropriate" and "inconsistent with moral or proper social behavior." By socially appropriate, we mean behavior that most people agree is the "correct" or "ethical" thing to do.
+In the following task you will be asked to evaluate the different situations and decide whether taking a certain action would be "socially appropriate" and "consistent with moral or proper social behavior" or "socially inappropriate" and "inconsistent with moral or proper social behavior." By socially appropriate, we mean behavior that most people agree is the "correct" or "ethical" thing to do.
 </p>
 <p>
-On the following screens, you will read descriptions of a series of situations. These descriptions correspond to situations in which one person, "Individual A", must make a decision.
+On the following screens, you will read descriptions of a series of situations. These descriptions correspond to situations in which one person, the Decider, must make a decision.
 </p>
 <p>
-For each situation, you will be given a description of the decision faced by Individual A. This description will include several possible choices available to Individual A.
+For each situation, you will be given a description of the decision faced by the Decider. This description will include several possible choices available to the Decider.
 After you read the description of the decision, you will be asked to evaluate the different possible choices available to Individual A and to decide,
 for each of the possible actions (the level of social appropriateness or inappropriateness of that action. - Kimbrough, Miller, & Vos), whether taking that action would be "socially appropriate" and "consistent with moral or proper social behavior" or "socially inappropriate" and
 "inconsistent with moral or proper social behavior." By socially appropriate, we mean behavior that most people agree is the "correct" or "ethical" thing to do.
@@ -104,8 +104,6 @@ Leave the wallet where it is		X
 Give the wallet to the shop manager				X
 </p>
 
-{% comment %}
-<h4>Appropriateness Ratings</h4>
 <table class="table">
     <tr>
         <th> Individual A's Decision
@@ -116,14 +114,13 @@ Give the wallet to the shop manager				X
     </tr>
     {% for field in form %}
         <tr>
-            <th>If Individual A were to: {{ field.label }}</th>
+            <th>{{ field.label }}</th>
             {% for choice in field %}
                 <td>{{ choice }}</td>
             {% endfor %}
         </tr>
     {% endfor %}
 </table>
-{% endcomment %}
 
 <p>
 
@@ -150,11 +147,8 @@ At the end of the experiment today, we will randomly select one of the situation
     If you have any questions from this point on, please raise your hand and wait for the experimenter to come to you.
 </p>
 <p>
-Please wait to turn the page until the experimenter asks you to do so.
+Please wait to move on until the experimenter asks you to do so.
 </p>
-<p>
-If you have any questions, please raise your hand and wait for the experimenter.
-    </p>
 
 {% next_button %}
     <button class="btn" name="back" value="1">Back</button>
