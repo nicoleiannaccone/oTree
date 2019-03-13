@@ -65,25 +65,16 @@ class Constants(BaseConstants):
 
     instructions_template = 'gender_intro/Instructions_Full.html'
 
-# Monetary amounts
+    # Monetary amounts
     endowment = c(3)
     prize = c(0.5)
     participation = c(5)
 
-# Screennames for treatments
+    # Screennames for treatments
     names = []
     ordering = models.StringField()
     names1 = ['Jacob', 'William', 'Michael', 'Sophia', 'Elizabeth']
-    # James, Bruce, Ethan, Alexander, Daniel, Elijah, Benjamin, Matthew, David, Anthony, Joseph, Joshua, Andrew
     names2 = ['Amy', 'Emily', 'Michelle', 'James', 'Daniel']
-    # Sophia, Emma, Olivia, Emily, Abigail, Elizabeth, Charlotte, Chloe,  Aubrey,  Natalie, Grace, Zoey, Hannah, Allison, Samantha
-    names3 = ['Cameron', 'Jamie', 'Taylor', 'Riley', 'Casey']
-    names4 = ['Player B', 'Player F', 'Player E', 'Player D', 'Player G']
-    names5 = ['Orange Player', 'Yellow Player', 'Purple Player', 'Green Player', 'Grey Player']
-    # Peyton, Taylor, Jordan, Ryan, Devon, Harper, Madison, Addison
-    # Jayden, Rowan, Emerson, Avery, Kasey, Devon, Casey, Parker, Bailey, Harley, Quinn, Mackenzie, Dakota,
-    # Logan, Cameron, Taylor, Jordan, Ryan, Morgan, Devin
-    # Kendall, Logan,
 
 
 # Needed below to implement a Perfect Strangers matching.
@@ -110,6 +101,7 @@ class Subsession(BaseSubsession):
         fd = self.session.vars['full_data']
         self.set_group_matrix(fd[self.round_number - 1])
         print(self.get_group_matrix())
+
 ##########################################################################################################################################################################################################################
 
 ######################################################################################################################
@@ -703,6 +695,19 @@ class Group(BaseGroup):
         #             attr_name = self.modal_rating_label
         #             attr_value = rating_label_dict[modal_rating]
         #             setattr(self, attr_name, attr_value)
+
+    def fetch_rating(self):
+        rating_dict = {
+            None: None,
+            c(0): self.rating00,
+            c(0.5): self.rating05,
+            c(1): self.rating10,
+            c(1.5): self.rating15,
+            c(2): self.rating20,
+            c(2.5): self.rating25,
+            c(3): self.rating30
+        }
+        return rating_dict[self.taken]
 
 # TODO: Andrew-based code - get_ratings
     def get_rating(self):

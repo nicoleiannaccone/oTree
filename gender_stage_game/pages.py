@@ -1,6 +1,7 @@
 from otree.api import Currency as c, currency_range
 from ._builtin import Page, WaitPage
 from .models import Constants
+import collections
 
 # Stage Game
 class D_Name(Page):
@@ -108,6 +109,24 @@ class ResultsWaitPage(WaitPage):
     # def is_displayed(self):
     #     return self.round_number == Constants.num_rounds
 
+class Test(Page):
+    def is_displayed(self):
+        print("First I did this")
+        return self.round_number == Constants.num_rounds
+
+    def after_all_players_arrive(self):
+        print("I did this")
+
+
+class ResultRow:
+    def __init__(self, round_number, dname, took, offered, rating, modal_rating):
+        self.round_number = round_number
+        self.dname = dname
+        self.took = took
+        self.offered = offered
+        self.rating = rating
+        self.modal_rating = modal_rating
+
 
 class Results(Page):
 #    def is_displayed(self):
@@ -116,67 +135,93 @@ class Results(Page):
         decider = self.group.get_player_by_role('decider')
         receiver = self.group.get_player_by_role('receiver')
         ordering = self.group.get_treatment()
-        self.group.get_modal_rating()
-        self.group.modal_rating_by_round(ordering)
-        self.player.mode_match()
-        self.group.get_names()
-        self.group.get_D_names()
-        self.group.get_offer()
-#        self.player.get_payoffs()
-        self.group.get_my_messages()
-        self.group.get_rating()
-        self.group.get_my_rating()
-        self.group.label_ratings()
 
-        # out = {
-        #     'payoff': self.participant.payoff,
-        # }
-        # for round in [1,2,3,4,5]:
-        #     for varname in ["took", "offered"]:
-        #         out[varname + str(round)] = self.participant.vars.get(varname + str(round), 0)
-        #     out["took" + str(round)] = self.participant.vars.get("taken" + str(round), 0)
-        # return out
+        receiver_ratings = {}
+        for t in 1,2:
+            for r in 1,2,3,4,5:
+                for v in 0, 0.5, 1, 1.5, 2, 2.5, 3:
+                    receiver_ratings[(t, r, v)] = list()
+        #receiver_ratings[(1,2,0.5)] = 3
+        for g in self.subsession.get_groups():
+            for r in 1,2,3,4,5:
+                x = g.in_round(r)
+                t = x.get_treatment()
+                receiver_ratings[(t,r,0)].append(x.rating00)
+                receiver_ratings[(t,r,0.5)].append(x.rating05)
+                receiver_ratings[(t,r,1)].append(x.rating10)
+                receiver_ratings[(t,r,1.5)].append(x.rating15)
+                receiver_ratings[(t,r,2)].append(x.rating20)
+                receiver_ratings[(t,r,2.5)].append(x.rating25)
+                receiver_ratings[(t,r,3)].append(x.rating30)
 
+        result_table = list()
+        for round_number in 1,2,3,4,5:
+            g = self.group.in_round(round_number)
+            dname = g.get_player_by_role('decider').participant.vars['name' + str(round_number)]
+            took = g.taken
+            offered = None if (g.taken is None) else (c(3) - g.taken)
+            rating = g.fetch_rating()
+
+            rating_list = receiver_ratings.get((g.get_treatment(), round_number, g.taken), None)
+            modal_rating = collections.Counter(rating_list).most_common(1)[0][0] if rating_list else None
+
+            rr = ResultRow(round_number, dname, took, offered, rating, modal_rating)
+            result_table.append(rr)
+
+#         self.group.get_modal_rating()
+#         self.group.modal_rating_by_round(ordering)
+#         self.player.mode_match()
+#         self.group.get_names()
+#         self.group.get_D_names()
+#         self.group.get_offer()
+# #        self.player.get_payoffs()
+#         self.group.get_my_messages()
+#         self.group.get_rating()
+#         self.group.get_my_rating()
+#         self.group.label_ratings()
+
+        print('fish')
         return {
-            'took1': decider.participant.vars.get('taken1', 0),
-            'took2': self.participant.vars.get('taken2', 0),
-            'took3': self.participant.vars.get('taken3', 0),
-            'took4': self.participant.vars.get('taken4', 0),
-            'took5': self.participant.vars.get('taken5', 0),
-            'payoff': self.participant.payoff,
-            'offered1': self.participant.vars.get('offer1', 0),
-            'offered2': self.participant.vars.get('offer2', 0),
-            'offered3': self.participant.vars.get('offer3', 0),
-            'offered4': self.participant.vars.get('offer4', 0),
-            'offered5': self.participant.vars.get('offer5', 0),
-            'rated1': self.participant.vars.get('ratinglabel1', 0),
-            'rated2': self.participant.vars.get('ratinglabel2', 0),
-            'rated3': self.participant.vars.get('ratinglabel3', 0),
-            'rated4': self.participant.vars.get('ratinglabel4', 0),
-            'rated5': self.participant.vars.get('ratinglabel5', 0),
-            'message1': self.participant.vars.get('message1', 0),
-            'message2': self.participant.vars.get('message2', 0),
-            'message3': self.participant.vars.get('message3', 0),
-            'message4': self.participant.vars.get('message4', 0),
-            'message5': self.participant.vars.get('message5', 0),
-            'name_1': decider.participant.vars.get('name1', 0),
-            'name_2': decider.participant.vars.get('name2', 0),
-            'name_3': decider.participant.vars.get('name3', 0),
-            'name_4': decider.participant.vars.get('name4', 0),
-            'name_5': decider.participant.vars.get('name5', 0),
-            'name_D1': receiver.participant.vars.get('name_D1', 0),
-            'name_D2': receiver.participant.vars.get('name_D2', 0),
-            'name_D3': receiver.participant.vars.get('name_D3', 0),
-            'name_D4': receiver.participant.vars.get('name_D4', 0),
-            'name_D5': receiver.participant.vars.get('name_D5', 0),
-            'gender': self.participant.vars.get('gender', 0),
-            'gender_CP_1': self.participant.vars.get('gender_CP_1', 0),
-            'gender_CP_2': self.participant.vars.get('gender_CP_2', 0),
-            'gender_CP_3': self.participant.vars.get('gender_CP_3', 0),
-            'gender_CP_4': self.participant.vars.get('gender_CP_4', 0),
-            'gender_CP_5': self.participant.vars.get('gender_CP_5', 0),
-            'ordering': self.participant.vars.get('ordering', 0),
-            'names': self.participant.vars.get('names', 0),
+            'result_table': result_table,
+            # 'took1': decider.participant.vars.get('taken1', 0),
+            # 'took2': self.participant.vars.get('taken2', 0),
+            # 'took3': self.participant.vars.get('taken3', 0),
+            # 'took4': self.participant.vars.get('taken4', 0),
+            # 'took5': self.participant.vars.get('taken5', 0),
+            # 'payoff': self.participant.payoff,
+            # 'offered1': self.participant.vars.get('offer1', 0),
+            # 'offered2': self.participant.vars.get('offer2', 0),
+            # 'offered3': self.participant.vars.get('offer3', 0),
+            # 'offered4': self.participant.vars.get('offer4', 0),
+            # 'offered5': self.participant.vars.get('offer5', 0),
+            # 'rated1': self.participant.vars.get('ratinglabel1', 0),
+            # 'rated2': self.participant.vars.get('ratinglabel2', 0),
+            # 'rated3': self.participant.vars.get('ratinglabel3', 0),
+            # 'rated4': self.participant.vars.get('ratinglabel4', 0),
+            # 'rated5': self.participant.vars.get('ratinglabel5', 0),
+            # 'message1': self.participant.vars.get('message1', 0),
+            # 'message2': self.participant.vars.get('message2', 0),
+            # 'message3': self.participant.vars.get('message3', 0),
+            # 'message4': self.participant.vars.get('message4', 0),
+            # 'message5': self.participant.vars.get('message5', 0),
+            # 'name_1': decider.participant.vars.get('name1', 0),
+            # 'name_2': decider.participant.vars.get('name2', 0),
+            # 'name_3': decider.participant.vars.get('name3', 0),
+            # 'name_4': decider.participant.vars.get('name4', 0),
+            # 'name_5': decider.participant.vars.get('name5', 0),
+            # 'name_D1': receiver.participant.vars.get('name_D1', 0),
+            # 'name_D2': receiver.participant.vars.get('name_D2', 0),
+            # 'name_D3': receiver.participant.vars.get('name_D3', 0),
+            # 'name_D4': receiver.participant.vars.get('name_D4', 0),
+            # 'name_D5': receiver.participant.vars.get('name_D5', 0),
+            # 'gender': self.participant.vars.get('gender', 0),
+            # 'gender_CP_1': self.participant.vars.get('gender_CP_1', 0),
+            # 'gender_CP_2': self.participant.vars.get('gender_CP_2', 0),
+            # 'gender_CP_3': self.participant.vars.get('gender_CP_3', 0),
+            # 'gender_CP_4': self.participant.vars.get('gender_CP_4', 0),
+            # 'gender_CP_5': self.participant.vars.get('gender_CP_5', 0),
+            # 'ordering': self.participant.vars.get('ordering', 0),
+            # 'names': self.participant.vars.get('names', 0),
         }
 
 class Results2(Page):
@@ -317,16 +362,17 @@ class Survey2(Page):
 #######################################################################################################################
 
 page_sequence = [
-     # D_Name,
-     # Wait_Page,
-     D_Take,
-     D_Wait_Page,
-     R_Rating,
-     RoundWaitPage,
-     # R_Message,
-     # Message_WaitPage,
-     ResultsWaitPage,
-     Results,
+    # Test,
+     # # D_Name,
+     # # Wait_Page,
+      D_Take,
+      D_Wait_Page,
+      R_Rating,
+      RoundWaitPage,
+     # # R_Message,
+     # # Message_WaitPage,
+      ResultsWaitPage,
+      Results,
      # Results2,
      # PostSurvey,
      # SurveyWaitPage,
