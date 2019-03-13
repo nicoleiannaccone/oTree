@@ -1,0 +1,31 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+     Decision {{round}}: {{alloc}}
+{% endblock %}
+
+{% block content %}
+
+Each token you keep for yourself gives you a bonus of {{Constants.perToken}} cents.
+
+Each token you give to the other participant gives them a bonus of {{alloc}}.
+
+{% formfield player.alloc1 %}
+{% formfield player.alloc2 %}
+{% formfield player.alloc3 %}
+{% formfield player.alloc4 %}
+{% formfield player.alloc5 %}
+
+Give 0 token(s) to the other participant.
+
+{{ form.checkslider1.errors }}
+{{ form.checkslider2.errors }}
+{{ form.checkslider3.errors }}
+{{ form.checkslider4.errors }}
+{{ form.checkslider5.errors }}
+
+    {% next_button %}
+
+{% endblock %}
+
