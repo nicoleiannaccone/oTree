@@ -39,13 +39,25 @@ The table below presents a list of the possible choices available to Individual 
 For each of the choices, you will be asked to indicate whether you believe choosing that option is very socially inappropriate, somewhat socially inappropriate, somewhat socially appropriate, or very socially appropriate.
 To indicate your response, [please click on the corresponding cell.-Kimbrough] you would place a check mark in the corresponding box.
 </p>
-<p>
-Take the wallet
-Ask others nearby if the wallet belongs to them
-Leave the wallet where it is
-Give the wallet to the shop manager
-Individual A's Action:
-</p>
+
+<table class="table">
+    <tr>
+        <th> Individual A's Action:
+        </th>
+        <th>
+            Appropriateness Rating
+        </th>
+    </tr>
+    {% for field in form %}
+        <tr>
+            <th>{{ field.label }}</th>
+            {% for choice in field %}
+                <td>{{ choice }}</td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+
 <p>
     [Please make sure you make an assessment for each possible choice in each row of the table.-Kimbrough]
 </p>
@@ -96,17 +108,10 @@ If this were one of the situations for this study, you would consider each of th
 </p>
 <p>
 For example, suppose you thought that taking the wallet was very socially inappropriate, asking others nearby if the wallet belongs to them was somewhat socially appropriate, leaving the wallet where it is was somewhat socially inappropriate, and giving the wallet to the shop manager was very socially appropriate. Then you would indicate your responses as follows:
-</p>
-<p>
-Take the wallet	X
-Ask others nearby if the wallet belongs to them			X
-Leave the wallet where it is		X
-Give the wallet to the shop manager				X
-</p>
 
 <table class="table">
     <tr>
-        <th> Individual A's Decision
+        <th> Individual A's Action:
         </th>
         <th>
             Appropriateness Rating
@@ -121,6 +126,7 @@ Give the wallet to the shop manager				X
         </tr>
     {% endfor %}
 </table>
+
 
 <p>
 
