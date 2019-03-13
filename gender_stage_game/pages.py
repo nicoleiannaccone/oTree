@@ -133,11 +133,11 @@ class Results(Page):
     def vars_for_template(self):
         receiver_ratings = {}
         for t in 1,2:
-            for r in Constants.round_numbers():
+            for r in Constants.round_numbers:
                 for v in 0, 0.5, 1, 1.5, 2, 2.5, 3:
                     receiver_ratings[(t, r, v)] = list()
         for g in self.subsession.get_groups():
-            for r in Constants.round_numbers():
+            for r in Constants.round_numbers:
                 x = g.in_round(r)
                 t = x.get_treatment()
                 receiver_ratings[(t,r,0)].append(x.rating00)
@@ -149,7 +149,7 @@ class Results(Page):
                 receiver_ratings[(t,r,3)].append(x.rating30)
 
         result_table = list()
-        for round_number in Constants.round_numbers():
+        for round_number in Constants.round_numbers:
             g = self.group.in_round(round_number)
             dname = g.get_player_by_role('decider').participant.vars['name' + str(round_number)]
             took = g.taken

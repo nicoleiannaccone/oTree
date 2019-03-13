@@ -1,5 +1,3 @@
-#!/Users/ai/anaconda3/bin/python
-# -*- coding: utf-8 -*-
 import re
 import sys
 

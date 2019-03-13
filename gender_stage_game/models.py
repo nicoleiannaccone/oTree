@@ -62,6 +62,7 @@ class Constants(BaseConstants):
     num_rounds = 5
 
     rounds = 5
+    round_numbers = list(range(1, num_rounds + 1))
 
     instructions_template = 'gender_intro/Instructions_Full.html'
 
@@ -75,9 +76,6 @@ class Constants(BaseConstants):
     ordering = models.StringField()
     names1 = ['Jacob', 'William', 'Michael', 'Sophia', 'Elizabeth']
     names2 = ['Amy', 'Emily', 'Michelle', 'James', 'Daniel']
-
-    def round_numbers(self):
-        return range(1, self.num_rounds + 1)
 
 
 # Needed below to implement a Perfect Strangers matching.
