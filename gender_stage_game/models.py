@@ -76,6 +76,9 @@ class Constants(BaseConstants):
     names1 = ['Jacob', 'William', 'Michael', 'Sophia', 'Elizabeth']
     names2 = ['Amy', 'Emily', 'Michelle', 'James', 'Daniel']
 
+    def round_numbers(self):
+        return range(1, self.num_rounds + 1)
+
 
 # Needed below to implement a Perfect Strangers matching.
 # From https://groups.google.com/forum/#!msg/otree/rciCzbTqSfQ/XC-T7oZrEAAJ
