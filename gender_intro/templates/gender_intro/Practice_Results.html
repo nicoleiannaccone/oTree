@@ -31,12 +31,6 @@
         <th>
             Receiver's Message:
         </th>
-        <th>
-            Counterpart's Gender:
-        </th>
-        <th>
-            Own Gender:
-        </th>
     </tr>
     <tr>
         <td>
@@ -49,16 +43,10 @@
             {{ group.ratinglabel }}
         </td>
         <td>
-            {{ group.modal_p_rating }}
+            {{ group.modal_p_rating }}: {{ group.practice_mode_rating_label }}
         </td>
         <td>
             {{ group.p_message }}
-        </td>
-        <td>
-            {{ other_player_gender }}
-        </td>
-        <td>
-            {{ gender }}
         </td>
     </tr>
 </table>
@@ -84,32 +72,34 @@
             </p>
             <p>
                 The most common rating that other Receivers assigned to an allocation of the amount {{ group.p_taken }}
-                taken by your Decider was <strong>{{ group.modal_p_rating }}</strong>.
+                taken by your Decider was {{ group.modal_p_rating }}: <strong> {{ group.practice_mode_rating_label }} </strong>.
                 {% if player.p_mode_matched == True %}
-                <p> Since your own rating, {{ group.p_rating }}, matched the most common rating you win a prize of {{Constants.prize }}. </p>
+                <p> Since your own rating, {{ group.ratinglabel }}, matched the most common rating,
+                    {{ group.practice_mode_rating_label }},  you win a prize of {{ Constants.prize }}. </p>
                 {% else %}
-<p> Your rating of the amount your Decider took, {{ group.p_rating }}, did not match the modal rating of that amount, {{ group.modal_p_rating }}. </p>
+                <p> Your rating of the amount your Decider took, {{ group.p_rating }}, did not match the most common
+                    rating assigned to an allocation of that amount, {{ group.modal_p_rating }}. </p>
                 {% endif %}
             </p>
         {% endif %}
 
 <p>
     -- Checking ratings -- Group.p_rating:
-{{ group.p_rating }}
+{{ group.p_rating }},
 Modal rating 00:
-{{ group.modal_rating_p00 }}
+{{ group.modal_rating_p00 }},
 Modal rating 05:
-{{ group.modal_rating_p05 }}
+{{ group.modal_rating_p05 }},
 Modal rating 10:
-{{ group.modal_rating_p10 }}
+{{ group.modal_rating_p10 }},
 Modal rating 15:
-{{ group.modal_rating_p15 }}
+{{ group.modal_rating_p15 }},
 Modal rating 20:
-{{ group.modal_rating_p20 }}
+{{ group.modal_rating_p20 }},
 Modal rating 25:
-{{ group.modal_rating_p25 }}
+{{ group.modal_rating_p25 }},
 Modal rating 30:
-{{ group.modal_rating_p30 }}
+{{ group.modal_rating_p30 }}.
 </p>
 {% next_button %}
 

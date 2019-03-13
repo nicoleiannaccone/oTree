@@ -147,48 +147,53 @@ class Subsession(BaseSubsession):
 # What it does: it shifts each second member in each group to the right by one. That guarantees that no one plays with
 # the same game in two subsequent rounds, and each members holds his/her position within in a group.
     def creating_session(self):
-            if self.round_number == 1:
-                self.session.vars['full_data'] = [i for i in shifter(self.get_group_matrix())]
-            fd = self.session.vars['full_data']
-            self.set_group_matrix(fd[self.round_number - 1])
-            print(self.get_group_matrix())
-#########################################################################################################################################################################################################################
+        if self.round_number == 1:
+            self.session.vars['full_data'] = [i for i in shifter(self.get_group_matrix())]
+        fd = self.session.vars['full_data']
+        self.set_group_matrix(fd[self.round_number - 1])
+        print(self.get_group_matrix())
 
 ######################################################################################################################
 ########################################### SUBSESSION CLASS #########################################################
 ######################################################################################################################
-######################################################################################################################
-#class Subsession(BaseSubsession):
-#    def get_players_by_role(self, role):
-#        return [p for p in self.get_players() if p.role() == role]
 
-## Attempt #1 at matching. from online forum.
-#    def creating_session(self):
-#        num_groups = len(self.get_groups())
-#        A_players = chunkify(self.get_players_by_role('decider'), num_groups)
-#        B_players = chunkify(self.get_players_by_role('receiver'), num_groups)
-#        random.shuffle(B_players)
-#        self.set_group_matrix([i + j for i, j in zip(A_players, B_players)])
+        # class Subsession(BaseSubsession):
+        #    def get_players_by_role(self, role):
+        #        return [p for p in self.get_players() if p.role() == role]
 
-# To assign each new subject to a treatment randomly (ideally this would only apply to the dictators)
-#            if self.round_number == 1:
-#                for g in self.get_groups():
-#                    p = g.get_player_by_id(1)
-#                    p.participant.vars['ordering'] = random.choice(['ordering1', 'ordering2'])
-#                    if p.participant.vars['ordering'] == 'ordering1':
-#                        p.participant.vars['names'] = Constants.names1
-#                    if p.participant.vars['ordering'] == 'ordering2':
-#                        p.participant.vars['names'] = Constants.names2
+        ## Attempt #1 at matching. from online forum.
+        #    def creating_session(self):
+        #        num_groups = len(self.get_groups())
+        #        A_players = chunkify(self.get_players_by_role('decider'), num_groups)
+        #        B_players = chunkify(self.get_players_by_role('receiver'), num_groups)
+        #        random.shuffle(B_players)
+        #        self.set_group_matrix([i + j for i, j in zip(A_players, B_players)])
 
-    #        #                p1 = self.group.get_player_by_id(1)
+        # To assign each new subject to a treatment randomly (ideally this would only apply to the dictators)
+        #            if self.round_number == 1:
+        #                for g in self.get_groups():
+        #                    p = g.get_player_by_id(1)
+        #                    p.participant.vars['ordering'] = random.choice(['ordering1', 'ordering2'])
+        #                    if p.participant.vars['ordering'] == 'ordering1':
+        #                        p.participant.vars['names'] = Constants.names1
+        #                    if p.participant.vars['ordering'] == 'ordering2':
+        #                        p.participant.vars['names'] = Constants.names2
+
+        #        #                p1 = self.group.get_player_by_id(1)
     #        #                ordering = p1.participant.vars['ordering']
 
     #        # This next line rematches group members randomly but keeps their ID # within the group constant. Does this mean that their role (Decider versus Receiver) will also be kept constant?
     #        self.group_randomly(fixed_id_in_group=True)
 
+# Stranger matching attempts:
+#     def before_session_starts(self):
+#        if self.round_number > 1:
+#           p_x_g  = match_players.perfect_strangers(self)
+#           for group, players in zip(self.get_groups(), p_x_g):
+#                 group.set_players(players)
 
     # Creating Balanced Treatments -- half of the groups get each ordering:
-    def creating_session(self):
+#    def creating_session(self):
         ordering = itertools.cycle(['ordering1', 'ordering2'])
     ##        p1.participant.vars['ordering'] = 'ordering1'
         for g in self.get_groups():
@@ -200,14 +205,13 @@ class Subsession(BaseSubsession):
             if decider.participant.vars['ordering'] == 'ordering2':
                 decider.participant.vars['names'] = Constants.names2
 
-
 # To randomly select which round is paid:
 #    def creating_session(self):
 #             if self.round_number == 1:
 #                 paying_round = random.randint(1, Constants.num_rounds)
 #                 self.session.vars['paying_round'] = paying_round
 
-
+# Session-Level Variables for calculating the practice-ratings mode
     modal_p_rating = models.IntegerField()
 
     modal_rating = models.IntegerField()
@@ -219,24 +223,10 @@ class Subsession(BaseSubsession):
     modal_rating_p25 = models.IntegerField()
     modal_rating_p30 = models.IntegerField()
 
-
-# Stranger matching attempts:
-#     def before_session_starts(self):
-#        if self.round_number > 1:
-#           p_x_g  = match_players.perfect_strangers(self)
-#           for group, players in zip(self.get_groups(), p_x_g):
-#                 group.set_players(players)
-
-
-
-
-######################################################################################################################
 ######################################################################################################################
 ########################################### GROUP CLASS ##############################################################
 ######################################################################################################################
-######################################################################################################################
 class Group(BaseGroup):
-
     # Roles
     decider = models.StringField()
     receiver = models.StringField()
@@ -296,7 +286,9 @@ class Group(BaseGroup):
         ],
         widget=widgets.RadioSelectHorizontal
     )
+    practice_mode_rating_label = models.StringField()
     ratinglabel = models.StringField()
+
     p_rating00 = make_rating_field('$0.00')
     p_rating05 = make_rating_field('$0.50')
     p_rating10 = make_rating_field('$1.00')
@@ -353,8 +345,8 @@ class Group(BaseGroup):
     def get_role(self):
         decider = self.get_player_by_role('decider')
         receiver = self.get_player_by_role('receiver')
-        p1 = self.get_player_by_role('decider')
-        p2 = self.get_player_by_role('receiver')
+        p1 = self.get_player_by_id(1)
+        p2 = self.get_player_by_id(2)
 
     def set_practice_payoffs(self):
         decider = self.get_player_by_role('decider')
@@ -387,7 +379,7 @@ class Group(BaseGroup):
         self.ratinglabel = rl_dict[self.p_rating]
 
     def get_modal_p_ratings(self):
-        #        if decider.participant.vars['ordering'] == 'ordering1':
+        # Create a list in which to place each group's practice-ratings for each possible allocation
         ratings_p00 = []
         ratings_p05 = []
         ratings_p10 = []
@@ -395,6 +387,7 @@ class Group(BaseGroup):
         ratings_p20 = []
         ratings_p25 = []
         ratings_p30 = []
+        # For each group in the session, append their practice rating into the corresponding list of all groups' ratings
         for r in self.subsession.get_groups():
             ratings_p00.append(r.p_rating00)
             ratings_p05.append(r.p_rating05)
@@ -403,13 +396,15 @@ class Group(BaseGroup):
             ratings_p20.append(r.p_rating20)
             ratings_p25.append(r.p_rating25)
             ratings_p30.append(r.p_rating30)
-        self.modal_rating_p00 = mode(ratings_p00) if ratings_p00 else None
-        self.modal_rating_p05 = mode(ratings_p05) if ratings_p15 else None
-        self.modal_rating_p10 = mode(ratings_p10) if ratings_p10 else None
-        self.modal_rating_p15 = mode(ratings_p15) if ratings_p15 else None
-        self.modal_rating_p20 = mode(ratings_p20) if ratings_p20 else None
-        self.modal_rating_p25 = mode(ratings_p25) if ratings_p25 else None
-        self.modal_rating_p30 = mode(ratings_p30) if ratings_p30 else None
+        # Use Counter to calculate the modal practice rating for each allocation (Counter lets a single rating be the modal rating; Statistics's mode does not)
+        self.modal_rating_p00 = Counter(ratings_p00).most_common(1)[0][0] if ratings_p00 else None
+#        self.modal_rating_p00 = mode(ratings_p00) if ratings_p00 else None
+        self.modal_rating_p05 = Counter(ratings_p05).most_common(1)[0][0] if ratings_p05 else None
+        self.modal_rating_p10 = Counter(ratings_p10).most_common(1)[0][0] if ratings_p10 else None
+        self.modal_rating_p15 = Counter(ratings_p15).most_common(1)[0][0] if ratings_p15 else None
+        self.modal_rating_p20 = Counter(ratings_p20).most_common(1)[0][0] if ratings_p20 else None
+        self.modal_rating_p25 = Counter(ratings_p25).most_common(1)[0][0] if ratings_p25 else None
+        self.modal_rating_p30 = Counter(ratings_p30).most_common(1)[0][0] if ratings_p30 else None
         for g in self.subsession.get_groups():
             if g.p_taken == c(0):
                 g.modal_p_rating = self.modal_rating_p00
@@ -425,6 +420,14 @@ class Group(BaseGroup):
                 g.modal_p_rating = self.modal_rating_p25
             if g.p_taken == c(3):
                 g.modal_p_rating = self.modal_rating_p30
+
+            practice_label_dict = {
+                1: 'Very Socially Inappropriate',
+                2: 'Somewhat Socially Inappropriate',
+                3: 'Somewhat Socially Appropriate',
+                4: 'Very Socially Appropriate'
+            }
+            self.practice_mode_rating_label = practice_label_dict[self.modal_p_rating]
 
     def get_practice_offer(self):
         for p in self.get_players():
@@ -480,88 +483,9 @@ class Group(BaseGroup):
         if self.round_number == 5:
             self.name = p1.participant.vars['name5']
 
-########################################################################################################################
-# GROUP - Gender Guesses:
-########################################################################################################################
-
     def get_partner(self):
         return self.get_others_in_group()[0]
 
-    def check_gender(self):
-        decider = self.get_player_by_role('decider')
-        receiver = self.get_player_by_role('receiver')
-
-        decider.guess1_is_correct = decider.genderCP1 == receiver.gender
-        decider.guess2_is_correct = decider.genderCP2 == receiver.gender
-        decider.guess3_is_correct = decider.genderCP3 == receiver.gender
-        decider.guess4_is_correct = decider.genderCP4 == receiver.gender
-        decider.guess5_is_correct = decider.genderCP5 == receiver.gender
-
-        receiver.guess1_is_correct = receiver.genderCP1 == decider.gender
-        receiver.guess2_is_correct = receiver.genderCP2 == decider.gender
-        receiver.guess3_is_correct = receiver.genderCP3 == decider.gender
-        receiver.guess4_is_correct = receiver.genderCP4 == decider.gender
-        receiver.guess5_is_correct = receiver.genderCP5 == decider.gender
-
-
-    def set_guesses(self):
-        if self.genderCP1 == 1:
-            self.genderlabel1 = 'Male'
-        if self.genderCP1 == 2:
-            self.player.genderlabel1 = 'Female'
-        if self.genderCP1 == 3:
-            self.player.genderlabel1 = 'Other'
-        if self.player.genderCP2 == 1:
-            self.player.genderlabel2 = 'Male'
-        if self.player.genderCP2 == 2:
-            self.player.genderlabel2 = 'Female'
-        if self.player.genderCP2 == 3:
-            self.player.genderlabel2 = 'Other'
-        if self.player.genderCP3 == 1:
-            self.player.genderlabel3 = 'Male'
-        if self.player.genderCP3 == 2:
-            self.player.genderlabel3 = 'Female'
-        if self.player.genderCP3 == 3:
-            self.player.genderlabel3 = 'Other'
-        if self.player.genderCP4 == 1:
-            self.player.genderlabel4 = 'Male'
-        if self.player.genderCP4 == 2:
-            self.player.genderlabel4 = 'Female'
-        if self.player.genderCP4 == 3:
-            self.player.genderlabel4 = 'Other'
-        if self.player.genderCP5 == 1:
-            self.player.genderlabel5 = 'Male'
-        if self.player.genderCP5 == 2:
-            self.player.genderlabel5 = 'Female'
-        if self.player.genderCP5 == 3:
-            self.player.genderlabel5 = 'Other'
-
-    def check_guesses(self):
-        p1 = self.get_player_by_id(1)
-        p2 = self.get_player_by_id(2)
-        if p1.genderCP1 == p2.participant.vars['gender']:
-            p1.guess1_is_correct = True
-        if p1.genderCP2 == p2.gender:
-            p1.guess2_is_correct = True
-        if p1.genderCP3 == p2.gender:
-            p1.guess3_is_correct = True
-        if p1.genderCP4 == p2.gender:
-            p1.guess4_is_correct = True
-        if p1.genderCP5 == p2.gender:
-            p1.guess5_is_correct = True
-        if p2.genderCP1 == p1.gender:
-            p2.guess1_is_correct = True
-        if p2.genderCP2 == p1.gender:
-            p2.guess2_is_correct = True
-        if p2.genderCP3 == p1.gender:
-            p2.guess3_is_correct = True
-        if p2.genderCP4 == p1.gender:
-            p2.guess4_is_correct = True
-        if p2.genderCP5 == p1.gender:
-            p2.guess5_is_correct = True
-########################################################################################################################
-
-######################################################################################################################
 ######################################################################################################################
 ########################################### PLAYER CLASS #############################################################
 ######################################################################################################################
@@ -575,11 +499,17 @@ class Player(BasePlayer):
             [2, 'Sophomore'],
             [3, 'Junior'],
             [4, 'Senior'],
+            [5, 'Other'],
         ],
         label='What is your year in school?',
         widget=widgets.RadioSelect
     )
     major = make_string_field('What is your major?')
+
+    krupka_1 = make_rating_field('Take the wallet')
+    krupka_2 = make_rating_field('Ask others nearby if the wallet belongs to them')
+    krupka_3 = make_rating_field('Leave the wallet where it is')
+    krupka_4 = make_rating_field('Give the wallet to the shop manager')
 
 # Practice Questions
     question1 = make_yn_field('When rating a Decider with the screenname Decider A taking $X, the most common rating by other Receivers was "Somewhat Appropriate." If Decider A chose to take $X, would you win a prize for your appropriateness rating?')
@@ -668,14 +598,15 @@ class Player(BasePlayer):
     guess4_is_correct = models.BooleanField(blank=False)
     guess5_is_correct = models.BooleanField(blank=False)
 
-
+    # Checking whether subject's rating matched the modal rating
     p_mode_matched = models.BooleanField()
     mode_matched = models.BooleanField()
 
+    # Other Variables
+    cumulative_payoff = models.IntegerField()
+
 ########################################################################################################################
 
-# Other Variables
-    cumulative_payoff = models.IntegerField()
 
     # Player Methods
 
@@ -694,6 +625,7 @@ class Player(BasePlayer):
     def other_player(self):
         return self.get_others_in_group()[0]
 
+    # Checking practice questions for correctness
     def check_comprehension(self):
         self.q1_is_correct = (self.question1 == 2)
         self.q2_is_correct = (self.question2 == 1)
@@ -720,8 +652,14 @@ class Player(BasePlayer):
     def get_payoffs(self):
         cumulative_payoff = sum([p.payoff for p in self.in_all_rounds()])
 
+    # Checking whether subject's rating matched the modal rating
+    def p_mode_match(self):
+        if self.group.p_rating == self.group.modal_p_rating:
+            self.p_mode_matched = True
+            self.payoff = Constants.prize
+
 ########################################################################################################################
-#  PLAYER - Checking Gender Guesses:
+#  PLAYER - Setting Players' Genders:
 ########################################################################################################################
 
     def get_genders(self):
@@ -759,83 +697,5 @@ class Player(BasePlayer):
         if self.gender == 3:
             self.participant.vars['Gender'] = 'Other'
 
-    # if self.round_number == 1:
-    #            d_r1 = self.get_player_by_id(1)
-    #            r_r1 = self.get_player_by_id(2)
-
-    def set_gender_guesses(self):
-        p1 = self.group.get_player_by_id(1)
-        p2 = self.group.get_player_by_id(2)
-        if self.genderCP1 == p1.participant.vars['gender']:
-            self.guess1_is_correct = True
-        if self.genderCP1 == p2.participant.vars['gender']:
-            self.guess1_is_correct = True
-
-    def set_guess(self):
-        if self.genderCP1 == 1:
-            self.genderlabel1 = 'Male'
-        if self.genderCP1 == 2:
-            self.genderlabel1 = 'Female'
-        if self.genderCP1 == 3:
-            self.genderlabel1 = 'Other'
-        if self.genderCP2 == 1:
-            self.genderlabel2 = 'Male'
-        if self.genderCP2 == 2:
-            self.genderlabel2 = 'Female'
-        if self.genderCP2 == 3:
-            self.genderlabel2 = 'Other'
-        if self.genderCP3 == 1:
-            self.genderlabel3 = 'Male'
-        if self.genderCP3 == 2:
-            self.genderlabel3 = 'Female'
-        if self.genderCP3 == 3:
-            self.genderlabel3 = 'Other'
-        if self.genderCP4 == 1:
-            self.genderlabel4 = 'Male'
-        if self.genderCP4 == 2:
-            self.genderlabel4 = 'Female'
-        if self.genderCP4 == 3:
-            self.genderlabel4 = 'Other'
-        if self.genderCP5 == 1:
-            self.genderlabel5 = 'Male'
-        if self.genderCP5 == 2:
-            self.genderlabel5 = 'Female'
-        if self.genderCP5 == 3:
-            self.genderlabel5 = 'Other'
-
-    def check_gender_guess(self):
-        self.participant.vars['genderCP1'] = self.genderCP1
-        self.participant.vars['genderCP2'] = self.genderCP2
-        self.participant.vars['genderCP3'] = self.genderCP3
-        self.participant.vars['genderCP4'] = self.genderCP4
-        self.participant.vars['genderCP5'] = self.genderCP5
-        p1 = self.group.get_player_by_id(1)
-        p2 = self.group.get_player_by_id(2)
-        if p1.genderCP1 == p2.gender:
-            p1.guess1_is_correct = True
-        if p1.genderCP2 == p2.gender:
-            p1.guess2_is_correct = True
-        if p1.genderCP3 == p2.gender:
-            p1.guess3_is_correct = True
-        if p1.genderCP4 == p2.gender:
-            p1.guess4_is_correct = True
-        if p1.genderCP5 == p2.gender:
-            p1.guess5_is_correct = True
-        if p2.genderCP1 == p1.gender:
-            p2.guess1_is_correct = True
-        if p2.genderCP2 == p1.gender:
-            p2.guess2_is_correct = True
-        if p2.genderCP3 == p1.gender:
-            p2.guess3_is_correct = True
-        if p2.genderCP4 == p1.gender:
-            p2.guess4_is_correct = True
-        if p2.genderCP5 == p1.gender:
-            p2.guess5_is_correct = True
-
-    def p_mode_match(self):
-        if self.group.p_rating == self.group.modal_p_rating:
-                self.p_mode_matched = True
-                self.payoff = Constants.prize
-
-    ########################################################################################################################
+#######################################################################################################################
     pass

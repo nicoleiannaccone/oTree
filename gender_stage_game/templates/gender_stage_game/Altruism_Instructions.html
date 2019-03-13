@@ -1,0 +1,24 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Instructions for Tokens
+{% endblock %}
+
+{% block content %}
+
+You have {{Constants.tokens}} tokens. In the next five screens, you choose how many of these tokens to keep for yourself or whether to share them with another participant.
+
+We will pay you a bonus of {{Constants.perToken}} cents at the end of the experiment for each token that you keep.
+
+Each token you share with the other participant gives them a bonus at the end of the experiment. The amount of the bonus per token varies across the five decisions you will be making.
+
+Only one of the five decisions you make will actually be implemented by the computer -- which one is randomly chosen by the computer. Hence, in each decision you can give between 0 and {{Constants.tokens}} tokens to the other participant.
+
+The participant you will be matched to in any one decision will not be matched with any other participant. Hence, he or she can only receive tokens if you decide to share your bonus tokens.
+
+
+    {% next_button %}
+
+{% endblock %}
+

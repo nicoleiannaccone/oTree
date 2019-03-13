@@ -2,11 +2,49 @@ from otree.api import (
     models, widgets, BaseConstants, BaseSubsession, BaseGroup, BasePlayer,
     Currency as c, currency_range,
 )
+import random
 from collections import Counter
+from statistics import mode
+import itertools
+#from otree import match_players
+# #import match_players
+from otree import matching
+
+# From online Google Groups answer: https://groups.google.com/forum/m/#!search/strangers$20Otree/otree/BYTdORn-35U
+# def before_session_starts(self):
+#     self.set_group_matrix(matching.round_robin(self))
+#     print(self.get_group_matrix())
 
 doc = """
 One player decides how much to take from the other player, given their screenname and observability of their choice.
 """
+
+# Attempting Stranger Matching:
+################################
+#From " https://github.com/oTree-org/otree-core/issues/217"
+#Why: esentially the match is function of the subsession and related only to subsession, but i want to create reusable
+# code for make more complex matchings. So the logic of the match lives inside the "match_players" module.
+# All the functions there accept a subssesion object and return a list of a suggested players_x_group.
+# The logic of subsession.match_players uses this sugestion for assign the players to the groups.
+# At last you cant interate over the groups and make the changes you want
+#def before_session_starts(self):
+#    if self.round_number > 1:
+#        self.match_players("perfect_strangers")
+#        for group in self.get_groups():
+#              # foo
+##You can use the "perfect_strangers" in a low level way with the next code
+##from otree import match_players
+##def before_session_starts(self):
+#    if self.round_number > 1:
+#       p_x_g  = match_players.perfect_strangers(self)
+#       for group, players in zip(self.get_groups(), p_x_g):
+#             group.set_players(players)
+########################################
+# Also see:
+# https://otree.readthedocs.io/en/latest/multiplayer/groups.html
+
+
+######################################################################################################################
 ######################################################################################################################
 ########################################### METHODS ##################################################################
 ######################################################################################################################
@@ -23,15 +61,18 @@ def make_rating_field(label):
         label=label,
         widget=widgets.RadioSelect,
     )
-def make_currency_field():
+def make_currency_field(label):
     return models.CurrencyField(blank=True,
         choices=currency_range(c(0), Constants.endowment, c(0.5)),
     )
-def make_take_field():
+def make_take_field(label):
+#    return models.PositiveIntegerField(widget=widgets.Slider(attrs={'step': '0.5'}), min=0, max = Constants.endowment, initial=c(0))
     return models.CurrencyField(choices=currency_range(c(0), Constants.endowment, c(0.5)))  # Drop-Down Menu version
+# From Neiderle code: # alloc1 = models.PositiveIntegerField(widget=widgets.Slider, min=0, max=Constants.tokens,
+# label=Constants.lab[0], initial=0)
 
 
-def make_gender_field():
+def make_gender_field(label):
     return models.IntegerField(blank=True,
         choices=[
             [1, 'Male'],
@@ -52,6 +93,9 @@ def make_yn_field(label):
         widget=widgets.RadioSelect
     )
 
+#def chunkify(lst, n):
+#    return [lst[i::n] for i in range(n)]
+
 ######################################################################################################################
 ########################################### CONSTANTS CLASS ##########################################################
 ######################################################################################################################
@@ -65,19 +109,25 @@ class Constants(BaseConstants):
 
     instructions_template = 'gender_intro/Instructions_Full.html'
 
-    # Monetary amounts
+# Monetary amounts
     endowment = c(3)
     prize = c(0.5)
     participation = c(5)
 
-    # Screennames for treatments
+# Screennames for treatments
     names = []
     ordering = models.StringField()
     names1 = ['Jacob', 'William', 'Michael', 'Sophia', 'Elizabeth']
+    # James, Bruce, Ethan, Alexander, Daniel, Elijah, Benjamin, Matthew, David, Anthony, Joseph, Joshua, Andrew
     names2 = ['Amy', 'Emily', 'Michelle', 'James', 'Daniel']
-
-    def round_numbers(self):
-        return range(1, self.num_rounds + 1)
+    # Sophia, Emma, Olivia, Emily, Abigail, Elizabeth, Charlotte, Chloe,  Aubrey,  Natalie, Grace, Zoey, Hannah, Allison, Samantha
+    names3 = ['Cameron', 'Jamie', 'Taylor', 'Riley', 'Casey']
+    names4 = ['Player B', 'Player F', 'Player E', 'Player D', 'Player G']
+    names5 = ['Orange Player', 'Yellow Player', 'Purple Player', 'Green Player', 'Grey Player']
+    # Peyton, Taylor, Jordan, Ryan, Devon, Harper, Madison, Addison
+    # Jayden, Rowan, Emerson, Avery, Kasey, Devon, Casey, Parker, Bailey, Harley, Quinn, Mackenzie, Dakota,
+    # Logan, Cameron, Taylor, Jordan, Ryan, Morgan, Devin
+    # Kendall, Logan,
 
 
 # Needed below to implement a Perfect Strangers matching.
@@ -97,14 +147,17 @@ def shifter(m):
 
 
 class Subsession(BaseSubsession):
+# To implement a Perfect Strangers matching:
 # From https://groups.google.com/forum/#!msg/otree/rciCzbTqSfQ/XC-T7oZrEAAJ
+# What it does: it shifts each second member in each group to the right by one.
+# That guarantees that no one plays with the same game in two subsequent rounds,
+# and each members holds his/her position within in a group.
     def creating_session(self):
         if self.round_number == 1:
             self.session.vars['full_data'] = [i for i in shifter(self.get_group_matrix())]
         fd = self.session.vars['full_data']
         self.set_group_matrix(fd[self.round_number - 1])
         print(self.get_group_matrix())
-
 ##########################################################################################################################################################################################################################
 
 ######################################################################################################################
@@ -171,6 +224,10 @@ class Subsession(BaseSubsession):
 #                 paying_round = random.randint(1, Constants.num_rounds)
 #                 self.session.vars['paying_round'] = paying_round
 
+# Session Variables:
+        modal_rating = models.IntegerField()
+        modal_rating_o1 = models.IntegerField()
+        modal_rating_o2 = models.IntegerField()
 
 ######################################################################################################################
 ######################################################################################################################
@@ -179,36 +236,23 @@ class Subsession(BaseSubsession):
 ######################################################################################################################
 class Group(BaseGroup):
 
-#    def __init__(self):
-  # When tried to run experiment, got the following error until I commented out the above line:
-
-# 2019-03-11 21:52:37,134 - ERROR - worker - Error processing message with consumer otree.channels.consumers.create_session:
-# Traceback (most recent call last):
-#   File "c:\users\nicole\appdata\local\programs\python\python36\lib\site-packages\channels\worker.py", line 120, in run
-#     consumer(message, **kwargs)
-#   File "c:\users\nicole\appdata\local\programs\python\python36\lib\site-packages\otree\channels\consumers.py", line 189, in create_session
-#     session = otree.session.create_session(**kwargs)
-#   File "c:\users\nicole\appdata\local\programs\python\python36\lib\site-packages\otree\session.py", line 371, in create_session
-#     id_in_subsession=id_in_subsession,
-# TypeError: __init__() got an unexpected keyword argument 'session'
-
-        # Roles
+    # Roles
     decider = models.StringField()
     receiver = models.StringField()
 
     # Genders
 #    gender = models.IntegerField()
 #    gender = make_gender_field('')
-    genderD1 = make_gender_field()
-    genderD2 = make_gender_field()
-    genderD3 = make_gender_field()
-    genderD4 = make_gender_field()
-    genderD5 = make_gender_field()
-    genderR1 = make_gender_field()
-    genderR2 = make_gender_field()
-    genderR3 = make_gender_field()
-    genderR4 = make_gender_field()
-    genderR5 = make_gender_field()
+    genderD1 = make_gender_field('')
+    genderD2 = make_gender_field('')
+    genderD3 = make_gender_field('')
+    genderD4 = make_gender_field('')
+    genderD5 = make_gender_field('')
+    genderR1 = make_gender_field('')
+    genderR2 = make_gender_field('')
+    genderR3 = make_gender_field('')
+    genderR4 = make_gender_field('')
+    genderR5 = make_gender_field('')
 
     message = models.LongStringField(blank=True, label="Your message:")
     message1 = models.LongStringField(blank=True, label="Your message:")
@@ -231,12 +275,12 @@ class Group(BaseGroup):
     ordering5 = models.StringField()
 
     # Offers
-    offer = make_currency_field()
-    offer1 = make_currency_field()
-    offer2 = make_currency_field()
-    offer3 = make_currency_field()
-    offer4 = make_currency_field()
-    offer5 = make_currency_field()
+    offer = make_currency_field('')
+    offer1 = make_currency_field('')
+    offer2 = make_currency_field('')
+    offer3 = make_currency_field('')
+    offer4 = make_currency_field('')
+    offer5 = make_currency_field('')
 
     # Ratings
     rating = make_rating_field('')
@@ -299,18 +343,24 @@ class Group(BaseGroup):
 
     # Amount taken by Dictator in current round
 #    taken = models.CurrencyField(choices=currency_range(c(0), Constants.endowment, c(0.5)))
-    p_taken=make_currency_field()
-    taken = make_take_field()
-    taken1=make_currency_field()
-    taken2=make_currency_field()
-    taken3=make_currency_field()
-    taken4=make_currency_field()
-    taken5=make_currency_field()
+    p_taken=make_currency_field('')
+    taken = make_take_field('')
+    taken1=make_currency_field('')
+    taken2=make_currency_field('')
+    taken3=make_currency_field('')
+    taken4=make_currency_field('')
+    taken5=make_currency_field('')
 
 
 #######################################################################################################################
 ################################# Group Methods #######################################################################
 #######################################################################################################################
+    def get_role(self):
+        decider = self.get_player_by_role('decider')
+        receiver = self.get_player_by_role('receiver')
+        p1 = self.get_player_by_role('decider')
+        p2 = self.get_player_by_role('receiver')
+
     def set_payoffs(self):
         decider = self.get_player_by_role('decider')
         receiver = self.get_player_by_role('receiver')
@@ -345,16 +395,20 @@ class Group(BaseGroup):
 
 ########################################################################################################################
 
-
+    # Treatment booleans
+    ordering_1 = models.BooleanField()
+    ordering_2 = models.BooleanField()
 
     def get_treatment(self):
         decider = self.get_player_by_role('decider')
         if decider.participant.vars['ordering'] == 'ordering1':
-            return 1
-        elif decider.participant.vars['ordering'] == 'ordering2':
-            return 2
+            self.ordering_1 = True
         else:
-            return None
+            self.ordering_1 = False
+        if decider.participant.vars['ordering'] == 'ordering2':
+            self.ordering_2 = True
+        else:
+            self.ordering_2 = False
 
 
     # Mode Variables:
@@ -593,7 +647,6 @@ class Group(BaseGroup):
         self.modal_rating_30_5_2 = Counter(ratings_30_2[4]).most_common(1)[0][0]
 
     def get_modal_rating(self):
-
         decider = self.get_player_by_role('decider')
         # Create lists to contain all Treatment 1 Receivers' ratings of each possible allocation, $0.00 to $3.00:
         ratings_00_1 = []
@@ -615,7 +668,7 @@ class Group(BaseGroup):
 
         for r in self.subsession.get_groups():
             if r.ordering_1 == True:
-                # For each group in Treatment 1, append the Receiver's rating of allocation $X into the list "ratings_X_1"
+                # For each group in Treatment 1, append the Receiver's rating of allocation $X into the list "ratings_00_1"
                 ratings_00_1.append(r.rating00)
                 ratings_05_1.append(r.rating05)
                 ratings_10_1.append(r.rating10)
@@ -698,19 +751,6 @@ class Group(BaseGroup):
         #             attr_name = self.modal_rating_label
         #             attr_value = rating_label_dict[modal_rating]
         #             setattr(self, attr_name, attr_value)
-
-    def fetch_rating(self):
-        rating_dict = {
-            None: None,
-            c(0): self.rating00,
-            c(0.5): self.rating05,
-            c(1): self.rating10,
-            c(1.5): self.rating15,
-            c(2): self.rating20,
-            c(2.5): self.rating25,
-            c(3): self.rating30
-        }
-        return rating_dict[self.taken]
 
 # TODO: Andrew-based code - get_ratings
     def get_rating(self):
@@ -802,6 +842,7 @@ class Group(BaseGroup):
             self.name = decider.participant.vars['name5']
 
     def get_my_messages(self):
+        self.get_role()
         for p in self.get_players():
             if self.round_number == 1:
                 self.message1 = self.message
@@ -985,6 +1026,8 @@ class Player(BasePlayer):
         label='How much money did your matched Decider take?',
         widget=widgets.RadioSelect
     )
+    offer_question_2 = make_currency_field('How much would your matched Receiver earn in Round 4?')
+    taken_question_2 = make_currency_field('How much did your matched Decider taken in Round 4?')
 
     q1_is_correct = models.BooleanField(blank=False)
     q2_is_correct = models.BooleanField(blank=False)
@@ -1003,8 +1046,8 @@ class Player(BasePlayer):
 
 # Round variables
     rating = make_rating_field('')
-    taken = make_currency_field()
-    offer = make_currency_field()
+    taken = make_currency_field('')
+    offer = make_currency_field('')
 
     message = models.LongStringField(blank=True, label="Your message:")
     message1 = models.LongStringField(blank=True, label="Your message:")
@@ -1018,17 +1061,17 @@ class Player(BasePlayer):
     Male = models.StringField()
     Female = models.StringField()
     Other = models.StringField()
-    gender = make_gender_field()
+    gender = make_gender_field('What is your gender?')
     genderlabel1 = models.StringField()
     genderlabel2 = models.StringField()
     genderlabel3 = models.StringField()
     genderlabel4 = models.StringField()
     genderlabel5 = models.StringField()
-    genderCP1 = make_gender_field()
-    genderCP2 = make_gender_field()
-    genderCP3 = make_gender_field()
-    genderCP4 = make_gender_field()
-    genderCP5 = make_gender_field()
+    genderCP1 = make_gender_field(label="")
+    genderCP2 = make_gender_field('')
+    genderCP3 = make_gender_field('')
+    genderCP4 = make_gender_field('')
+    genderCP5 = make_gender_field('')
 
     # Checking gender guesses for correctness
     guess1_is_correct = models.BooleanField(blank=False)

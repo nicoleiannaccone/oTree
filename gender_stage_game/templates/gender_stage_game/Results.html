@@ -41,145 +41,28 @@
             Modal Rating:
         </th>
     </tr>
+    {% for r in result_table %}
     <tr>
         <td>
-            1
+            {{ r.round_number }}
         </td>
         <td>
-            {% if player.role == 'decider' %}
-            {{ name_1 }}
-            {% else %}
-            {{ name_D1 }}
-            {% endif %}
+            {{ r.dname }}
         </td>
         <td>
-            {{ took1 }}
+            {{ r.took }}
         </td>
         <td>
-            {{ offered1 }}
+            {{ r.offered }}
         </td>
         <td>
-            {{ rated1 }}
+            {{ r.rating }}
         </td>
         <td>
-            {% if group.ordering_1 %}
-            {{ group.modal_rating1_1 }} {{ group.modal_rating1 }} {{ group.modal_rating_label_1 }}
-            {% else %}
-            {{ group.modal_rating1_2 }} {{ group.modal_rating1 }} {{ group.modal_rating_label_1 }}
-            {% endif %}
+            {{ r.modal_rating }}
         </td>
     </tr>
-    <tr>
-        <td>
-            2
-        </td>
-        <td>
-            {% if player.role == 'decider' %}
-            {{ name_2 }}
-            {% else %}
-            {{ name_D2 }}
-            {% endif %}
-        </td>
-        <td>
-            {{ took2 }}
-        </td>
-        <td>
-            {{ offered2 }}
-        </td>
-        <td>
-            {{ rated2 }}
-        </td>
-        <td>
-            {% if group.ordering_1 %}
-            {{ group.modal_rating2_1 }} {{ group.modal_rating2 }} {{ group.modal_rating_label_2 }}
-            {% else %}
-            {{ group.modal_rating2_2 }} {{ group.modal_rating2 }} {{ group.modal_rating_label_2 }}
-            {% endif %}
-        </td>
-    </tr>
-    <tr>
-        <td>
-            3
-        </td>
-        <td>
-            {% if player.role == 'decider' %}
-            {{ name_3 }}
-            {% else %}
-            {{ name_D3 }}
-            {% endif %}
-        </td>
-        <td>
-            {{ took3 }}
-        </td>
-        <td>
-            {{ offered3 }}
-        </td>
-        <td>
-            {{ rated3 }}
-        </td>
-        <td>
-            {% if group.ordering_1 %}
-            {{ group.modal_rating3_1 }} {{ group.modal_rating3 }} {{ group.modal_rating_label_3 }}
-            {% else %}
-            {{ group.modal_rating3_2 }} {{ group.modal_rating3 }} {{ group.modal_rating_label_3 }}
-            {% endif %}
-        </td>
-    </tr>
-        <td>
-            4
-        </td>
-        <td>
-            {% if player.role == 'decider' %}
-            {{ name_4 }}
-            {% else %}
-            {{ name_D4 }}
-            {% endif %}
-        </td>
-        <td>
-            {{ took4 }}
-        </td>
-        <td>
-            {{ offered4 }}
-        </td>
-        <td>
-            {{ rated4 }}
-        </td>
-        <td>
-            {% if group.ordering_1 %}
-            {{ group.modal_rating4_1 }} {{ group.modal_rating4 }} {{ group.modal_rating_label_4 }}
-            {% else %}
-            {{ group.modal_rating4_2 }} {{ group.modal_rating4 }} {{ group.modal_rating_label_4 }}
-            {% endif %}
-        </td>
-    <tr>
-        <td>
-            5
-        </td>
-        <td>
-            {% if player.role == 'decider' %}
-            {{ name_5 }}
-            {% else %}
-            {{ name_D5 }}
-            {% endif %}
-        </td>
-        <td>
-            {{ took5 }}
-        </td>
-        <td>
-            {{ offered5 }}
-        </td>
-        <td>
-            {{ rated5 }}
-        </td>
-        <td>
-            {% if group.ordering_1 %}
-            {{ group.modal_rating5_1 }} {{ group.modal_rating5 }} {{ group.modal_rating_label_5 }}
-            {% else %}
-            {{ group.modal_rating5_2 }} {{ group.modal_rating5 }} {{ group.modal_rating_label_5 }}
-            {% endif %}
-        </td>
-    </tr>
-
+    {% endfor %}
 </table>
 
 {% comment %}
