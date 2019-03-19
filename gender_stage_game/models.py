@@ -59,7 +59,7 @@ def make_yn_field(label):
 class Constants(BaseConstants):
     name_in_url = 'WebGames'
     players_per_group = 2
-    num_rounds = 5
+    num_rounds = 1
 
     rounds = 5
 
@@ -105,92 +105,20 @@ class Subsession(BaseSubsession):
         self.set_group_matrix(fd[self.round_number - 1])
         print(self.get_group_matrix())
 
-##########################################################################################################################################################################################################################
-
 ######################################################################################################################
 ########################################### SUBSESSION CLASS #########################################################
 ######################################################################################################################
-######################################################################################################################
-#class Subsession(BaseSubsession):
-#    def get_players_by_role(self, role):
-#        return [p for p in self.get_players() if p.role() == role]
-
-######################################################################################################################
-## Stranger Matching Attempts:
-
-## Attempt #1 at matching. from online forum.
-#    def creating_session(self):
-#        num_groups = len(self.get_groups())
-#        A_players = chunkify(self.get_players_by_role('decider'), num_groups)
-#        B_players = chunkify(self.get_players_by_role('receiver'), num_groups)
-#        random.shuffle(B_players)
-#        self.set_group_matrix([i + j for i, j in zip(A_players, B_players)])
-
-# Stranger matching attempts:
-#     def before_session_starts(self):
-#        if self.round_number > 1:
-#           p_x_g  = match_players.perfect_strangers(self)
-#           for group, players in zip(self.get_groups(), p_x_g):
-#                 group.set_players(players)
-######################################################################################################################
-
-######################################################################################################################
-# Assigning Treatments to Players: 1) Randomly and 2) Balanced
-
-# (1) Random treatment assignment:
-# To assign each new subject to a treatment randomly (ideally this would only apply to the dictators)
-#            if self.round_number == 1:
-#                for p in self.get_players():
-#                    p.participant.vars['ordering'] = random.choice(['ordering1', 'ordering2'])
-#                    if p.participant.vars['ordering'] == 'ordering1':
-#                        p.participant.vars['names'] = Constants.names1
-#                    if p.participant.vars['ordering'] == 'ordering2':
-#                        p.participant.vars['names'] = Constants.names2
-    #        #                p1 = self.group.get_player_by_id(1)
-    #        #                ordering = p1.participant.vars['ordering']
-    #        # This next line rematches group members randomly but keeps their ID # within the group constant.
-            #        Does this mean that their role (Decider versus Receiver) will also be kept constant?
-    #        self.group_randomly(fixed_id_in_group=True)
-
-# (2) Creating Balanced Treatments -- half of the groups get each ordering
-
-#     def creating_session(self):
-#            ordering = itertools.cycle(['ordering1', 'ordering2'])
-#    #        p1.participant.vars['ordering'] = 'ordering1'
-#            for g in self.get_group():
-#                p = g.get_player_by_id(1)
-#                p.participant.vars['ordering'] = next(ordering)
-#    #            ordering = next(ordering)
-#                if p.participant.vars['ordering'] == 'ordering1':
-#                    p.participant.vars['names'] = Constants.names1
-#                if p.participant.vars['ordering'] == 'ordering2':
-#                    p.participant.vars['names'] = Constants.names2
 
 # # To randomly select which round is paid:
 #             if self.round_number == 1:
 #                 paying_round = random.randint(1, Constants.num_rounds)
 #                 self.session.vars['paying_round'] = paying_round
 
-
-######################################################################################################################
 ######################################################################################################################
 ########################################### GROUP CLASS ##############################################################
 ######################################################################################################################
 ######################################################################################################################
 class Group(BaseGroup):
-
-#    def __init__(self):
-  # When tried to run experiment, got the following error until I commented out the above line:
-
-# 2019-03-11 21:52:37,134 - ERROR - worker - Error processing message with consumer otree.channels.consumers.create_session:
-# Traceback (most recent call last):
-#   File "c:\users\nicole\appdata\local\programs\python\python36\lib\site-packages\channels\worker.py", line 120, in run
-#     consumer(message, **kwargs)
-#   File "c:\users\nicole\appdata\local\programs\python\python36\lib\site-packages\otree\channels\consumers.py", line 189, in create_session
-#     session = otree.session.create_session(**kwargs)
-#   File "c:\users\nicole\appdata\local\programs\python\python36\lib\site-packages\otree\session.py", line 371, in create_session
-#     id_in_subsession=id_in_subsession,
-# TypeError: __init__() got an unexpected keyword argument 'session'
 
         # Roles
     decider = models.StringField()
@@ -239,8 +167,6 @@ class Group(BaseGroup):
     offer5 = make_currency_field()
 
     # Ratings
-    rating = make_rating_field('')
-    p_rating = make_rating_field('')
     ratings = models.IntegerField(
         choices=[
             [1, 'Very Inappropriate'],
@@ -250,6 +176,8 @@ class Group(BaseGroup):
         ],
         widget=widgets.RadioSelectHorizontal
     )
+    rating = make_rating_field('')
+    p_rating = make_rating_field('')
     ratinglabel = models.StringField()
     p_rating00 = make_rating_field('$0.00')
     p_rating05 = make_rating_field('$0.50')
@@ -673,6 +601,22 @@ class Group(BaseGroup):
                     attr_value = getattr(self, "modal_rating%d_%d" % (j, i))
                     setattr(self, attr_name, attr_value)
 
+    def label_rating(self):
+        rating_label_dict = {
+            None: 'None appropriate',
+            1: 'Very Socially Inappropriate',
+            2: 'Somewhat Socially Inappropriate',
+            3: 'Somewhat Socially Appropriate',
+            4: 'Very Socially Appropriate'
+        }
+#        self.ratinglabel = rating_label_dict[self.rating]
+#        self.modal_rating_label = rating_label_dict[self.modal_rating]
+        return rating_label_dict[self.rating]
+#            {
+#            self.ratinglabel,
+#            self.modal_rating_label,
+#        }
+
     def label_ratings(self):
         rating_label_dict = {
             None: 'None appropriate',
@@ -689,7 +633,7 @@ class Group(BaseGroup):
             modal_label_j = rating_label_dict[modal_rating_j]
             setattr(self, "modal_rating_label_%d" % j, modal_label_j)
 
-#        self.modal_rating_label = rating_label_dict[self.modal_rating]
+    #        self.modal_rating_label = rating_label_dict[self.modal_rating]
 
         # for i in [1, 2]:
         #     if getattr(self, "ordering_%d" % i):

@@ -119,25 +119,25 @@ class Test(Page):
 
 
 class ResultRow:
-    def __init__(self, round_number, dname, took, offered, rating, modal_rating):
+    def __init__(self, round_number, dname, took, offered, rating, modal_rating, ratinglabel):
         self.round_number = round_number
         self.dname = dname
         self.took = took
         self.offered = offered
         self.rating = rating
         self.modal_rating = modal_rating
-
+        self.ratinglabel = ratinglabel
 
 class Results(Page):
 
     def vars_for_template(self):
         receiver_ratings = {}
         for t in 1,2:
-            for r in Constants.round_numbers():
+            for r in Constants.round_numbers(Constants):
                 for v in 0, 0.5, 1, 1.5, 2, 2.5, 3:
                     receiver_ratings[(t, r, v)] = list()
         for g in self.subsession.get_groups():
-            for r in Constants.round_numbers():
+            for r in Constants.round_numbers(Constants):
                 x = g.in_round(r)
                 t = x.get_treatment()
                 receiver_ratings[(t,r,0)].append(x.rating00)
@@ -149,7 +149,7 @@ class Results(Page):
                 receiver_ratings[(t,r,3)].append(x.rating30)
 
         result_table = list()
-        for round_number in Constants.round_numbers():
+        for round_number in Constants.round_numbers(Constants):
             g = self.group.in_round(round_number)
             dname = g.get_player_by_role('decider').participant.vars['name' + str(round_number)]
             took = g.taken
@@ -157,7 +157,8 @@ class Results(Page):
             rating = g.fetch_rating()
             rating_list = receiver_ratings.get((g.get_treatment(), round_number, g.taken), None)
             modal_rating = collections.Counter(rating_list).most_common(1)[0][0] if rating_list else None
-            rr = ResultRow(round_number, dname, took, offered, rating, modal_rating)
+            ratinglabel = g.label_rating()
+            rr = ResultRow(round_number, dname, took, offered, rating, modal_rating, ratinglabel)
             result_table.append(rr)
 
         return {
@@ -303,20 +304,20 @@ class Survey2(Page):
 
 page_sequence = [
     # Test,
-     # # D_Name,
-     # # Wait_Page,
+      D_Name,
+      Wait_Page,
       D_Take,
       D_Wait_Page,
       R_Rating,
       RoundWaitPage,
-     # # R_Message,
-     # # Message_WaitPage,
+      R_Message,
+      Message_WaitPage,
       ResultsWaitPage,
       Results,
-     # Results2,
-     # PostSurvey,
-     # SurveyWaitPage,
-     # Survey_Results,
+      Results2,
+      PostSurvey,
+      SurveyWaitPage,
+      Survey_Results,
      # D_Self_Rating_M,
      # D_Self_Rating_F,
 ##    Survey1,
