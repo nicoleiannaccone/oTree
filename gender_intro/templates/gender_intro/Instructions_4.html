@@ -1,0 +1,23 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Instructions{% endblock %}
+
+{% block content %}
+    Order of Each Round:
+<ol>
+    <li>
+        In each of the {{ Constants.rounds }} rounds, while the Decider is choosing how much of the Receiver's
+        {{ Constants.endowment }} endowment to take, the Receiver will be evaluating the
+        appropriateness of the different possible choices available to the Decider.    </li>
+    <li> Before seeing their Decider's choice, Receivers will rate the social appropriateness of each
+        potential choice their Decider could make.   </li>
+    <li>    After the Decider makes their choice, this choice will be shown to the Receiver.    </li>
+    <li>    The Receiver will then write their Decider a message responding to the Decider's choice. </li>
+    <li>    Deciders will see these messages at the end of the experiment after they have finished making all their choices. </li>
+</ol>
+
+{% next_button %}
+    <button class="btn" name="back" value="1">Back</button>
+
+{% endblock %}
