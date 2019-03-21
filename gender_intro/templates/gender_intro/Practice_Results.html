@@ -43,7 +43,7 @@
             {{ group.ratinglabel }}
         </td>
         <td>
-            {{ group.modal_p_rating }}: {{ group.practice_mode_rating_label }}
+            {{ group.practice_mode_rating_label }}
         </td>
         <td>
             {{ group.p_message }}
@@ -68,11 +68,11 @@
                 endowment.
             </p>
             <p>
-                You rated this choice as {{ group.p_rating }}: <strong>{{ group.ratinglabel }}</strong>.
+                You rated this choice as <strong>{{ group.ratinglabel }}</strong>.
             </p>
             <p>
                 The most common rating that other Receivers assigned to an allocation of the amount {{ group.p_taken }}
-                taken by your Decider was {{ group.modal_p_rating }}: <strong> {{ group.practice_mode_rating_label }} </strong>.
+                taken by your Decider was <strong> {{ group.practice_mode_rating_label }} </strong>.
                 {% if player.p_mode_matched == True %}
                 <p> Since your own rating, {{ group.ratinglabel }}, matched the most common rating,
                     {{ group.practice_mode_rating_label }},  you win a prize of {{ Constants.prize }}. </p>
@@ -83,6 +83,7 @@
             </p>
         {% endif %}
 
+{% comment %}
 <p>
     -- Checking ratings -- Group.p_rating:
 {{ group.p_rating }},
@@ -101,6 +102,10 @@ Modal rating 25:
 Modal rating 30:
 {{ group.modal_rating_p30 }}.
 </p>
+
+{% endcomment %}
+
+
 {% next_button %}
 
     <!-- Button trigger modal -->

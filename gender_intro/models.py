@@ -368,7 +368,7 @@ class Group(BaseGroup):
             c(2.5): self.p_rating25,
             c(3): self.p_rating30
         }
-        self.p_rating = pr_dict[self.p_taken]
+        self.p_rating = pr_dict[self.p_taken] if self.p_taken else None
 
         rl_dict = {
             1: 'Very Socially Inappropriate',
@@ -376,7 +376,7 @@ class Group(BaseGroup):
             3: 'Somewhat Socially Appropriate',
             4: 'Very Socially Appropriate'
         }
-        self.ratinglabel = rl_dict[self.p_rating]
+        self.ratinglabel = rl_dict[self.p_rating] if self.p_rating else None
 
     def get_modal_p_ratings(self):
         # Create a list in which to place each group's practice-ratings for each possible allocation
@@ -427,13 +427,13 @@ class Group(BaseGroup):
                 3: 'Somewhat Socially Appropriate',
                 4: 'Very Socially Appropriate'
             }
-            self.practice_mode_rating_label = practice_label_dict[self.modal_p_rating]
+            self.practice_mode_rating_label = practice_label_dict[self.modal_p_rating] if self.modal_p_rating else None
 
     def get_practice_offer(self):
         for p in self.get_players():
-            self.practice_offer = Constants.endowment - self.p_taken
+            self.practice_offer = Constants.endowment - self.p_taken if self.p_taken else None
             p.participant.vars['p_taken'] = self.p_taken
-            p.participant.vars['p_offer'] = Constants.endowment - self.p_taken
+            p.participant.vars['p_offer'] = Constants.endowment - self.p_taken if self.p_taken else None
 
     def get_my_rating(self):
         for p in self.get_players():

@@ -7,6 +7,7 @@
 
 {% block content %}
 
+For additional prizes, please guess the gender of each of your previous counterparts:
 
 <table class="table">
     <tr>
@@ -135,6 +136,7 @@
 </table>
 
 
+{% comment %}
         {% if player.id_in_group == 1 %}
         <strong> Round 1 Results: </strong>
             <p> In Round 1, your screenname was  <strong> {{ name_1 }} </strong> and you decided to take
@@ -253,5 +255,9 @@
     <p>
         On the next page, you will have the opportunity to earn additional money by making some guesses about your experiment counterparts.
     </p>
+
+{% endcomment %}
+
+
         {% next_button %}
 {% endblock %}
