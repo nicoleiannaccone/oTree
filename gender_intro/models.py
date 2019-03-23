@@ -117,10 +117,13 @@ class Constants(BaseConstants):
     names1 = ['Jacob', 'William', 'Michael', 'Sophia', 'Elizabeth']
     # James, Bruce, Ethan, Alexander, Daniel, Elijah, Benjamin, Matthew, David, Anthony, Joseph, Joshua, Andrew
     names2 = ['Amy', 'Emily', 'Michelle', 'James', 'Daniel']
+    # For Between-Subject version, need subjects to each get a single name for the entire experiment:
+    names3 = ['Jacob', 'Jacob', 'Jacob', 'Jacob', 'Jacob']
+    names4 = ['Amy', 'Amy', 'Amy', 'Amy', 'Amy']
     # Sophia, Emma, Olivia, Emily, Abigail, Elizabeth, Charlotte, Chloe,  Aubrey,  Natalie, Grace, Zoey, Hannah, Lillian, Allison, Samantha
-    names3 = ['Cameron', 'Jamie', 'Taylor', 'Riley', 'Casey']
-    names4 = ['Player B', 'Player F', 'Player E', 'Player D', 'Player G']
-    names5 = ['Orange Player', 'Yellow Player', 'Purple Player', 'Green Player', 'Grey Player']
+    # names3 = ['Cameron', 'Jamie', 'Taylor', 'Riley', 'Casey']
+    # names4 = ['Player B', 'Player F', 'Player E', 'Player D', 'Player G']
+    # names5 = ['Orange Player', 'Yellow Player', 'Purple Player', 'Green Player', 'Grey Player']
     # Peyton, Taylor, Jordan, Ryan, Devon, Harper, Madison, Addison
     # Jayden, Rowan, Emerson, Avery, Kasey, Devon, Casey, Parker, Bailey, Harley, Quinn, Mackenzie, Dakota,
     # Logan, Cameron, Taylor, Jordan, Ryan, Morgan, Devin
@@ -234,16 +237,16 @@ class Group(BaseGroup):
     # Genders
 #    gender = models.IntegerField()
 #    gender = make_gender_field('')
-    genderD1 = make_gender_field('')
-    genderD2 = make_gender_field('')
-    genderD3 = make_gender_field('')
-    genderD4 = make_gender_field('')
-    genderD5 = make_gender_field('')
-    genderR1 = make_gender_field('')
-    genderR2 = make_gender_field('')
-    genderR3 = make_gender_field('')
-    genderR4 = make_gender_field('')
-    genderR5 = make_gender_field('')
+#     genderD1 = make_gender_field('')
+#     genderD2 = make_gender_field('')
+#     genderD3 = make_gender_field('')
+#     genderD4 = make_gender_field('')
+#     genderD5 = make_gender_field('')
+#     genderR1 = make_gender_field('')
+#     genderR2 = make_gender_field('')
+#     genderR3 = make_gender_field('')
+#     genderR4 = make_gender_field('')
+#     genderR5 = make_gender_field('')
 
     message = models.LongStringField(blank=True, label="Your message:")
     message1 = models.LongStringField(blank=True, label="Your message:")
@@ -259,11 +262,11 @@ class Group(BaseGroup):
 
     # Treatments: Orderings of Screennames (M, M, M, F, F or F, F, F, M, M)
     ordering = models.StringField()
-    ordering1 = models.StringField()
-    ordering2 = models.StringField()
-    ordering3 = models.StringField()
-    ordering4 = models.StringField()
-    ordering5 = models.StringField()
+    # ordering1 = models.StringField()
+    # ordering2 = models.StringField()
+    # ordering3 = models.StringField()
+    # ordering4 = models.StringField()
+    # ordering5 = models.StringField()
 
     # Offers
     practice_offer = make_currency_field('')
@@ -342,11 +345,11 @@ class Group(BaseGroup):
     taken5=make_currency_field('')
 
     ################################# Group Methods #######################################################################
-    def get_role(self):
-        decider = self.get_player_by_role('decider')
-        receiver = self.get_player_by_role('receiver')
-        p1 = self.get_player_by_id(1)
-        p2 = self.get_player_by_id(2)
+    # def get_role(self):
+    #     decider = self.get_player_by_role('decider')
+    #     receiver = self.get_player_by_role('receiver')
+    #     p1 = self.get_player_by_id(1)
+    #     p2 = self.get_player_by_id(2)
 
     def set_practice_payoffs(self):
         decider = self.get_player_by_role('decider')
