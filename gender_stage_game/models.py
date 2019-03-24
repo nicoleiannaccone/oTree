@@ -230,11 +230,11 @@ class Group(BaseGroup):
 #    taken = models.CurrencyField(choices=currency_range(c(0), Constants.endowment, c(0.5)))
     p_taken=make_currency_field()
     taken = make_take_field()
-    # taken1=make_currency_field()
-    # taken2=make_currency_field()
-    # taken3=make_currency_field()
-    # taken4=make_currency_field()
-    # taken5=make_currency_field()
+    taken1=make_currency_field()
+    taken2=make_currency_field()
+    taken3=make_currency_field()
+    taken4=make_currency_field()
+    taken5=make_currency_field()
 
 
 #######################################################################################################################
