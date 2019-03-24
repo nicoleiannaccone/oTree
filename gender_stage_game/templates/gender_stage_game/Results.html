@@ -43,6 +43,9 @@
         <th>
             Modal Rating:
         </th>
+        <th>
+            Modal Rating Label:
+        </th>
     </tr>
     {% for r in result_table %}
     <tr>
@@ -66,6 +69,9 @@
         </td>
         <td>
             {{ r.modal_rating }}
+        </td>
+        <td>
+            {{ r.modalrating_label }}
         </td>
     </tr>
     {% endfor %}

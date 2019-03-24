@@ -508,6 +508,7 @@ class Group(BaseGroup):
                     attr_value = getattr(self, "modal_rating%d_%d" % (j, i))
                     setattr(self, attr_name, attr_value)
 
+
     def label_rating(self):
         rating_label_dict = {
             None: 'None appropriate',
@@ -516,8 +517,17 @@ class Group(BaseGroup):
             3: 'Somewhat Socially Appropriate',
             4: 'Very Socially Appropriate'
         }
-#        self.modal_rating_label = rating_label_dict[self.modal_rating]
         return rating_label_dict[self.rating]
+
+    def label_modal_rating(self):
+        modal_rating_label_dict = {
+            None: 'None appropriate',
+            1: 'Very Socially Inappropriate',
+            2: 'Somewhat Socially Inappropriate',
+            3: 'Somewhat Socially Appropriate',
+            4: 'Very Socially Appropriate'
+        }
+        return modal_rating_label_dict[self.modal_rating]
 
     def label_ratings(self):
         rating_label_dict = {

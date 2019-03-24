@@ -119,7 +119,8 @@ class Test(Page):
 
 
 class ResultRow:
-    def __init__(self, round_number, dname, took, offered, rating, modal_rating, ratinglabel):
+    # Added ratinglabel and modal_rating_label
+    def __init__(self, round_number, dname, took, offered, rating, modal_rating, ratinglabel, modalrating_label):
         self.round_number = round_number
         self.dname = dname
         self.took = took
@@ -127,6 +128,7 @@ class ResultRow:
         self.rating = rating
         self.modal_rating = modal_rating
         self.ratinglabel = ratinglabel
+        self.modalrating_label = modalrating_label
 
 class Results(Page):
 
@@ -159,16 +161,23 @@ class Results(Page):
                 receiver_ratings[(t,r,3)].append(x.rating30)
 
         result_table = list()
+        # For each round:
         for round_number in Constants.round_numbers(Constants):
             g = self.group.in_round(round_number)
+            # ex: dname = decider.participant.vars['name3']
             dname = g.get_player_by_role('decider').participant.vars['name' + str(round_number)]
+            # ex: took = self.group.in_round(3).taken
             took = g.taken
             offered = None if (g.taken is None) else (c(3) - g.taken)
             rating = g.fetch_rating()
             rating_list = receiver_ratings.get((g.get_treatment(), round_number, g.taken), None)
             modal_rating = collections.Counter(rating_list).most_common(1)[0][0] if rating_list else None
+            # Added by Nicole:
             ratinglabel = g.label_rating()
-            rr = ResultRow(round_number, dname, took, offered, rating, modal_rating, ratinglabel)
+            # In progress:
+            modalrating_label = g.label_modal_rating()
+            rr = ResultRow(round_number, dname, took, offered, rating, modal_rating, ratinglabel, modalrating_label)
+
             result_table.append(rr)
 
         return {
