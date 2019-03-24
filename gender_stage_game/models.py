@@ -344,87 +344,87 @@ class Group(BaseGroup):
     modal_rating_05_1_1 = models.IntegerField()
     modal_rating_05_2_1 = models.IntegerField()
 
-
-    def get_modal_ratings(self):
-        decider = self.get_player_by_role('decider')
-        ratings_00_1 = []
-        ratings_05_1 = []
-        ratings_10_1 = []
-        ratings_15_1 = []
-        ratings_20_1 = []
-        ratings_25_1 = []
-        ratings_30_1 = []
-
-        ratings_00_2 = []
-        ratings_05_2 = []
-        ratings_10_2 = []
-        ratings_15_2 = []
-        ratings_20_2 = []
-        ratings_25_2 = []
-        ratings_30_2 = []
-
-        ratings_00_1_1 = []
-        ratings_00_2_1 = []
-        ratings_00_3_1 = []
-        ratings_00_4_1 = []
-        ratings_00_5_1 = []
-
-        for r in self.subsession.get_groups():
-            if r.ordering_1 == True:
-                if self.round_number == 1:
-                    # Name the rating given to allocation $0.00 in Round 1 of Treatment 1 "Rating_00_1_1":
-                    rating00_1_1 = r.rating00
-                    # For all groups in Treatment 1, append their Treatment 1 Round 1 rating of $0.00 to the list "ratings_00_1_1":
-                    ratings_00_1_1.append(rating00_1_1)
-                    # Take the mode of this list of Round 1 Treatment 1 ratings of allocation $0.00:
-                    self.modal_rating_00_1_1 = Counter(ratings_00_1_1).most_common(1)[0][0]
-                if self.round_number == 2:
-                    rating00_2_1 = r.rating00
-                    ratings_00_2_1.append(rating00_2_1)
-                    self.modal_rating_00_2_1 = Counter(ratings_00_2_1).most_common(1)[0][0]
-                if self.round_number == 3:
-                    rating00_3_1 = r.rating00
-                    ratings_00_3_1.append(rating00_3_1)
-                    self.modal_rating_00_3_1 = Counter(ratings_00_3_1).most_common(1)[0][0]
-                if self.round_number == 4:
-                    rating00_4_1 = r.rating00
-                    ratings_00_4_1.append(rating00_4_1)
-                    self.modal_rating_00_4_1 = Counter(ratings_00_4_1).most_common(1)[0][0]
-                if self.round_number == 5:
-                    rating00_5_1 = r.rating00
-                    ratings_00_5_1.append(rating00_5_1)
-                    self.modal_rating_00_5_1 = Counter(ratings_00_5_1).most_common(1)[0][0]
-
-                # For each
-                ratings_05_1.append(r.rating05)
-                ratings_10_1.append(r.rating10)
-                ratings_15_1.append(r.rating15)
-                ratings_20_1.append(r.rating20)
-                ratings_25_1.append(r.rating25)
-                ratings_30_1.append(r.rating30)
-
-                self.modal_rating_05_1 = Counter(ratings_05_1).most_common(1)[0][0]
-                self.modal_rating_10_1 = Counter(ratings_10_1).most_common(1)[0][0]
-                self.modal_rating_15_1 = Counter(ratings_15_1).most_common(1)[0][0]
-                self.modal_rating_20_1 = Counter(ratings_20_1).most_common(1)[0][0]
-                self.modal_rating_25_1 = Counter(ratings_25_1).most_common(1)[0][0]
-                self.modal_rating_30_1 = Counter(ratings_30_1).most_common(1)[0][0]
-
-            if r.ordering_2 == True:
-                ratings_00_2.append(r.rating00)
-                ratings_05_2.append(r.rating05)
-                ratings_10_2.append(r.rating10)
-                ratings_15_2.append(r.rating15)
-                ratings_20_2.append(r.rating20)
-                ratings_25_2.append(r.rating25)
-                ratings_30_2.append(r.rating30)
-                self.modal_rating_00_2 = Counter(ratings_00_2).most_common(1)[0][0]
-                self.modal_rating_05_2 = Counter(ratings_05_2).most_common(1)[0][0]
-                self.modal_rating_10_2 = Counter(ratings_10_2).most_common(1)[0][0]
-                self.modal_rating_15_2 = Counter(ratings_15_2).most_common(1)[0][0]
-                self.modal_rating_20_2 = Counter(ratings_20_2).most_common(1)[0][0]
-                self.modal_rating_25_2 = Counter(ratings_25_2).most_common(1)[0][0]
-                self.modal_rating_30_2 = Counter(ratings_30_2).most_common(1)[0][0]
+    #
+    # def get_modal_ratings(self):
+    #     decider = self.get_player_by_role('decider')
+    #     ratings_00_1 = []
+    #     ratings_05_1 = []
+    #     ratings_10_1 = []
+    #     ratings_15_1 = []
+    #     ratings_20_1 = []
+    #     ratings_25_1 = []
+    #     ratings_30_1 = []
+    #
+    #     ratings_00_2 = []
+    #     ratings_05_2 = []
+    #     ratings_10_2 = []
+    #     ratings_15_2 = []
+    #     ratings_20_2 = []
+    #     ratings_25_2 = []
+    #     ratings_30_2 = []
+    #
+    #     ratings_00_1_1 = []
+    #     ratings_00_2_1 = []
+    #     ratings_00_3_1 = []
+    #     ratings_00_4_1 = []
+    #     ratings_00_5_1 = []
+    #
+    #     for r in self.subsession.get_groups():
+    #         if r.ordering_1 == True:
+    #             if self.round_number == 1:
+    #                 # Name the rating given to allocation $0.00 in Round 1 of Treatment 1 "Rating_00_1_1":
+    #                 rating00_1_1 = r.rating00
+    #                 # For all groups in Treatment 1, append their Treatment 1 Round 1 rating of $0.00 to the list "ratings_00_1_1":
+    #                 ratings_00_1_1.append(rating00_1_1)
+    #                 # Take the mode of this list of Round 1 Treatment 1 ratings of allocation $0.00:
+    #                 self.modal_rating_00_1_1 = Counter(ratings_00_1_1).most_common(1)[0][0]
+    #             if self.round_number == 2:
+    #                 rating00_2_1 = r.rating00
+    #                 ratings_00_2_1.append(rating00_2_1)
+    #                 self.modal_rating_00_2_1 = Counter(ratings_00_2_1).most_common(1)[0][0]
+    #             if self.round_number == 3:
+    #                 rating00_3_1 = r.rating00
+    #                 ratings_00_3_1.append(rating00_3_1)
+    #                 self.modal_rating_00_3_1 = Counter(ratings_00_3_1).most_common(1)[0][0]
+    #             if self.round_number == 4:
+    #                 rating00_4_1 = r.rating00
+    #                 ratings_00_4_1.append(rating00_4_1)
+    #                 self.modal_rating_00_4_1 = Counter(ratings_00_4_1).most_common(1)[0][0]
+    #             if self.round_number == 5:
+    #                 rating00_5_1 = r.rating00
+    #                 ratings_00_5_1.append(rating00_5_1)
+    #                 self.modal_rating_00_5_1 = Counter(ratings_00_5_1).most_common(1)[0][0]
+    #
+    #             # For each
+    #             ratings_05_1.append(r.rating05)
+    #             ratings_10_1.append(r.rating10)
+    #             ratings_15_1.append(r.rating15)
+    #             ratings_20_1.append(r.rating20)
+    #             ratings_25_1.append(r.rating25)
+    #             ratings_30_1.append(r.rating30)
+    #
+    #             self.modal_rating_05_1 = Counter(ratings_05_1).most_common(1)[0][0]
+    #             self.modal_rating_10_1 = Counter(ratings_10_1).most_common(1)[0][0]
+    #             self.modal_rating_15_1 = Counter(ratings_15_1).most_common(1)[0][0]
+    #             self.modal_rating_20_1 = Counter(ratings_20_1).most_common(1)[0][0]
+    #             self.modal_rating_25_1 = Counter(ratings_25_1).most_common(1)[0][0]
+    #             self.modal_rating_30_1 = Counter(ratings_30_1).most_common(1)[0][0]
+    #
+    #         if r.ordering_2 == True:
+    #             ratings_00_2.append(r.rating00)
+    #             ratings_05_2.append(r.rating05)
+    #             ratings_10_2.append(r.rating10)
+    #             ratings_15_2.append(r.rating15)
+    #             ratings_20_2.append(r.rating20)
+    #             ratings_25_2.append(r.rating25)
+    #             ratings_30_2.append(r.rating30)
+    #             self.modal_rating_00_2 = Counter(ratings_00_2).most_common(1)[0][0]
+    #             self.modal_rating_05_2 = Counter(ratings_05_2).most_common(1)[0][0]
+    #             self.modal_rating_10_2 = Counter(ratings_10_2).most_common(1)[0][0]
+    #             self.modal_rating_15_2 = Counter(ratings_15_2).most_common(1)[0][0]
+    #             self.modal_rating_20_2 = Counter(ratings_20_2).most_common(1)[0][0]
+    #             self.modal_rating_25_2 = Counter(ratings_25_2).most_common(1)[0][0]
+    #             self.modal_rating_30_2 = Counter(ratings_30_2).most_common(1)[0][0]
 
     #
     # def get_modal_rating(self):
