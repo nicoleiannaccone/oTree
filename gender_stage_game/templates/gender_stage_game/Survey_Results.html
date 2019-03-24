@@ -61,6 +61,7 @@
 
 Your overall earnings for these bonus guesses was {{ player.payoff }}, so your total earnings for the experiment is now {{ player.cumulative_payoff }}.
 
+{% comment %}
 <ul>
     <li> Player.gender: {{ player.gender }} </li>
     <li>    Participant.var gender: {{ gender }} </li>
@@ -73,6 +74,7 @@ Your overall earnings for these bonus guesses was {{ player.payoff }}, so your t
     <li> The first decider's gender was {{ genderD1 }} </li>
     <li> The first receiver's gender was {{ genderR1 }}. </li>
 </ul>
+{% endcomment %}
 
 {% next_button %}
 
