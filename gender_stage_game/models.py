@@ -508,7 +508,7 @@ class Group(BaseGroup):
                     attr_value = getattr(self, "modal_rating%d_%d" % (j, i))
                     setattr(self, attr_name, attr_value)
 
-
+    # Nicole made these two rating labelers - the modal one returns None Appropriate
     def label_rating(self):
         rating_label_dict = {
             None: 'None appropriate',
@@ -518,7 +518,8 @@ class Group(BaseGroup):
             4: 'Very Socially Appropriate'
         }
         return rating_label_dict[self.rating]
-
+        
+    #TODO: Fix this, Nicole. Why "None Appropriate"?
     def label_modal_rating(self):
         modal_rating_label_dict = {
             None: 'None appropriate',
