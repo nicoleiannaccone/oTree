@@ -193,6 +193,7 @@ class Group(BaseGroup):
     rating20 = make_rating_field('$2.00')
     rating25 = make_rating_field('$2.50')
     rating30 = make_rating_field('$3.00')
+    # Self-ratings
     selfrating00 = make_rating_field('$0.00')
     selfrating05 = make_rating_field('$0.50')
     selfrating10 = make_rating_field('$1.00')
@@ -215,25 +216,25 @@ class Group(BaseGroup):
     fselfrating25 = make_rating_field('$2.50')
     fselfrating30 = make_rating_field('$3.00')
 
-    rating01 = models.IntegerField(blank=True,
-        choices=[
-            [1, 'Very Inappropriate'],
-            [2, 'Somewhat Inappropriate'],
-            [3, 'Somewhat Appropriate'],
-            [4, 'Very Appropriate'],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
+    # rating01 = models.IntegerField(blank=True,
+    #     choices=[
+    #         [1, 'Very Inappropriate'],
+    #         [2, 'Somewhat Inappropriate'],
+    #         [3, 'Somewhat Appropriate'],
+    #         [4, 'Very Appropriate'],
+    #     ],
+    #     widget=widgets.RadioSelectHorizontal
+    # )
 
     # Amount taken by Dictator in current round
 #    taken = models.CurrencyField(choices=currency_range(c(0), Constants.endowment, c(0.5)))
     p_taken=make_currency_field()
     taken = make_take_field()
-    taken1=make_currency_field()
-    taken2=make_currency_field()
-    taken3=make_currency_field()
-    taken4=make_currency_field()
-    taken5=make_currency_field()
+    # taken1=make_currency_field()
+    # taken2=make_currency_field()
+    # taken3=make_currency_field()
+    # taken4=make_currency_field()
+    # taken5=make_currency_field()
 
 
 #######################################################################################################################
