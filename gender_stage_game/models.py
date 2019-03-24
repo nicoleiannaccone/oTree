@@ -59,7 +59,7 @@ def make_yn_field(label):
 class Constants(BaseConstants):
     name_in_url = 'WebGames'
     players_per_group = 2
-    num_rounds = 5
+    num_rounds = 1
 
     rounds = 5
     round_numbers = list(range(1, num_rounds + 1))
@@ -103,92 +103,20 @@ class Subsession(BaseSubsession):
         self.set_group_matrix(fd[self.round_number - 1])
         print(self.get_group_matrix())
 
-##########################################################################################################################################################################################################################
-
 ######################################################################################################################
 ########################################### SUBSESSION CLASS #########################################################
 ######################################################################################################################
-######################################################################################################################
-#class Subsession(BaseSubsession):
-#    def get_players_by_role(self, role):
-#        return [p for p in self.get_players() if p.role() == role]
-
-######################################################################################################################
-## Stranger Matching Attempts:
-
-## Attempt #1 at matching. from online forum.
-#    def creating_session(self):
-#        num_groups = len(self.get_groups())
-#        A_players = chunkify(self.get_players_by_role('decider'), num_groups)
-#        B_players = chunkify(self.get_players_by_role('receiver'), num_groups)
-#        random.shuffle(B_players)
-#        self.set_group_matrix([i + j for i, j in zip(A_players, B_players)])
-
-# Stranger matching attempts:
-#     def before_session_starts(self):
-#        if self.round_number > 1:
-#           p_x_g  = match_players.perfect_strangers(self)
-#           for group, players in zip(self.get_groups(), p_x_g):
-#                 group.set_players(players)
-######################################################################################################################
-
-######################################################################################################################
-# Assigning Treatments to Players: 1) Randomly and 2) Balanced
-
-# (1) Random treatment assignment:
-# To assign each new subject to a treatment randomly (ideally this would only apply to the dictators)
-#            if self.round_number == 1:
-#                for p in self.get_players():
-#                    p.participant.vars['ordering'] = random.choice(['ordering1', 'ordering2'])
-#                    if p.participant.vars['ordering'] == 'ordering1':
-#                        p.participant.vars['names'] = Constants.names1
-#                    if p.participant.vars['ordering'] == 'ordering2':
-#                        p.participant.vars['names'] = Constants.names2
-    #        #                p1 = self.group.get_player_by_id(1)
-    #        #                ordering = p1.participant.vars['ordering']
-    #        # This next line rematches group members randomly but keeps their ID # within the group constant.
-            #        Does this mean that their role (Decider versus Receiver) will also be kept constant?
-    #        self.group_randomly(fixed_id_in_group=True)
-
-# (2) Creating Balanced Treatments -- half of the groups get each ordering
-
-#     def creating_session(self):
-#            ordering = itertools.cycle(['ordering1', 'ordering2'])
-#    #        p1.participant.vars['ordering'] = 'ordering1'
-#            for g in self.get_group():
-#                p = g.get_player_by_id(1)
-#                p.participant.vars['ordering'] = next(ordering)
-#    #            ordering = next(ordering)
-#                if p.participant.vars['ordering'] == 'ordering1':
-#                    p.participant.vars['names'] = Constants.names1
-#                if p.participant.vars['ordering'] == 'ordering2':
-#                    p.participant.vars['names'] = Constants.names2
 
 # # To randomly select which round is paid:
 #             if self.round_number == 1:
 #                 paying_round = random.randint(1, Constants.num_rounds)
 #                 self.session.vars['paying_round'] = paying_round
 
-
-######################################################################################################################
 ######################################################################################################################
 ########################################### GROUP CLASS ##############################################################
 ######################################################################################################################
 ######################################################################################################################
 class Group(BaseGroup):
-
-#    def __init__(self):
-  # When tried to run experiment, got the following error until I commented out the above line:
-
-# 2019-03-11 21:52:37,134 - ERROR - worker - Error processing message with consumer otree.channels.consumers.create_session:
-# Traceback (most recent call last):
-#   File "c:\users\nicole\appdata\local\programs\python\python36\lib\site-packages\channels\worker.py", line 120, in run
-#     consumer(message, **kwargs)
-#   File "c:\users\nicole\appdata\local\programs\python\python36\lib\site-packages\otree\channels\consumers.py", line 189, in create_session
-#     session = otree.session.create_session(**kwargs)
-#   File "c:\users\nicole\appdata\local\programs\python\python36\lib\site-packages\otree\session.py", line 371, in create_session
-#     id_in_subsession=id_in_subsession,
-# TypeError: __init__() got an unexpected keyword argument 'session'
 
         # Roles
     decider = models.StringField()
@@ -237,8 +165,6 @@ class Group(BaseGroup):
     offer5 = make_currency_field()
 
     # Ratings
-    rating = make_rating_field('')
-    p_rating = make_rating_field('')
     ratings = models.IntegerField(
         choices=[
             [1, 'Very Inappropriate'],
@@ -248,6 +174,8 @@ class Group(BaseGroup):
         ],
         widget=widgets.RadioSelectHorizontal
     )
+    rating = make_rating_field('')
+    p_rating = make_rating_field('')
     ratinglabel = models.StringField()
     p_rating00 = make_rating_field('$0.00')
     p_rating05 = make_rating_field('$0.50')
@@ -263,6 +191,7 @@ class Group(BaseGroup):
     rating20 = make_rating_field('$2.00')
     rating25 = make_rating_field('$2.50')
     rating30 = make_rating_field('$3.00')
+    # Self-ratings
     selfrating00 = make_rating_field('$0.00')
     selfrating05 = make_rating_field('$0.50')
     selfrating10 = make_rating_field('$1.00')
@@ -285,15 +214,15 @@ class Group(BaseGroup):
     fselfrating25 = make_rating_field('$2.50')
     fselfrating30 = make_rating_field('$3.00')
 
-    rating01 = models.IntegerField(blank=True,
-        choices=[
-            [1, 'Very Inappropriate'],
-            [2, 'Somewhat Inappropriate'],
-            [3, 'Somewhat Appropriate'],
-            [4, 'Very Appropriate'],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
+    # rating01 = models.IntegerField(blank=True,
+    #     choices=[
+    #         [1, 'Very Inappropriate'],
+    #         [2, 'Somewhat Inappropriate'],
+    #         [3, 'Somewhat Appropriate'],
+    #         [4, 'Very Appropriate'],
+    #     ],
+    #     widget=widgets.RadioSelectHorizontal
+    # )
 
     # Amount taken by Dictator in current round
 #    taken = models.CurrencyField(choices=currency_range(c(0), Constants.endowment, c(0.5)))
@@ -413,239 +342,145 @@ class Group(BaseGroup):
     modal_rating_05_1_1 = models.IntegerField()
     modal_rating_05_2_1 = models.IntegerField()
 
+    #
+    # def get_modal_ratings(self):
+    #     decider = self.get_player_by_role('decider')
+    #     ratings_00_1 = []
+    #     ratings_05_1 = []
+    #     ratings_10_1 = []
+    #     ratings_15_1 = []
+    #     ratings_20_1 = []
+    #     ratings_25_1 = []
+    #     ratings_30_1 = []
+    #
+    #     ratings_00_2 = []
+    #     ratings_05_2 = []
+    #     ratings_10_2 = []
+    #     ratings_15_2 = []
+    #     ratings_20_2 = []
+    #     ratings_25_2 = []
+    #     ratings_30_2 = []
+    #
+    #     ratings_00_1_1 = []
+    #     ratings_00_2_1 = []
+    #     ratings_00_3_1 = []
+    #     ratings_00_4_1 = []
+    #     ratings_00_5_1 = []
+    #
+    #     for r in self.subsession.get_groups():
+    #         if r.ordering_1 == True:
+    #             if self.round_number == 1:
+    #                 # Name the rating given to allocation $0.00 in Round 1 of Treatment 1 "Rating_00_1_1":
+    #                 rating00_1_1 = r.rating00
+    #                 # For all groups in Treatment 1, append their Treatment 1 Round 1 rating of $0.00 to the list "ratings_00_1_1":
+    #                 ratings_00_1_1.append(rating00_1_1)
+    #                 # Take the mode of this list of Round 1 Treatment 1 ratings of allocation $0.00:
+    #                 self.modal_rating_00_1_1 = Counter(ratings_00_1_1).most_common(1)[0][0]
+    #             if self.round_number == 2:
+    #                 rating00_2_1 = r.rating00
+    #                 ratings_00_2_1.append(rating00_2_1)
+    #                 self.modal_rating_00_2_1 = Counter(ratings_00_2_1).most_common(1)[0][0]
+    #             if self.round_number == 3:
+    #                 rating00_3_1 = r.rating00
+    #                 ratings_00_3_1.append(rating00_3_1)
+    #                 self.modal_rating_00_3_1 = Counter(ratings_00_3_1).most_common(1)[0][0]
+    #             if self.round_number == 4:
+    #                 rating00_4_1 = r.rating00
+    #                 ratings_00_4_1.append(rating00_4_1)
+    #                 self.modal_rating_00_4_1 = Counter(ratings_00_4_1).most_common(1)[0][0]
+    #             if self.round_number == 5:
+    #                 rating00_5_1 = r.rating00
+    #                 ratings_00_5_1.append(rating00_5_1)
+    #                 self.modal_rating_00_5_1 = Counter(ratings_00_5_1).most_common(1)[0][0]
+    #
+    #             # For each
+    #             ratings_05_1.append(r.rating05)
+    #             ratings_10_1.append(r.rating10)
+    #             ratings_15_1.append(r.rating15)
+    #             ratings_20_1.append(r.rating20)
+    #             ratings_25_1.append(r.rating25)
+    #             ratings_30_1.append(r.rating30)
+    #
+    #             self.modal_rating_05_1 = Counter(ratings_05_1).most_common(1)[0][0]
+    #             self.modal_rating_10_1 = Counter(ratings_10_1).most_common(1)[0][0]
+    #             self.modal_rating_15_1 = Counter(ratings_15_1).most_common(1)[0][0]
+    #             self.modal_rating_20_1 = Counter(ratings_20_1).most_common(1)[0][0]
+    #             self.modal_rating_25_1 = Counter(ratings_25_1).most_common(1)[0][0]
+    #             self.modal_rating_30_1 = Counter(ratings_30_1).most_common(1)[0][0]
+    #
+    #         if r.ordering_2 == True:
+    #             ratings_00_2.append(r.rating00)
+    #             ratings_05_2.append(r.rating05)
+    #             ratings_10_2.append(r.rating10)
+    #             ratings_15_2.append(r.rating15)
+    #             ratings_20_2.append(r.rating20)
+    #             ratings_25_2.append(r.rating25)
+    #             ratings_30_2.append(r.rating30)
+    #             self.modal_rating_00_2 = Counter(ratings_00_2).most_common(1)[0][0]
+    #             self.modal_rating_05_2 = Counter(ratings_05_2).most_common(1)[0][0]
+    #             self.modal_rating_10_2 = Counter(ratings_10_2).most_common(1)[0][0]
+    #             self.modal_rating_15_2 = Counter(ratings_15_2).most_common(1)[0][0]
+    #             self.modal_rating_20_2 = Counter(ratings_20_2).most_common(1)[0][0]
+    #             self.modal_rating_25_2 = Counter(ratings_25_2).most_common(1)[0][0]
+    #             self.modal_rating_30_2 = Counter(ratings_30_2).most_common(1)[0][0]
 
-    def get_modal_ratings(self):
-        decider = self.get_player_by_role('decider')
-        ratings_00_1 = []
-        ratings_05_1 = []
-        ratings_10_1 = []
-        ratings_15_1 = []
-        ratings_20_1 = []
-        ratings_25_1 = []
-        ratings_30_1 = []
-
-        ratings_00_2 = []
-        ratings_05_2 = []
-        ratings_10_2 = []
-        ratings_15_2 = []
-        ratings_20_2 = []
-        ratings_25_2 = []
-        ratings_30_2 = []
-
-        ratings_00_1_1 = []
-        ratings_00_2_1 = []
-        ratings_00_3_1 = []
-        ratings_00_4_1 = []
-        ratings_00_5_1 = []
-
-        for r in self.subsession.get_groups():
-            if r.ordering_1 == True:
-                if self.round_number == 1:
-                    # Name the rating given to allocation $0.00 in Round 1 of Treatment 1 "Rating_00_1_1":
-                    rating00_1_1 = r.rating00
-                    # For all groups in Treatment 1, append their Treatment 1 Round 1 rating of $0.00 to the list "ratings_00_1_1":
-                    ratings_00_1_1.append(rating00_1_1)
-                    # Take the mode of this list of Round 1 Treatment 1 ratings of allocation $0.00:
-                    self.modal_rating_00_1_1 = Counter(ratings_00_1_1).most_common(1)[0][0]
-                if self.round_number == 2:
-                    rating00_2_1 = r.rating00
-                    ratings_00_2_1.append(rating00_2_1)
-                    self.modal_rating_00_2_1 = Counter(ratings_00_2_1).most_common(1)[0][0]
-                if self.round_number == 3:
-                    rating00_3_1 = r.rating00
-                    ratings_00_3_1.append(rating00_3_1)
-                    self.modal_rating_00_3_1 = Counter(ratings_00_3_1).most_common(1)[0][0]
-                if self.round_number == 4:
-                    rating00_4_1 = r.rating00
-                    ratings_00_4_1.append(rating00_4_1)
-                    self.modal_rating_00_4_1 = Counter(ratings_00_4_1).most_common(1)[0][0]
-                if self.round_number == 5:
-                    rating00_5_1 = r.rating00
-                    ratings_00_5_1.append(rating00_5_1)
-                    self.modal_rating_00_5_1 = Counter(ratings_00_5_1).most_common(1)[0][0]
-
-                # For each
-                ratings_05_1.append(r.rating05)
-                ratings_10_1.append(r.rating10)
-                ratings_15_1.append(r.rating15)
-                ratings_20_1.append(r.rating20)
-                ratings_25_1.append(r.rating25)
-                ratings_30_1.append(r.rating30)
-
-                self.modal_rating_05_1 = Counter(ratings_05_1).most_common(1)[0][0]
-                self.modal_rating_10_1 = Counter(ratings_10_1).most_common(1)[0][0]
-                self.modal_rating_15_1 = Counter(ratings_15_1).most_common(1)[0][0]
-                self.modal_rating_20_1 = Counter(ratings_20_1).most_common(1)[0][0]
-                self.modal_rating_25_1 = Counter(ratings_25_1).most_common(1)[0][0]
-                self.modal_rating_30_1 = Counter(ratings_30_1).most_common(1)[0][0]
-
-            if r.ordering_2 == True:
-                ratings_00_2.append(r.rating00)
-                ratings_05_2.append(r.rating05)
-                ratings_10_2.append(r.rating10)
-                ratings_15_2.append(r.rating15)
-                ratings_20_2.append(r.rating20)
-                ratings_25_2.append(r.rating25)
-                ratings_30_2.append(r.rating30)
-                self.modal_rating_00_2 = Counter(ratings_00_2).most_common(1)[0][0]
-                self.modal_rating_05_2 = Counter(ratings_05_2).most_common(1)[0][0]
-                self.modal_rating_10_2 = Counter(ratings_10_2).most_common(1)[0][0]
-                self.modal_rating_15_2 = Counter(ratings_15_2).most_common(1)[0][0]
-                self.modal_rating_20_2 = Counter(ratings_20_2).most_common(1)[0][0]
-                self.modal_rating_25_2 = Counter(ratings_25_2).most_common(1)[0][0]
-                self.modal_rating_30_2 = Counter(ratings_30_2).most_common(1)[0][0]
-
-
-    def modal_ratings(self):
-        decider = self.get_player_by_role('decider')
-        # Create lists to contain all Treatment-1 and Treatment-2 ratings
-        ratings_1 = []
-        ratings_2 = []
-
-        # For each group in the session, and each of the two treatments (Ordering 1 & Ordering 2), create an array containing ratings of all 7 allocations in each of the 5 rounds
-        for g in self.subsession.get_groups():
-            if g.ordering_1:
-                g.ratings_1 = [[g.in_round(1).rating00, g.in_round(1).rating05, g.in_round(1).rating10, g.in_round(1).rating15, g.in_round(1).rating20, g.in_round(1).rating25, g.in_round(1).rating30],
-                               [g.in_round(2).rating00, g.in_round(2).rating05, g.in_round(2).rating10, g.in_round(2).rating15, g.in_round(2).rating20, g.in_round(2).rating25, g.in_round(2).rating30],
-                               [g.in_round(3).rating00, g.in_round(3).rating05, g.in_round(3).rating10, g.in_round(3).rating15, g.in_round(3).rating20, g.in_round(3).rating25, g.in_round(3).rating30],
-                               [g.in_round(4).rating00, g.in_round(4).rating05, g.in_round(4).rating10, g.in_round(4).rating15, g.in_round(4).rating20, g.in_round(4).rating25, g.in_round(4).rating30],
-                               [g.in_round(5).rating00, g.in_round(5).rating05, g.in_round(5).rating10, g.in_round(5).rating15, g.in_round(5).rating20, g.in_round(5).rating25, g.in_round(5).rating30]]
-            if g.ordering_2:
-                g.ratings_2 = [[g.in_round(1).rating00, g.in_round(1).rating05, g.in_round(1).rating10, g.in_round(1).rating15, g.in_round(1).rating20, g.in_round(1).rating25, g.in_round(1).rating30],
-                               [g.in_round(2).rating00, g.in_round(2).rating05, g.in_round(2).rating10, g.in_round(2).rating15, g.in_round(2).rating20, g.in_round(2).rating25, g.in_round(2).rating30],
-                               [g.in_round(3).rating00, g.in_round(3).rating05, g.in_round(3).rating10, g.in_round(3).rating15, g.in_round(3).rating20, g.in_round(3).rating25, g.in_round(3).rating30],
-                               [g.in_round(4).rating00, g.in_round(4).rating05, g.in_round(4).rating10, g.in_round(4).rating15, g.in_round(4).rating20, g.in_round(4).rating25, g.in_round(4).rating30],
-                               [g.in_round(5).rating00, g.in_round(5).rating05, g.in_round(5).rating10, g.in_round(5).rating15, g.in_round(5).rating20, g.in_round(5).rating25, g.in_round(5).rating30]]
-
-        # Create lists to contain each round in Treatment 1's ratings of the allocation $0.00:
-        ratings_00_1_1 = []
-        ratings_00_2_1 = []
-        ratings_00_3_1 = []
-        ratings_00_4_1 = []
-        ratings_00_5_1 = []
-
-        for g in self.subsession.get_groups():
-            # For each round of Treatment 1, append the corresponding value in the "Ratings_1" array into a list of ratings given to the allocation $0.00:
-            ratings_00_1_1.append(g.ratings_1[0][0])
-            ratings_00_2_1.append(g.ratings_1[1][0])
-            ratings_00_3_1.append(g.ratings_1[2][0])
-            ratings_00_4_1.append(g.ratings_1[3][0])
-            ratings_00_5_1.append(g.ratings_1[4][0])
-
-        ratings_00_1 = []
-        ratings_05_1 = []
-        #...
-        ratings_30_1 = []
-
-        for g in self.subsession.get_groups():
-            # Create an array containing all Treatment 1 groups' 5 rounds of ratings of the allocation $0.00:
-            ratings_00_1.append([ratings_1[0][0], ratings_1[1][0], ratings_1[2][0], ratings_1[3][0], ratings_1[4][0]])
-            # Create an array containing all Treatment 1 groups' 5 rounds of ratings of the allocation $0.50:
-            ratings_05_1.append([ratings_1[0][1], ratings_1[1][1], ratings_1[2][1], ratings_1[3][1], ratings_1[4][1]])
-            #...
-            # Create an array containing all Treatment 1 groups' 5 rounds of ratings of the allocation $3.00:
-            ratings_30_1.append([ratings_1[0][6], ratings_1[1][6], ratings_1[2][6], ratings_1[3][6], ratings_1[4][6]])
-
-        ratings_00_2 = []
-        ratings_05_2 = []
-        #...
-        ratings_30_2 = []
-
-        for g in self.subsession.get_groups():
-            # Create an array containing all Treatment 2 groups' 5 rounds of ratings of the allocation $0.00:
-            ratings_00_2.append([ratings_2[0][0], ratings_2[1][0], ratings_2[2][0], ratings_2[3][0], ratings_2[4][0]])
-            # Create an array containing all Treatment 2 groups' 5 rounds of ratings of the allocation $0.50:
-            ratings_05_2.append([ratings_2[0][1], ratings_2[1][1], ratings_2[2][1], ratings_2[3][1], ratings_2[4][1]])
-            #...
-            # Create an array containing all Treatment 2 groups' 5 rounds of ratings of the allocation $3.00:
-            ratings_30_2.append([ratings_2[0][6], ratings_2[1][6], ratings_2[2][6], ratings_2[3][6], ratings_2[4][6]])
-
-        # # # Treatment 1 Modes: # # #
-        # Calculate the modal rating assigned to the $0.00 allocation in Round 1 of Treatment 1:
-        self.modal_rating_00_1_1 = Counter(ratings_00_1[0]).most_common(1)[0][0]
-        # Calculate the modal rating assigned to the $0.00 allocation in Round 2 of Treatment 1:
-        self.modal_rating_00_2_1 = Counter(ratings_00_1[1]).most_common(1)[0][0]
-        #...
-        # Calculate the modal rating assigned to the $0.00 allocation in Round 5 of Treatment 1:
-        self.modal_rating_00_5_1 = Counter(ratings_00_1[4]).most_common(1)[0][0]
-            #...
-        # Calculate the modal rating assigned to the $3.00 allocation in Round 1 of Treatment 1:
-        self.modal_rating_30_1_1 = Counter(ratings_30_1[0]).most_common(1)[0][0]
-        # Calculate the modal rating assigned to the $3.00 allocation in Round 2 of Treatment 1:
-        self.modal_rating_30_2_1 = Counter(ratings_30_1[1]).most_common(1)[0][0]
-        #...
-        # Calculate the modal rating assigned to the $3.00 allocation in Round 5 of Treatment 1:
-        self.modal_rating_30_5_1 = Counter(ratings_30_1[4]).most_common(1)[0][0]
-
-        # # # Treatment 2 Modes: # # #
-        # Calculate the modal rating assigned to the $0.00 allocation in Round 1 of Treatment 2:
-        self.modal_rating_00_1_2 = Counter(ratings_00_2[0]).most_common(1)[0][0]
-        self.modal_rating_00_2_2 = Counter(ratings_00_2[1]).most_common(1)[0][0]
-        #...
-        self.modal_rating_00_5_2 = Counter(ratings_00_2[4]).most_common(1)[0][0]
-            #...
-        self.modal_rating_30_1_2 = Counter(ratings_30_2[0]).most_common(1)[0][0]
-        self.modal_rating_30_2_2 = Counter(ratings_30_2[1]).most_common(1)[0][0]
-        #...
-        # Calculate the modal rating assigned to the $3.00 allocation in Round 5 of Treatment 2:
-        self.modal_rating_30_5_2 = Counter(ratings_30_2[4]).most_common(1)[0][0]
-
-    def get_modal_rating(self):
-
-        decider = self.get_player_by_role('decider')
-        # Create lists to contain all Treatment 1 Receivers' ratings of each possible allocation, $0.00 to $3.00:
-        ratings_00_1 = []
-        ratings_05_1 = []
-        ratings_10_1 = []
-        ratings_15_1 = []
-        ratings_20_1 = []
-        ratings_25_1 = []
-        ratings_30_1 = []
-
-        # Create lists to contain all Treatment 2 Receivers' ratings of each possible allocation, $0.00 to $3.00
-        ratings_00_2 = []
-        ratings_05_2 = []
-        ratings_10_2 = []
-        ratings_15_2 = []
-        ratings_20_2 = []
-        ratings_25_2 = []
-        ratings_30_2 = []
-
-        for r in self.subsession.get_groups():
-            if r.ordering_1 == True:
-                # For each group in Treatment 1, append the Receiver's rating of allocation $X into the list "ratings_X_1"
-                ratings_00_1.append(r.rating00)
-                ratings_05_1.append(r.rating05)
-                ratings_10_1.append(r.rating10)
-                ratings_15_1.append(r.rating15)
-                ratings_20_1.append(r.rating20)
-                ratings_25_1.append(r.rating25)
-                ratings_30_1.append(r.rating30)
-                # For each group in Treatment 1, calculate the mode of all Receivers' ratings of the allocation $X.
-                self.modal_rating_00_1 = Counter(ratings_00_1).most_common(1)[0][0]
-                self.modal_rating_05_1 = Counter(ratings_05_1).most_common(1)[0][0]
-                self.modal_rating_10_1 = Counter(ratings_10_1).most_common(1)[0][0]
-                self.modal_rating_15_1 = Counter(ratings_15_1).most_common(1)[0][0]
-                self.modal_rating_20_1 = Counter(ratings_20_1).most_common(1)[0][0]
-                self.modal_rating_25_1 = Counter(ratings_25_1).most_common(1)[0][0]
-                self.modal_rating_30_1 = Counter(ratings_30_1).most_common(1)[0][0]
-            if r.ordering_2 == True:
-                # For each group in Treatment 2, append the Receiver's rating of allocation $X into the list "ratings_00_1"
-                ratings_00_2.append(r.rating00)
-                ratings_05_2.append(r.rating05)
-                ratings_10_2.append(r.rating10)
-                ratings_15_2.append(r.rating15)
-                ratings_20_2.append(r.rating20)
-                ratings_25_2.append(r.rating25)
-                ratings_30_2.append(r.rating30)
-                # For each group in Treatment 2, calculate the mode of all Receivers' ratings of the allocation $X.
-                self.modal_rating_00_2 = Counter(ratings_00_2).most_common(1)[0][0]
-                self.modal_rating_05_2 = Counter(ratings_05_2).most_common(1)[0][0]
-                self.modal_rating_10_2 = Counter(ratings_10_2).most_common(1)[0][0]
-                self.modal_rating_15_2 = Counter(ratings_15_2).most_common(1)[0][0]
-                self.modal_rating_20_2 = Counter(ratings_20_2).most_common(1)[0][0]
-                self.modal_rating_25_2 = Counter(ratings_25_2).most_common(1)[0][0]
-                self.modal_rating_30_2 = Counter(ratings_30_2).most_common(1)[0][0]
+    #
+    # def get_modal_rating(self):
+    #
+    #     decider = self.get_player_by_role('decider')
+    #     # Create lists to contain all Treatment 1 Receivers' ratings of each possible allocation, $0.00 to $3.00:
+    #     ratings_00_1 = []
+    #     ratings_05_1 = []
+    #     ratings_10_1 = []
+    #     ratings_15_1 = []
+    #     ratings_20_1 = []
+    #     ratings_25_1 = []
+    #     ratings_30_1 = []
+    #
+    #     # Create lists to contain all Treatment 2 Receivers' ratings of each possible allocation, $0.00 to $3.00
+    #     ratings_00_2 = []
+    #     ratings_05_2 = []
+    #     ratings_10_2 = []
+    #     ratings_15_2 = []
+    #     ratings_20_2 = []
+    #     ratings_25_2 = []
+    #     ratings_30_2 = []
+    #
+    #     for r in self.subsession.get_groups():
+    #         if r.ordering_1 == True:
+    #             # For each group in Treatment 1, append the Receiver's rating of allocation $X into the list "ratings_X_1"
+    #             ratings_00_1.append(r.rating00)
+    #             ratings_05_1.append(r.rating05)
+    #             ratings_10_1.append(r.rating10)
+    #             ratings_15_1.append(r.rating15)
+    #             ratings_20_1.append(r.rating20)
+    #             ratings_25_1.append(r.rating25)
+    #             ratings_30_1.append(r.rating30)
+    #             # For each group in Treatment 1, calculate the mode of all Receivers' ratings of the allocation $X.
+    #             self.modal_rating_00_1 = Counter(ratings_00_1).most_common(1)[0][0]
+    #             self.modal_rating_05_1 = Counter(ratings_05_1).most_common(1)[0][0]
+    #             self.modal_rating_10_1 = Counter(ratings_10_1).most_common(1)[0][0]
+    #             self.modal_rating_15_1 = Counter(ratings_15_1).most_common(1)[0][0]
+    #             self.modal_rating_20_1 = Counter(ratings_20_1).most_common(1)[0][0]
+    #             self.modal_rating_25_1 = Counter(ratings_25_1).most_common(1)[0][0]
+    #             self.modal_rating_30_1 = Counter(ratings_30_1).most_common(1)[0][0]
+    #         if r.ordering_2 == True:
+    #             # For each group in Treatment 2, append the Receiver's rating of allocation $X into the list "ratings_00_1"
+    #             ratings_00_2.append(r.rating00)
+    #             ratings_05_2.append(r.rating05)
+    #             ratings_10_2.append(r.rating10)
+    #             ratings_15_2.append(r.rating15)
+    #             ratings_20_2.append(r.rating20)
+    #             ratings_25_2.append(r.rating25)
+    #             ratings_30_2.append(r.rating30)
+    #             # For each group in Treatment 2, calculate the mode of all Receivers' ratings of the allocation $X.
+    #             self.modal_rating_00_2 = Counter(ratings_00_2).most_common(1)[0][0]
+    #             self.modal_rating_05_2 = Counter(ratings_05_2).most_common(1)[0][0]
+    #             self.modal_rating_10_2 = Counter(ratings_10_2).most_common(1)[0][0]
+    #             self.modal_rating_15_2 = Counter(ratings_15_2).most_common(1)[0][0]
+    #             self.modal_rating_20_2 = Counter(ratings_20_2).most_common(1)[0][0]
+    #             self.modal_rating_25_2 = Counter(ratings_25_2).most_common(1)[0][0]
+    #             self.modal_rating_30_2 = Counter(ratings_30_2).most_common(1)[0][0]
 
     def modal_rating_by_round(self):
         decider = self.get_player_by_role('decider')
@@ -671,7 +506,8 @@ class Group(BaseGroup):
                     attr_value = getattr(self, "modal_rating%d_%d" % (j, i))
                     setattr(self, attr_name, attr_value)
 
-    def label_ratings(self):
+    # Nicole made these two rating labelers - the modal one returns None Appropriate
+    def label_rating(self):
         rating_label_dict = {
             None: 'None appropriate',
             1: 'Very Socially Inappropriate',
@@ -679,23 +515,18 @@ class Group(BaseGroup):
             3: 'Somewhat Socially Appropriate',
             4: 'Very Socially Appropriate'
         }
-        self.ratinglabel = rating_label_dict[self.rating]
-
-        for j in [1, 2, 3, 4, 5]:
-            modal_rating_j = getattr(self, "modal_rating%d" % j)
-            # modal_rating_j = getattr(self, "modal_rating%d_%d" % (j, i))  # This is evaluating to None
-            modal_label_j = rating_label_dict[modal_rating_j]
-            setattr(self, "modal_rating_label_%d" % j, modal_label_j)
-
-#        self.modal_rating_label = rating_label_dict[self.modal_rating]
-
-        # for i in [1, 2]:
-        #     if getattr(self, "ordering_%d" % i):
-        #         for j in [1,2,3,4,5]:
-        #             modal_rating = "modal_rating%d_%d" % (j, i)
-        #             attr_name = self.modal_rating_label
-        #             attr_value = rating_label_dict[modal_rating]
-        #             setattr(self, attr_name, attr_value)
+        return rating_label_dict[self.rating]
+        
+    #TODO: Fix this, Nicole. Why "None Appropriate"?
+    def label_modal_rating(self):
+        modal_rating_label_dict = {
+            None: 'None appropriate',
+            1: 'Very Socially Inappropriate',
+            2: 'Somewhat Socially Inappropriate',
+            3: 'Somewhat Socially Appropriate',
+            4: 'Very Socially Appropriate'
+        }
+        return modal_rating_label_dict[self.modal_rating]
 
     def fetch_rating(self):
         rating_dict = {
@@ -1017,11 +848,13 @@ class Player(BasePlayer):
     Female = models.StringField()
     Other = models.StringField()
     gender = make_gender_field()
+    # Create labels for each numerical gender field
     genderlabel1 = models.StringField()
     genderlabel2 = models.StringField()
     genderlabel3 = models.StringField()
     genderlabel4 = models.StringField()
     genderlabel5 = models.StringField()
+    # Used in "check gender guess", "set gender guesses" and "set guess"
     genderCP1 = make_gender_field()
     genderCP2 = make_gender_field()
     genderCP3 = make_gender_field()
@@ -1058,10 +891,6 @@ class Player(BasePlayer):
         if self.id_in_group == 2:
             return 'receiver'
 
-    # def get_role(self):
-    #     decider = self.group.get_player_by_role('decider')
-    #     receiver = self.group.get_player_by_role('receiver')
-
     def other_player(self):
         return self.get_others_in_group()[0]
 
@@ -1071,7 +900,7 @@ class Player(BasePlayer):
         decider.payoff = self.group.taken
         receiver.payoff = Constants.endowment - self.group.taken
 
-    def get_payoffs(self):
+    def calculate_payoffs(self):
         self.cumulative_payoff = sum([p.payoff for p in self.in_all_rounds()])
 
     def get_survey_prizes(self):
