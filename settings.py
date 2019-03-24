@@ -14,7 +14,7 @@ SESSION_CONFIG_DEFAULTS = {
 SESSION_CONFIGS = [
     {
         'name': 'False_Gender_Experiment_Apps',
-        'num_demo_participants': 6,
+        'num_demo_participants': 2,
         'app_sequence': ['gender_intro', 'gender_stage_game', 'payment_info'],
     },
     {

@@ -5,27 +5,7 @@
 
 {% block content %}
 
-<p>
-    Order:
-<ol>
-    <li>
-        While the Decider is choosing how much of the Receiver's endowment to take, the Receiver will evaluate the appropriateness of the different possible choices available to the Decider.
-    </li>
-    <li>
-    Before seeing their Decider's choice, they will rate the social appropriateness of each potential choice.
-    </li>
-    <li>
-    After the Decider makes their choice, this choice will be shown to the Receiver.
-    </li>
-    <li>
-    The Receiver will then write their Decider a message responding to the Decider's choice.
-    </li>
-</ol>
-
-</p>
-
-    <p>
-        Screennames
+Screennames
 <ul>
         <li>
         Deciders will be assigned screennames.
@@ -36,36 +16,6 @@
         encouraged to write and rate freely when evaluating their Deciders' allocation decisions.
         </li>
 </ul>
-    </p>
- <p>
-        Receivers must decide, for each possible amount the Decider could take, whether taking that amount
-        would be considered "socially appropriate" and "consistent with moral or proper social behavior" or "socially inappropriate" and
-        "inconsistent with moral or proper social behavior."
-    </p>
-    <p>
-        By socially appropriate, we mean behavior that most people agree is the "correct" or "ethical" thing to do.
-    </p>
-    <p>
-        Another way to think about what we mean is that if an individual were to select a socially inappropriate choice,
-        then someone else might be angry at that individual for doing so.
-    </p>
-    <p>
-        Receivers do not observe the Decider's chosen allocation until after they have rated the appropriateness of each possible
-        allocation decision.
-    </p>
-    <p>
-        Prizes:
-        After all 5 rounds have been played, Receivers earn a {{ Constants.prize }} prize if the rating they gave to the allocation the Decider actually made matched the most common rating given to that
-        allocation by all other Receivers who were matched up with a Decider with that screenname.
-    </p>
-    <p>
-        After the Deciders have chosen how much to take from their Receiver's {{ Constants.endowment }} and Receivers have
-        finished rating each possible allocation, the Decider's chosen allocation decision will be shown to the Receiver.
-        Receivers will then write a message that the Decider will see at the end of the experiment.
-    </p>
-    <p>
-        You will now play a practice round, followed by 5 experimental rounds. Then you will see your earnings and take a survey.
-    </p>
 
 {% next_button %}
     <button class="btn" name="back" value="1">Back</button>
