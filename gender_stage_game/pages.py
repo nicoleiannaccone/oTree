@@ -93,7 +93,7 @@ class R_Message(Page):
 
     def vars_for_template(self):
         self.group.get_names()
-        self.player.get_payoffs()
+        self.player.calculate_payoffs()
         p1 = self.group.get_player_by_id(1)
         return {
             #            'name1': self.group.names[0],
@@ -131,15 +131,25 @@ class ResultRow:
 class Results(Page):
 
     def vars_for_template(self):
+        # Create empty dictationary for Receivers' ratings
         receiver_ratings = {}
+        # For each treatment / ordering of names:
         for t in 1,2:
+            # For each round:
             for r in Constants.round_numbers(Constants):
+                # For each potential allocation:
                 for v in 0, 0.5, 1, 1.5, 2, 2.5, 3:
+                    # Create a tuple containing the treatment #, round #, and allocation
                     receiver_ratings[(t, r, v)] = list()
+        # For each group in the session:
         for g in self.subsession.get_groups():
+            # For each round:
             for r in Constants.round_numbers(Constants):
+                # "x" stands in for "group.in_round(r)"
                 x = g.in_round(r)
+                # t is this group's treatment
                 t = x.get_treatment()
+                # Append ratings to the appropriate tuple by allocation
                 receiver_ratings[(t,r,0)].append(x.rating00)
                 receiver_ratings[(t,r,0.5)].append(x.rating05)
                 receiver_ratings[(t,r,1)].append(x.rating10)
@@ -257,7 +267,7 @@ class Survey_Results(Page):
         self.group.check_gender()
         self.player.set_guess()  # This just puts a label "Male" on gender 1 and a label "Female" on gender 2
         self.player.get_survey_prizes()
-        self.player.get_payoffs()
+        self.player.calculate_payoffs()
         return {
             'gender': self.participant.vars.get('gender', 0),
             'genderCP1': self.participant.vars.get('genderCP1', 0),
@@ -314,8 +324,8 @@ page_sequence = [
       Message_WaitPage,
       ResultsWaitPage,
       Results,
-      Results2,
-      # PostSurvey,
+      # Results2,
+      PostSurvey,
       SurveyWaitPage,
       Survey_Results,
       D_Self_Rating_M,
