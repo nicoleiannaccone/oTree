@@ -529,32 +529,6 @@ class Group(BaseGroup):
         }
         return modal_rating_label_dict[self.modal_rating]
 
-    def label_ratings(self):
-        rating_label_dict = {
-            None: 'None appropriate',
-            1: 'Very Socially Inappropriate',
-            2: 'Somewhat Socially Inappropriate',
-            3: 'Somewhat Socially Appropriate',
-            4: 'Very Socially Appropriate'
-        }
-        self.ratinglabel = rating_label_dict[self.rating]
-
-        for j in [1, 2, 3, 4, 5]:
-            modal_rating_j = getattr(self, "modal_rating%d" % j)
-            # modal_rating_j = getattr(self, "modal_rating%d_%d" % (j, i))  # This is evaluating to None
-            modal_label_j = rating_label_dict[modal_rating_j]
-            setattr(self, "modal_rating_label_%d" % j, modal_label_j)
-
-    #        self.modal_rating_label = rating_label_dict[self.modal_rating]
-
-        # for i in [1, 2]:
-        #     if getattr(self, "ordering_%d" % i):
-        #         for j in [1,2,3,4,5]:
-        #             modal_rating = "modal_rating%d_%d" % (j, i)
-        #             attr_name = self.modal_rating_label
-        #             attr_value = rating_label_dict[modal_rating]
-        #             setattr(self, attr_name, attr_value)
-
     def fetch_rating(self):
         rating_dict = {
             None: None,
