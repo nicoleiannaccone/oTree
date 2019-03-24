@@ -870,11 +870,13 @@ class Player(BasePlayer):
     Female = models.StringField()
     Other = models.StringField()
     gender = make_gender_field()
+    # Create labels for each numerical gender field
     genderlabel1 = models.StringField()
     genderlabel2 = models.StringField()
     genderlabel3 = models.StringField()
     genderlabel4 = models.StringField()
     genderlabel5 = models.StringField()
+    # Used in "check gender guess", "set gender guesses" and "set guess"
     genderCP1 = make_gender_field()
     genderCP2 = make_gender_field()
     genderCP3 = make_gender_field()
@@ -911,10 +913,6 @@ class Player(BasePlayer):
         if self.id_in_group == 2:
             return 'receiver'
 
-    # def get_role(self):
-    #     decider = self.group.get_player_by_role('decider')
-    #     receiver = self.group.get_player_by_role('receiver')
-
     def other_player(self):
         return self.get_others_in_group()[0]
 
@@ -924,7 +922,7 @@ class Player(BasePlayer):
         decider.payoff = self.group.taken
         receiver.payoff = Constants.endowment - self.group.taken
 
-    def get_payoffs(self):
+    def calculate_payoffs(self):
         self.cumulative_payoff = sum([p.payoff for p in self.in_all_rounds()])
 
     def get_survey_prizes(self):
