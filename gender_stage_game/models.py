@@ -516,13 +516,8 @@ class Group(BaseGroup):
             3: 'Somewhat Socially Appropriate',
             4: 'Very Socially Appropriate'
         }
-#        self.ratinglabel = rating_label_dict[self.rating]
 #        self.modal_rating_label = rating_label_dict[self.modal_rating]
         return rating_label_dict[self.rating]
-#            {
-#            self.ratinglabel,
-#            self.modal_rating_label,
-#        }
 
     def label_ratings(self):
         rating_label_dict = {
