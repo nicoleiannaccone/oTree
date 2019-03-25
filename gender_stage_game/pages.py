@@ -11,7 +11,7 @@ class D_Name(Page):
 
     def vars_for_template(self):
         self.group.get_names()
-        self.group.get_D_names()
+        self.group.get_d_names()
         return {
             'name': self.participant.vars.get('name', 0),
         }
