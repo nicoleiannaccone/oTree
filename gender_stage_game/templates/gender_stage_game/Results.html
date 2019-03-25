@@ -38,13 +38,7 @@
             Receiver's Rating:
         </th>
         <th>
-            Rating Label:
-        </th>
-        <th>
             Modal Rating:
-        </th>
-        <th>
-            Modal Rating Label:
         </th>
     </tr>
     {% for r in result_table %}
@@ -62,14 +56,10 @@
             {{ r.offered }}
         </td>
         <td>
-            {{ r.rating }}
+            {{ r.rating_label }}
         </td>
         <td>
-        </td>
-        <td>
-            {{ r.modal_rating }}
-        </td>
-        <td>
+            {{ r.modal_rating_label }}
         </td>
     </tr>
     {% endfor %}

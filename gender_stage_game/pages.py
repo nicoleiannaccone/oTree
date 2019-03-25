@@ -119,13 +119,15 @@ class Test(Page):
 
 
 class ResultRow:
-    def __init__(self, round_number, dname, took, offered, rating, modal_rating):
-        self.round_number = round_number
+    def __init__(self, round_numberxx, dname, took, offered, rating, modal_rating):
+        self.round_number = round_numberxx
         self.dname = dname
         self.took = took
         self.offered = offered
         self.rating = rating
+        self.rating_label = Constants.rating_label_dict[rating]
         self.modal_rating = modal_rating
+        self.modal_rating_label = Constants.rating_label_dict[modal_rating]
 
 
 class Results(Page):

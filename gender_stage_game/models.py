@@ -75,6 +75,14 @@ class Constants(BaseConstants):
 
     instructions_template = 'gender_intro/Instructions_Full.html'
 
+    rating_label_dict = {
+        None: 'None appropriate',
+        1: 'Very Socially Inappropriate',
+        2: 'Somewhat Socially Inappropriate',
+        3: 'Somewhat Socially Appropriate',
+        4: 'Very Socially Appropriate'
+    }
+
     # Monetary amounts
     endowment = c(3)
     prize = c(0.5)
@@ -298,14 +306,7 @@ class Group(BaseGroup):
 
     # Nicole made these two rating labelers - the modal one returns None Appropriate
     def label_rating(self):
-        rating_label_dict = {
-            None: 'None appropriate',
-            1: 'Very Socially Inappropriate',
-            2: 'Somewhat Socially Inappropriate',
-            3: 'Somewhat Socially Appropriate',
-            4: 'Very Socially Appropriate'
-        }
-        return rating_label_dict[self.rating]
+        return Constants.rating_label_dict[self.rating]
 
         # TODO: Fix this, Nicole. Why "None Appropriate"?
 
