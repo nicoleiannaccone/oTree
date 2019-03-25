@@ -137,18 +137,8 @@ class Group(BaseGroup):
     receiver = models.StringField()
 
     # Genders
-    #    gender = models.IntegerField()
-    #    gender = make_gender_field('')
-    genderD1 = make_gender_field()
-    genderD2 = make_gender_field()
-    genderD3 = make_gender_field()
-    genderD4 = make_gender_field()
-    genderD5 = make_gender_field()
-    genderR1 = make_gender_field()
-    genderR2 = make_gender_field()
-    genderR3 = make_gender_field()
-    genderR4 = make_gender_field()
-    genderR5 = make_gender_field()
+#    gender = models.IntegerField()
+#    gender = make_gender_field('')
 
     message = models.LongStringField(blank=True, label="Your message:")
     message1 = models.LongStringField(blank=True, label="Your message:")
