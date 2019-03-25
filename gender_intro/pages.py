@@ -1,5 +1,7 @@
 from ._builtin import Page, WaitPage
-from .models import Constants
+from .models import ScreennameFetcher, Constants
+
+from settings import INCLUDE_GENDER_INTRO
 
 
 class Introduction(Page):
@@ -76,6 +78,15 @@ class Instructions_Krupka_1(Page):
 class Pre_Survey(Page):
     form_model = 'player'
     form_fields = ['age', 'gender', 'major', 'year']  # this means player.name, player.age
+
+    def before_next_page(self):
+        self.participant.vars['age'] = self.player.age
+        self.participant.vars['gender'] = self.player.gender
+        self.participant.vars['major'] = self.player.major
+        self.participant.vars['year'] = self.player.year
+        self.participant.vars['screenname'] = ScreennameFetcher.get_next_name(
+            self.session.config['treatment'], self.player.gender == Constants.MALE)
+
 
 class Pre_Survey_WaitPage(WaitPage):
     pass
@@ -199,23 +210,26 @@ class Practice_Results(Page):
 ########################################################################################################################
 
 page_sequence = [
-    #  Introduction,
-    #  Pre_Survey,
-    #  Pre_Survey_WaitPage,
-    #  Instructions_2,
-    #  Instructions_3,
-    #  Instructions_4,
-    #  Instructions_5,
-    #  Instructions_6,
-    # # Instructions_Krupka_1,
-    #  Practice_Question_2,
-    #  Practice_Question_0,
-    #  Practice_Question_1,
-    #  Comprehension_Results,
-    #  Practice_Take,
-    #  Practice_Rating,
-    #  Practice_WaitPage,
-    #  Practice_Message,
-    #  Practice_WaitPage,
-    #  Practice_Results,
+     Introduction,
+     Pre_Survey,
+     Pre_Survey_WaitPage,
+     Instructions_2,
+     Instructions_3,
+     Instructions_4,
+     Instructions_5,
+     Instructions_6,
+     # Instructions_Krupka_1,
+     Practice_Question_2,
+     Practice_Question_0,
+     Practice_Question_1,
+     Comprehension_Results,
+     Practice_Take,
+     Practice_Rating,
+     Practice_WaitPage,
+     Practice_Message,
+     Practice_WaitPage,
+     Practice_Results,
 ]
+
+if not INCLUDE_GENDER_INTRO:
+    page_sequence = []
