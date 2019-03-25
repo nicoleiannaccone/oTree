@@ -94,6 +94,10 @@ def shifter(m):
         s_items = [s_items[-1]] + s_items[:-1]
 
 
+
+######################################################################################################################
+########################################### SUBSESSION CLASS #########################################################
+######################################################################################################################
 class Subsession(BaseSubsession):
 # From https://groups.google.com/forum/#!msg/otree/rciCzbTqSfQ/XC-T7oZrEAAJ
     def creating_session(self):
@@ -104,38 +108,19 @@ class Subsession(BaseSubsession):
         print(self.get_group_matrix())
 
 ######################################################################################################################
-########################################### SUBSESSION CLASS #########################################################
-######################################################################################################################
-
-# # To randomly select which round is paid:
-#             if self.round_number == 1:
-#                 paying_round = random.randint(1, Constants.num_rounds)
-#                 self.session.vars['paying_round'] = paying_round
-
-######################################################################################################################
 ########################################### GROUP CLASS ##############################################################
 ######################################################################################################################
 ######################################################################################################################
 class Group(BaseGroup):
 
-        # Roles
+    # Roles
     decider = models.StringField()
     receiver = models.StringField()
 
     # Genders
 #    gender = models.IntegerField()
 #    gender = make_gender_field('')
-    genderD1 = make_gender_field()
-    genderD2 = make_gender_field()
-    genderD3 = make_gender_field()
-    genderD4 = make_gender_field()
-    genderD5 = make_gender_field()
-    genderR1 = make_gender_field()
-    genderR2 = make_gender_field()
-    genderR3 = make_gender_field()
-    genderR4 = make_gender_field()
-    genderR5 = make_gender_field()
-
+    
     message = models.LongStringField(blank=True, label="Your message:")
     message1 = models.LongStringField(blank=True, label="Your message:")
     message2 = models.LongStringField(blank=True, label="Your message:")
