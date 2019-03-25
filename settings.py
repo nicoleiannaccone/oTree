@@ -15,22 +15,7 @@ SESSION_CONFIGS = [
     {
         'name': 'False_Gender_Experiment_Apps',
         'num_demo_participants': 2,
-        'app_sequence': ['gender_intro', 'gender_stage_game', 'payment_info'],
-    },
-    {
-        'name': 'Sacrifice',
-        'num_demo_participants': 3,
-        'app_sequence': ['sacrifice'],
-    },
-    {
-        'name': 'Dismissiveness',
-        'num_demo_participants': 1,
-        'app_sequence': ['overconfidence'],
-    },
-    {
-        'name': 'stranger_matching',
-        'num_demo_participants': 12,
-        'app_sequence': ['stranger_matching'],
+        'app_sequence': ['gender_intro', 'gender_stage_game'],
     },
 ]
 # see the end of this file for the inactive session configs
