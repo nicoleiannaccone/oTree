@@ -2,6 +2,8 @@ from otree.api import (
     models, widgets, BaseConstants, BaseSubsession, BaseGroup, BasePlayer,
     Currency as c, currency_range,
 )
+
+from globals import Globals
 from settings import ALLOW_BLANKS, TREATMENT_NO_GENDER, TREATMENT_TRUE_GENDER, TREATMENT_FALSE_GENDER
 
 from collections import Counter
@@ -264,6 +266,12 @@ class Group(BaseGroup):
     # Group Methods #
     #################
 
+    def get_decider(self):
+        return self.get_player_by_role(Globals.DECIDER)
+
+    def get_receiver(self):
+        return self.get_player_by_role(Globals.RECEIVER)
+
     def set_practice_payoffs(self):
         decider = self.get_player_by_role('decider')
         receiver = self.get_player_by_role('receiver')
@@ -365,36 +373,6 @@ class Group(BaseGroup):
             if self.round_number == 5:
                 p.participant.vars['rating5'] = self.rating
                 p.participant.vars['ratinglabel5'] = self.ratinglabel
-
-    def get_names(self):
-        p1 = self.get_player_by_id(1)
-        #        self.ordering = p1.participant.vars['ordering']
-        self.names = p1.participant.vars['names']
-        p1.participant.vars['name1'] = self.names[0]
-        p1.participant.vars['name2'] = self.names[1]
-        p1.participant.vars['name3'] = self.names[2]
-        p1.participant.vars['name4'] = self.names[3]
-        p1.participant.vars['name5'] = self.names[4]
-        if self.round_number == 1:
-            p1.participant.vars['name'] = self.names[0]
-        if self.round_number == 2:
-            p1.participant.vars['name'] = self.names[1]
-        if self.round_number == 3:
-            p1.participant.vars['name'] = self.names[2]
-        if self.round_number == 4:
-            p1.participant.vars['name'] = self.names[3]
-        if self.round_number == 5:
-            p1.participant.vars['name'] = self.names[4]
-        if self.round_number == 1:
-            self.name = p1.participant.vars['name1']
-        if self.round_number == 2:
-            self.name = p1.participant.vars['name2']
-        if self.round_number == 3:
-            self.name = p1.participant.vars['name3']
-        if self.round_number == 4:
-            self.name = p1.participant.vars['name4']
-        if self.round_number == 5:
-            self.name = p1.participant.vars['name5']
 
     def get_partner(self):
         return self.get_others_in_group()[0]

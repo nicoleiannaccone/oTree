@@ -2,6 +2,7 @@ from otree.api import Currency as c, currency_range
 from ._builtin import Page, WaitPage
 from .models import Constants
 import collections
+import decimal
 
 
 # Stage Game
@@ -11,10 +12,8 @@ class D_Name(Page):
         return self.player.id_in_group == 1
 
     def vars_for_template(self):
-        self.group.get_names()
-        self.group.get_d_names()
         return {
-            'name': self.participant.vars.get('name', 0),
+            'name': self.participant.vars['screenname'],
         }
 
 
@@ -31,9 +30,8 @@ class D_Take(Page):
         return self.player.id_in_group == 1
 
     def vars_for_template(self):
-        self.group.get_names()
         return {
-            'name': self.participant.vars.get('name', 0),
+            'name': self.participant.vars['screenname'],
         }
 
     def before_next_page(self):
@@ -55,11 +53,8 @@ class R_Rating(Page):
         return self.player.id_in_group == 2
 
     def vars_for_template(self):
-        self.group.get_names()
-        p1 = self.group.get_player_by_id(1)
         return {
-            #            'name1': self.group.names[0],
-            'name': p1.participant.vars.get('name', 0),
+            'dname': self.group.get_decider().participant.vars['screenname']
         }
 
 
@@ -103,12 +98,8 @@ class R_Message(Page):
         self.group.get_my_messages()
 
     def vars_for_template(self):
-        self.group.get_names()
-        self.player.get_payoffs()
-        p1 = self.group.get_player_by_id(1)
         return {
-            #            'name1': self.group.names[0],
-            'name': p1.participant.vars.get('name', 0),
+            'dname': self.group.get_decider().participant.vars['screenname'],
         }
 
 
@@ -148,30 +139,28 @@ class Results(Page):
 
     def vars_for_template(self):
         receiver_ratings = {}
-        for t in 1, 2:
-            for r in Constants.round_numbers:
-                for v in 0, 0.5, 1, 1.5, 2, 2.5, 3:
-                    receiver_ratings[(t, r, v)] = list()
+        for r in Constants.round_numbers:
+            for v in 0, 0.5, 1, 1.5, 2, 2.5, 3:
+                receiver_ratings[(r, v)] = list()
         for g in self.subsession.get_groups():
             for r in Constants.round_numbers:
                 x = g.in_round(r)
-                t = x.get_treatment()
-                receiver_ratings[(t, r, 0)].append(x.rating00)
-                receiver_ratings[(t, r, 0.5)].append(x.rating05)
-                receiver_ratings[(t, r, 1)].append(x.rating10)
-                receiver_ratings[(t, r, 1.5)].append(x.rating15)
-                receiver_ratings[(t, r, 2)].append(x.rating20)
-                receiver_ratings[(t, r, 2.5)].append(x.rating25)
-                receiver_ratings[(t, r, 3)].append(x.rating30)
+                receiver_ratings[(r, 0)].append(x.rating00)
+                receiver_ratings[(r, 0.5)].append(x.rating05)
+                receiver_ratings[(r, 1)].append(x.rating10)
+                receiver_ratings[(r, 1.5)].append(x.rating15)
+                receiver_ratings[(r, 2)].append(x.rating20)
+                receiver_ratings[(r, 2.5)].append(x.rating25)
+                receiver_ratings[(r, 3)].append(x.rating30)
 
         result_table = list()
         for round_number in Constants.round_numbers:
             g = self.group.in_round(round_number)
-            dname = g.get_player_by_role('decider').participant.vars['name' + str(round_number)]
+            dname = g.get_decider().get_screenname()
             took = g.taken
             offered = None if (g.taken is None) else (c(3) - g.taken)
             rating = g.fetch_rating()
-            rating_list = receiver_ratings.get((g.get_treatment(), round_number, g.taken), None)
+            rating_list = receiver_ratings.get((round_number, decimal.Decimal(g.taken)), None)
             modal_rating = collections.Counter(rating_list).most_common(1)[0][0] if rating_list else None
             rr = ResultRow(round_number, dname, took, offered, rating, modal_rating)
             result_table.append(rr)
@@ -237,7 +226,8 @@ class PostSurvey(Page):
                    'genderCP5']  # For some reason when I elicit gender in the pre-survey it disappears by the time the post-survey rolls around
 
     def is_displayed(self):
-        return self.round_number == Constants.num_rounds  # Only do the survey after the last round
+        # Only do the survey after the last round, and only for the dictator
+        return self.round_number == Constants.num_rounds and self.group.get_player_by_role('receiver') == self.player
 
     #    def before_next_page(self):
     #        self.player.get_gender() # Set participants' gender equal to self.gender and participants' "genderCP1" equal to self.genderCP1
@@ -246,18 +236,20 @@ class PostSurvey(Page):
 
     def vars_for_template(self):
         p1 = self.group.get_player_by_id(1)
-        self.group.get_names()  # Need to remind Receivers of Deciders' screennames in order to elicit guesses about their gender.
         return {
             'gender': self.participant.vars.get('gender', 0),
-            'genderCP1': self.participant.vars.get('genderCP1', 0),
             'my_gender': self.player.gender,
-            'other_player_gender': self.player.other_player().gender,
-            'name_1': p1.participant.vars.get('name1', 0),
+
+            # 'other_player_gender': self.player.other_player().gender,
+
+            # 'genderCP1': self.participant.vars.get('genderCP1', 0),
+
+            # 'name_1': p1.participant.vars.get('name1', 0),
             # I might need to use participant vars because of re-matching screwing with "self.name"
-            'name_2': p1.participant.vars.get('name2', 0),
-            'name_3': p1.participant.vars.get('name3', 0),
-            'name_4': p1.participant.vars.get('name4', 0),
-            'name_5': p1.participant.vars.get('name5', 0),
+            # 'name_2': p1.participant.vars.get('name2', 0),
+            # 'name_3': p1.participant.vars.get('name3', 0),
+            # 'name_4': p1.participant.vars.get('name4', 0),
+            # 'name_5': p1.participant.vars.get('name5', 0),
         }
 
 

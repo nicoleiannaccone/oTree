@@ -91,20 +91,6 @@ class Pre_Survey(Page):
 class Pre_Survey_WaitPage(WaitPage):
     pass
 
-class Pre_Survey_Results(Page):
-    def vars_for_template(self):
-        self.player.get_gender()
-#        self.player.get_gender_by_round()
-        decider = self.group.get_player_by_role('decider')
-        receiver = self.group.get_player_by_role('receiver')
-        return {
-            'my_gender': self.player.gender,
-            'gender': self.participant.vars['gender'],
-            'genderD1': decider.participant.vars.get('gender', 0),
-            'genderR1': receiver.participant.vars.get('gender', 0),
-            'other_player_gender': self.player.other_player().gender
-        }
-
 class Practice_Question_0(Page):
     form_model = 'player'
     form_fields = ['offer_question_1', 'taken_question_1']
