@@ -2,59 +2,68 @@ from otree.api import (
     models, widgets, BaseConstants, BaseSubsession, BaseGroup, BasePlayer,
     Currency as c, currency_range,
 )
-from collections import Counter
 
 doc = """
 One player decides how much to take from the other player, given their screenname and observability of their choice.
 """
-######################################################################################################################
-########################################### METHODS ##################################################################
-######################################################################################################################
-######################################################################################################################
+
+
+###########
+# METHODS #
+###########
+
 
 def make_rating_field(label):
     return models.IntegerField(blank=True,
-        choices=[
-            [1, 'Very Inappropriate'],
-            [2, 'Somewhat Inappropriate'],
-            [3, 'Somewhat Appropriate'],
-            [4, 'Very Appropriate'],
-        ],
-        label=label,
-        widget=widgets.RadioSelect,
-    )
+                               choices=[
+                                   [1, 'Very Inappropriate'],
+                                   [2, 'Somewhat Inappropriate'],
+                                   [3, 'Somewhat Appropriate'],
+                                   [4, 'Very Appropriate'],
+                               ],
+                               label=label,
+                               widget=widgets.RadioSelect,
+                               )
+
+
 def make_currency_field():
     return models.CurrencyField(blank=True,
-        choices=currency_range(c(0), Constants.endowment, c(0.5)),
-    )
+                                choices=currency_range(c(0), Constants.endowment, c(0.5)),
+                                )
+
+
 def make_take_field():
     return models.CurrencyField(choices=currency_range(c(0), Constants.endowment, c(0.5)))  # Drop-Down Menu version
 
 
 def make_gender_field():
     return models.IntegerField(blank=True,
-        choices=[
-            [1, 'Male'],
-            [2, 'Female'],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
+                               choices=[
+                                   [1, 'Male'],
+                                   [2, 'Female'],
+                               ],
+                               widget=widgets.RadioSelectHorizontal
+                               )
+
+
 def make_string_field(label):
     return models.StringField(blank=True, label=label)
 
+
 def make_yn_field(label):
     return models.IntegerField(blank=True,
-        choices=[
-            [1, 'Yes'],
-            [2, 'No'],
-        ],
-        label=label,
-        widget=widgets.RadioSelect
-    )
+                               choices=[
+                                   [1, 'Yes'],
+                                   [2, 'No'],
+                               ],
+                               label=label,
+                               widget=widgets.RadioSelect
+                               )
 
-######################################################################################################################
-########################################### CONSTANTS CLASS ##########################################################
-######################################################################################################################
+
+###################
+# CONSTANTS CLASS #
+###################
 
 class Constants(BaseConstants):
     name_in_url = 'WebGames'
@@ -94,8 +103,13 @@ def shifter(m):
         s_items = [s_items[-1]] + s_items[:-1]
 
 
+####################
+# SUBSESSION CLASS #
+####################
+
+
 class Subsession(BaseSubsession):
-# From https://groups.google.com/forum/#!msg/otree/rciCzbTqSfQ/XC-T7oZrEAAJ
+    # From https://groups.google.com/forum/#!msg/otree/rciCzbTqSfQ/XC-T7oZrEAAJ
     def creating_session(self):
         if self.round_number == 1:
             self.session.vars['full_data'] = [i for i in shifter(self.get_group_matrix())]
@@ -103,28 +117,20 @@ class Subsession(BaseSubsession):
         self.set_group_matrix(fd[self.round_number - 1])
         print(self.get_group_matrix())
 
-######################################################################################################################
-########################################### SUBSESSION CLASS #########################################################
-######################################################################################################################
 
-# # To randomly select which round is paid:
-#             if self.round_number == 1:
-#                 paying_round = random.randint(1, Constants.num_rounds)
-#                 self.session.vars['paying_round'] = paying_round
+###############
+# GROUP CLASS #
+###############
 
-######################################################################################################################
-########################################### GROUP CLASS ##############################################################
-######################################################################################################################
-######################################################################################################################
+
 class Group(BaseGroup):
-
-        # Roles
+    # Roles
     decider = models.StringField()
     receiver = models.StringField()
 
     # Genders
-#    gender = models.IntegerField()
-#    gender = make_gender_field('')
+    #    gender = models.IntegerField()
+    #    gender = make_gender_field('')
     genderD1 = make_gender_field()
     genderD2 = make_gender_field()
     genderD3 = make_gender_field()
@@ -214,42 +220,26 @@ class Group(BaseGroup):
     fselfrating25 = make_rating_field('$2.50')
     fselfrating30 = make_rating_field('$3.00')
 
-    # rating01 = models.IntegerField(blank=True,
-    #     choices=[
-    #         [1, 'Very Inappropriate'],
-    #         [2, 'Somewhat Inappropriate'],
-    #         [3, 'Somewhat Appropriate'],
-    #         [4, 'Very Appropriate'],
-    #     ],
-    #     widget=widgets.RadioSelectHorizontal
-    # )
-
     # Amount taken by Dictator in current round
-#    taken = models.CurrencyField(choices=currency_range(c(0), Constants.endowment, c(0.5)))
-    p_taken=make_currency_field()
+    p_taken = make_currency_field()
     taken = make_take_field()
-    taken1=make_currency_field()
-    taken2=make_currency_field()
-    taken3=make_currency_field()
-    taken4=make_currency_field()
-    taken5=make_currency_field()
+    taken1 = make_currency_field()
+    taken2 = make_currency_field()
+    taken3 = make_currency_field()
+    taken4 = make_currency_field()
+    taken5 = make_currency_field()
 
+    #################
+    # Group Methods #
+    #################
 
-#######################################################################################################################
-################################# Group Methods #######################################################################
-#######################################################################################################################
     def set_payoffs(self):
         decider = self.get_player_by_role('decider')
         receiver = self.get_player_by_role('receiver')
         decider.payoff = self.taken
         receiver.payoff = Constants.endowment - self.taken
 
-    # taken1 = self.taken.in_round(1)
-
-#    def get_payoffs(self):
-#        cumulative_payoff = sum([p.payoff for p in self.player.in_all_rounds()])
-
-# TODO: Andrew code - get_practice_rating
+    # TODO: Andrew code - get_practice_rating
     def get_practice_rating(self):
         pr_dict = {
             c(0): self.p_rating00,
@@ -270,10 +260,6 @@ class Group(BaseGroup):
         }
         self.ratinglabel = rl_dict[self.p_rating]
 
-########################################################################################################################
-
-
-
     def get_treatment(self):
         decider = self.get_player_by_role('decider')
         if decider.participant.vars['ordering'] == 'ordering1':
@@ -282,7 +268,6 @@ class Group(BaseGroup):
             return 2
         else:
             return None
-
 
     # Mode Variables:
     modal_rating = models.IntegerField()
@@ -294,7 +279,7 @@ class Group(BaseGroup):
             mr_dict = {}
             for j in [1, 2, 3, 4, 5]:
                 for x in 0, 5, 10, 15, 20, 25, 30:
-                    k = c(x/10)
+                    k = c(x / 10)
                     temp = self.in_round(j)
                     v = getattr(temp, "modal_rating_%02d_%d" % (x, i))
                     mr_dict[k] = v
@@ -321,8 +306,9 @@ class Group(BaseGroup):
             4: 'Very Socially Appropriate'
         }
         return rating_label_dict[self.rating]
-        
-    #TODO: Fix this, Nicole. Why "None Appropriate"?
+
+        # TODO: Fix this, Nicole. Why "None Appropriate"?
+
     def label_modal_rating(self):
         modal_rating_label_dict = {
             None: 'None appropriate',
@@ -346,7 +332,7 @@ class Group(BaseGroup):
         }
         return rating_dict[self.taken]
 
-# TODO: Andrew-based code - get_ratings
+    # TODO: Andrew-based code - get_ratings
     def get_rating(self):
         rating_dict = {
             c(0): self.rating00,
@@ -368,7 +354,7 @@ class Group(BaseGroup):
         }
         self.ratinglabel = rating_label_dict[self.rating]
 
-# TODO: Andrew-based code - get_offer
+    # TODO: Andrew-based code - get_offer
     def get_offer(self):
         for p in self.get_players():
             var_name1 = 'taken' + str(self.round_number)
@@ -381,25 +367,24 @@ class Group(BaseGroup):
             #     self.offer = Constants.endowment - self.taken
             #     p.participant.vars['offer1'] = self.offer
 
-# TODO: Andrew-based code - get_my_rating
+    # TODO: Andrew-based code - get_my_rating
     def get_my_rating(self):
         for p in self.get_players():
-            var1_name = 'rating'+str(self.round_number)
+            var1_name = 'rating' + str(self.round_number)
             p.participant.vars[var1_name] = self.rating
-            var2_name = 'ratinglabel'+str(self.round_number)
+            var2_name = 'ratinglabel' + str(self.round_number)
             p.participant.vars[var2_name] = self.ratinglabel
 
-# TODO Andrew code - get_D_names
+    # TODO Andrew code - get_D_names
 
-    def get_D_names(self):
+    def get_d_names(self):
         decider = self.get_player_by_role('decider')
         receiver = self.get_player_by_role('receiver')
-        var_name_1 = 'name_D'+str(self.round_number)
-        var_name_2 = 'name'+str(self.round_number)
+        var_name_1 = 'name_D' + str(self.round_number)
+        var_name_2 = 'name' + str(self.round_number)
         receiver.participant.vars[var_name_1] = decider.participant.vars[var_name_2]
-#        receiver.participant.vars[var_name_1] = decider.participant.vars['name']
 
-    def get_Dnames(self):
+    def get_dnames(self):
         decider = self.get_player_by_role('decider')
         receiver = self.get_player_by_role('receiver')
         var_name_dict = {1: "name_D1", 2: "name_D2", 3: "name_D3", 4: "name_D4", 5: "name_D5"}
@@ -453,9 +438,9 @@ class Group(BaseGroup):
                 self.message5 = self.message
                 p.participant.vars['message5'] = self.message
 
-########################################################################################################################
-# GROUP - Gender Guesses:
-########################################################################################################################
+    ###########################
+    # GROUP - Gender Guesses: #
+    ###########################
 
     def get_partner(self):
         return self.get_others_in_group()[0]
@@ -559,29 +544,28 @@ class Group(BaseGroup):
             p2.guess4_is_correct = True
         if p2.genderCP5 == p1.gender:
             p2.guess5_is_correct = True
-########################################################################################################################
 
-######################################################################################################################
-######################################################################################################################
-########################################### PLAYER CLASS #############################################################
-######################################################################################################################
-######################################################################################################################
+
+################
+# PLAYER CLASS #
+################
+
 class Player(BasePlayer):
-# Survey Questions
+    # Survey Questions
     age = models.IntegerField(blank=True, label='What is your age?')
     year = models.IntegerField(blank=True,
-        choices=[
-            [1, 'Freshman'],
-            [2, 'Sophomore'],
-            [3, 'Junior'],
-            [4, 'Senior'],
-        ],
-        label='What is your year in school?',
-        widget=widgets.RadioSelect
-    )
+                               choices=[
+                                   [1, 'Freshman'],
+                                   [2, 'Sophomore'],
+                                   [3, 'Junior'],
+                                   [4, 'Senior'],
+                               ],
+                               label='What is your year in school?',
+                               widget=widgets.RadioSelect
+                               )
     major = make_string_field('What is your major?')
 
-# Practice Questions
+    # Practice Questions
     question1 = make_yn_field('When rating a Decider with the screenname Decider A taking $X, the most common rating '
                               'by other Receivers was "Somewhat Appropriate." If Decider A chose to take $X, would you '
                               'win a prize for your appropriateness rating?')
@@ -593,32 +577,32 @@ class Player(BasePlayer):
                               'win a prize for your appropriateness rating?')
 
     role_question = models.IntegerField(blank=True,
-       choices=[
-                  [1, 'Receiver'],
-                  [2, 'Decider'],
-                  [3, 'Either Receiver or Decider: Roles are chosen randomly every round'],
-       ],
-        label = False,
-        widget = widgets.RadioSelect
-    )
+                                        choices=[
+                                            [1, 'Receiver'],
+                                            [2, 'Decider'],
+                                            [3, 'Either Receiver or Decider: Roles are chosen randomly every round'],
+                                        ],
+                                        label=False,
+                                        widget=widgets.RadioSelect
+                                        )
     offer_question_1 = models.IntegerField(blank=True,
-        choices=[
-            [1, '$X'],
-            [2, '$1.00 - $X'],
-            [3, '$3.00 - $X'],
-        ],
-        label='How much money would your matched Receiver get?',
-        widget=widgets.RadioSelect
-    )
+                                           choices=[
+                                               [1, '$X'],
+                                               [2, '$1.00 - $X'],
+                                               [3, '$3.00 - $X'],
+                                           ],
+                                           label='How much money would your matched Receiver get?',
+                                           widget=widgets.RadioSelect
+                                           )
     taken_question_1 = models.IntegerField(blank=True,
-        choices=[
-            [1, '$X'],
-            [2, '$1.00 - $X'],
-            [3, '$3.00 - $X'],
-        ],
-        label='How much money did your matched Decider take?',
-        widget=widgets.RadioSelect
-    )
+                                           choices=[
+                                               [1, '$X'],
+                                               [2, '$1.00 - $X'],
+                                               [3, '$3.00 - $X'],
+                                           ],
+                                           label='How much money did your matched Decider take?',
+                                           widget=widgets.RadioSelect
+                                           )
 
     q1_is_correct = models.BooleanField(blank=False)
     q2_is_correct = models.BooleanField(blank=False)
@@ -629,13 +613,12 @@ class Player(BasePlayer):
     q7_is_correct = models.BooleanField(blank=False)
     q8_is_correct = models.BooleanField(blank=False)
 
-
-# Screennames
+    # Screennames
     name = models.StringField()
     names = Constants.names
     ordering = models.StringField()
 
-# Round variables
+    # Round variables
     rating = make_rating_field('')
     taken = make_currency_field()
     offer = make_currency_field()
@@ -647,8 +630,7 @@ class Player(BasePlayer):
     message4 = models.LongStringField(blank=True, label="Your message:")
     message5 = models.LongStringField(blank=True, label="Your message:")
 
-########################################################################################################################
-# Gender variables
+    # Gender variables
     Male = models.StringField()
     Female = models.StringField()
     Other = models.StringField()
@@ -673,7 +655,6 @@ class Player(BasePlayer):
     guess4_is_correct = models.BooleanField(blank=False)
     guess5_is_correct = models.BooleanField(blank=False)
 
-
     mode_matched = models.BooleanField()
     mode_matched1 = models.BooleanField()
     mode_matched2 = models.BooleanField()
@@ -681,15 +662,13 @@ class Player(BasePlayer):
     mode_matched4 = models.BooleanField()
     mode_matched5 = models.BooleanField()
 
-########################################################################################################################
-######### PLAYER METHODS ###############################################################################################
-########################################################################################################################
-# Other Variables
-#    cumulative_payoff = models.IntegerField()
+    ##################
+    # PLAYER METHODS #
+    ##################
+    # Other Variables
     cumulative_payoff = models.CurrencyField()
 
-# Player Methods
-
+    # Player Methods
     def role(self):
         if self.id_in_group == 1:
             return 'decider'
@@ -709,11 +688,10 @@ class Player(BasePlayer):
         self.cumulative_payoff = sum([p.payoff for p in self.in_all_rounds()])
 
     def get_survey_prizes(self):
-        self.payoff = (self.guess1_is_correct + self.guess2_is_correct + self.guess3_is_correct + self.guess4_is_correct + self.guess5_is_correct)*Constants.prize
+        self.payoff = (
+                                  self.guess1_is_correct + self.guess2_is_correct + self.guess3_is_correct + self.guess4_is_correct + self.guess5_is_correct) * Constants.prize
 
     def get_names(self):
-#        self.participant.vars['names'] = ['A', 'B']
-#        self.names = self.participant.vars['names']
         if self.round_number == 1:
             self.participant.vars['name1'] = self.group.names[0]
             self.name = self.names[0]
@@ -736,7 +714,6 @@ class Player(BasePlayer):
             self.group.name = self.name
 
     def get_my_messages(self):
-#        self.get_role()
         if self.round_number == 1:
             self.message1 = self.group.message
             self.participant.vars['message1'] = self.group.message
@@ -753,9 +730,9 @@ class Player(BasePlayer):
             self.message5 = self.group.message
             self.participant.vars['message5'] = self.group.message
 
-########################################################################################################################
-#  PLAYER - Checking Gender Guesses:
-########################################################################################################################
+    ######################################
+    #  PLAYER - Checking Gender Guesses: #
+    ######################################
 
     def get_genders(self):
         d = self.get_player_by_id(1)
@@ -764,17 +741,11 @@ class Player(BasePlayer):
         self.genderR1 = r.gender
 
     def get_gender(self):
-#        self.participant.vars['gender'] = self.gender
-#        self.participant.vars['genderCP'] = self.other_player().gender
         decider = self.group.get_player_by_role('decider')
         receiver = self.group.get_player_by_role('receiver')
-#       for p in self.group.get_players():
         if self.round_number == 1:
             decider.participant.vars['gender_CP_1'] = receiver.participant.vars.get('gender', 0)
             receiver.participant.vars['gender_CP_1'] = decider.participant.vars.get('gender', 0)
-#                p.participant.vars['gender_D5'] = decider.gender
-#                p.participant.vars['gender_R5'] = receiver.gender
-#                p.participant.vars['gender_CP_5'] = self.other_player().gender
         if self.round_number == 2:
             decider.participant.vars['gender_CP_2'] = receiver.participant.vars.get('gender', 0)
             receiver.participant.vars['gender_CP_2'] = decider.participant.vars.get('gender', 0)
@@ -812,10 +783,6 @@ class Player(BasePlayer):
             self.participant.vars['Gender'] = 'Female'
         if self.gender == 3:
             self.participant.vars['Gender'] = 'Other'
-
-    # if self.round_number == 1:
-    #            d_r1 = self.get_player_by_id(1)
-    #            r_r1 = self.get_player_by_id(2)
 
     def set_gender_guesses(self):
         p1 = self.group.get_player_by_id(1)
@@ -886,19 +853,14 @@ class Player(BasePlayer):
         if p2.genderCP5 == p1.gender:
             p2.guess5_is_correct = True
 
-########################################################################################################################
-########################################################################################################################
-########################################################################################################################
-
     def p_mode_match(self):
         if self.group.rating == self.group.modal_rating:
             self.mode_matched = True
             self.payoff = Constants.prize
 
-
     def mode_match(self):
         decider = self.group.get_player_by_role('decider')
-        if self.group.ordering_1 == True:
+        if self.group.ordering_1:
             if self.round_number == 1:
                 if self.group.modal_rating1_1 == self.group.rating:
                     self.mode_matched1 = True
@@ -919,7 +881,7 @@ class Player(BasePlayer):
                 if self.group.modal_rating5_1 == decider.participant.vars.get('rating5', 0):
                     self.mode_matched5 = True
                     self.payoff = Constants.prize
-        if self.group.ordering_2 == True:
+        if self.group.ordering_2:
             if self.round_number == 1:
                 if self.group.modal_rating1_2 == decider.participant.vars.get('rating1', 0):
                     self.mode_matched1 = True
@@ -941,8 +903,3 @@ class Player(BasePlayer):
                     self.mode_matched5 = True
                     self.payoff = Constants.prize
 
-########################################################################################################################
-########################################################################################################################
-########################################################################################################################
-
-########################################################################################################################
