@@ -20,7 +20,7 @@ player, given their screenname and observability of their choice.
 ###########
 
 def make_rating_field(label):
-    return models.IntegerField(blank=True,
+    return models.IntegerField(blank=ALLOW_BLANKS,
                                choices=[
                                    [1, 'Very Inappropriate'],
                                    [2, 'Somewhat Inappropriate'],
@@ -33,13 +33,13 @@ def make_rating_field(label):
 
 
 def make_currency_field(label):
-    return models.CurrencyField(blank=True,
+    return models.CurrencyField(blank=ALLOW_BLANKS,
                                 choices=currency_range(c(0), Constants.endowment, c(0.5))
                                 )
 
 
 def make_gender_field(label):
-    return models.IntegerField(blank=True,
+    return models.IntegerField(blank=ALLOW_BLANKS,
                                choices=[
                                    [Constants.MALE, 'Male'],
                                    [Constants.FEMALE, 'Female'],
@@ -49,11 +49,11 @@ def make_gender_field(label):
 
 
 def make_string_field(label):
-    return models.StringField(blank=True, label=label)
+    return models.StringField(blank=ALLOW_BLANKS, label=label)
 
 
 def make_yn_field(label):
-    return models.IntegerField(blank=True,
+    return models.IntegerField(blank=ALLOW_BLANKS,
                                choices=[
                                    [1, 'Yes'],
                                    [2, 'No'],
@@ -173,13 +173,13 @@ class Group(BaseGroup):
     decider = models.StringField()
     receiver = models.StringField()
 
-    message = models.LongStringField(blank=True, label="Your message:")
-    message1 = models.LongStringField(blank=True, label="Your message:")
-    message2 = models.LongStringField(blank=True, label="Your message:")
-    message3 = models.LongStringField(blank=True, label="Your message:")
-    message4 = models.LongStringField(blank=True, label="Your message:")
-    message5 = models.LongStringField(blank=True, label="Your message:")
-    p_message = models.LongStringField(blank=True, label="Your message:")
+    message = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
+    message1 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
+    message2 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
+    message3 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
+    message4 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
+    message5 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
+    p_message = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
 
     # Screennames
     name = models.StringField()
@@ -225,7 +225,7 @@ class Group(BaseGroup):
     rating20 = make_rating_field('$2.00')
     rating25 = make_rating_field('$2.50')
     rating30 = make_rating_field('$3.00')
-    rating01 = models.IntegerField(blank=True,
+    rating01 = models.IntegerField(blank=ALLOW_BLANKS,
                                    choices=[
                                        [1, 'Very Inappropriate'],
                                        [2, 'Somewhat Inappropriate'],
@@ -421,7 +421,7 @@ class Player(BasePlayer):
         '"Very Appropriate." When rating a Decider with the screenname Decider A taking $Y, the most common rating by '
         'other Receivers was "Somewhat Inappropriate." If Decider A chose to take $Z, would you win a prize for your '
         'appropriateness rating?')
-    role_question = models.IntegerField(blank=True,
+    role_question = models.IntegerField(blank=ALLOW_BLANKS,
                                         choices=[
                                             [1, 'Receiver'],
                                             [2, 'Decider'],
@@ -430,7 +430,7 @@ class Player(BasePlayer):
                                         label=False,
                                         widget=widgets.RadioSelect
                                         )
-    offer_question_1 = models.IntegerField(blank=True,
+    offer_question_1 = models.IntegerField(blank=ALLOW_BLANKS,
                                            choices=[
                                                [1, '$X'],
                                                [2, '$1.00 - $X'],
@@ -439,7 +439,7 @@ class Player(BasePlayer):
                                            label='How much money would your matched Receiver get?',
                                            widget=widgets.RadioSelect
                                            )
-    taken_question_1 = models.IntegerField(blank=True,
+    taken_question_1 = models.IntegerField(blank=ALLOW_BLANKS,
                                            choices=[
                                                [1, '$Y'],
                                                [2, '$1.00 - $Y'],
@@ -470,12 +470,12 @@ class Player(BasePlayer):
     taken = make_currency_field('')
     offer = make_currency_field('')
 
-    message = models.LongStringField(blank=True, label="Your message:")
-    message1 = models.LongStringField(blank=True, label="Your message:")
-    message2 = models.LongStringField(blank=True, label="Your message:")
-    message3 = models.LongStringField(blank=True, label="Your message:")
-    message4 = models.LongStringField(blank=True, label="Your message:")
-    message5 = models.LongStringField(blank=True, label="Your message:")
+    message = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
+    message1 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
+    message2 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
+    message3 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
+    message4 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
+    message5 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
 
     # Gender variables
 
