@@ -3,6 +3,8 @@ from otree.api import (
     Currency as c, currency_range,
 )
 
+from globals import Globals
+
 doc = """
 One player decides how much to take from the other player, given their screenname and observability of their choice.
 """
@@ -69,6 +71,10 @@ class Constants(BaseConstants):
     name_in_url = 'WebGames'
     players_per_group = 2
     num_rounds = 1
+
+    # Roles
+    DECIDER = "decider"
+    RECEIVER = "receiver"
 
     rounds = 5
     round_numbers = list(range(1, num_rounds + 1))
@@ -231,6 +237,12 @@ class Group(BaseGroup):
     # Group Methods #
     #################
 
+    def get_decider(self):
+        return self.get_player_by_role(Globals.DECIDER)
+
+    def get_receiver(self):
+        return self.get_player_by_role(Globals.RECEIVER)
+
     def set_payoffs(self):
         decider = self.get_player_by_role('decider')
         receiver = self.get_player_by_role('receiver')
@@ -257,15 +269,6 @@ class Group(BaseGroup):
             4: 'Very Socially Appropriate'
         }
         self.ratinglabel = rl_dict[self.p_rating]
-
-    def get_treatment(self):
-        decider = self.get_player_by_role('decider')
-        if decider.participant.vars['ordering'] == 'ordering1':
-            return 1
-        elif decider.participant.vars['ordering'] == 'ordering2':
-            return 2
-        else:
-            return None
 
     # Mode Variables:
     modal_rating = models.IntegerField()
@@ -365,51 +368,6 @@ class Group(BaseGroup):
             p.participant.vars[var1_name] = self.rating
             var2_name = 'ratinglabel' + str(self.round_number)
             p.participant.vars[var2_name] = self.ratinglabel
-
-    # TODO Andrew code - get_D_names
-
-    def get_d_names(self):
-        decider = self.get_player_by_role('decider')
-        receiver = self.get_player_by_role('receiver')
-        var_name_1 = 'name_D' + str(self.round_number)
-        var_name_2 = 'name' + str(self.round_number)
-        receiver.participant.vars[var_name_1] = decider.participant.vars[var_name_2]
-
-    def get_dnames(self):
-        decider = self.get_player_by_role('decider')
-        receiver = self.get_player_by_role('receiver')
-        var_name_dict = {1: "name_D1", 2: "name_D2", 3: "name_D3", 4: "name_D4", 5: "name_D5"}
-        var_name = var_name_dict[self.round_number]
-        receiver.participant.vars[var_name] = decider.participant.vars['name']
-
-    def get_names(self):
-        decider = self.get_player_by_role('decider')
-        self.names = decider.participant.vars.get('names', 0)
-        decider.participant.vars['name1'] = self.names[0]
-        decider.participant.vars['name2'] = self.names[1]
-        decider.participant.vars['name3'] = self.names[2]
-        decider.participant.vars['name4'] = self.names[3]
-        decider.participant.vars['name5'] = self.names[4]
-        if self.round_number == 1:
-            decider.participant.vars['name'] = self.names[0]
-        if self.round_number == 2:
-            decider.participant.vars['name'] = self.names[1]
-        if self.round_number == 3:
-            decider.participant.vars['name'] = self.names[2]
-        if self.round_number == 4:
-            decider.participant.vars['name'] = self.names[3]
-        if self.round_number == 5:
-            decider.participant.vars['name'] = self.names[4]
-        if self.round_number == 1:
-            self.name = decider.participant.vars.get('name1', 0)
-        if self.round_number == 2:
-            self.name = decider.participant.vars['name2']
-        if self.round_number == 3:
-            self.name = decider.participant.vars['name3']
-        if self.round_number == 4:
-            self.name = decider.participant.vars['name4']
-        if self.round_number == 5:
-            self.name = decider.participant.vars['name5']
 
     def get_my_messages(self):
         for p in self.get_players():
@@ -679,8 +637,11 @@ class Player(BasePlayer):
         self.cumulative_payoff = sum([p.payoff for p in self.in_all_rounds()])
 
     def get_survey_prizes(self):
-        self.payoff = (
-                                  self.guess1_is_correct + self.guess2_is_correct + self.guess3_is_correct + self.guess4_is_correct + self.guess5_is_correct) * Constants.prize
+        self.payoff = (self.guess1_is_correct + self.guess2_is_correct + self.guess3_is_correct
+                       + self.guess4_is_correct + self.guess5_is_correct) * Constants.prize
+
+    def get_screenname(self):
+        return self.participant.vars['screenname']
 
     def get_names(self):
         if self.round_number == 1:

@@ -1,5 +1,7 @@
 from ._builtin import Page, WaitPage
-from .models import Constants
+from .models import ScreennameFetcher, Constants
+
+from settings import INCLUDE_GENDER_INTRO
 
 
 class Introduction(Page):
@@ -77,22 +79,17 @@ class Pre_Survey(Page):
     form_model = 'player'
     form_fields = ['age', 'gender', 'major', 'year']  # this means player.name, player.age
 
+    def before_next_page(self):
+        self.participant.vars['age'] = self.player.age
+        self.participant.vars['gender'] = self.player.gender
+        self.participant.vars['major'] = self.player.major
+        self.participant.vars['year'] = self.player.year
+        self.participant.vars['screenname'] = ScreennameFetcher.get_next_name(
+            self.session.config['treatment'], self.player.gender == Constants.MALE)
+
+
 class Pre_Survey_WaitPage(WaitPage):
     pass
-
-class Pre_Survey_Results(Page):
-    def vars_for_template(self):
-        self.player.get_gender()
-#        self.player.get_gender_by_round()
-        decider = self.group.get_player_by_role('decider')
-        receiver = self.group.get_player_by_role('receiver')
-        return {
-            'my_gender': self.player.gender,
-            'gender': self.participant.vars['gender'],
-            'genderD1': decider.participant.vars.get('gender', 0),
-            'genderR1': receiver.participant.vars.get('gender', 0),
-            'other_player_gender': self.player.other_player().gender
-        }
 
 class Practice_Question_0(Page):
     form_model = 'player'
@@ -199,23 +196,26 @@ class Practice_Results(Page):
 ########################################################################################################################
 
 page_sequence = [
-    #  Introduction,
-    #  Pre_Survey,
-    #  Pre_Survey_WaitPage,
-    #  Instructions_2,
-    #  Instructions_3,
-    #  Instructions_4,
-    #  Instructions_5,
-    #  Instructions_6,
-    # # Instructions_Krupka_1,
-    #  Practice_Question_2,
-    #  Practice_Question_0,
-    #  Practice_Question_1,
-    #  Comprehension_Results,
-    #  Practice_Take,
-    #  Practice_Rating,
-    #  Practice_WaitPage,
-    #  Practice_Message,
-    #  Practice_WaitPage,
-    #  Practice_Results,
+     Introduction,
+     Pre_Survey,
+     Pre_Survey_WaitPage,
+     Instructions_2,
+     Instructions_3,
+     Instructions_4,
+     Instructions_5,
+     Instructions_6,
+     # Instructions_Krupka_1,
+     Practice_Question_2,
+     Practice_Question_0,
+     Practice_Question_1,
+     Comprehension_Results,
+     Practice_Take,
+     Practice_Rating,
+     Practice_WaitPage,
+     Practice_Message,
+     Practice_WaitPage,
+     Practice_Results,
 ]
+
+if not INCLUDE_GENDER_INTRO:
+    page_sequence = []

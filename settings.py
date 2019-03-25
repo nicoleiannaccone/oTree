@@ -11,11 +11,32 @@ SESSION_CONFIG_DEFAULTS = {
     'doc': "",
 }
 
+# Testing flags
+ALLOW_BLANKS = True
+INCLUDE_GENDER_INTRO = True
+
+TREATMENT_NO_GENDER = "No Gender"
+TREATMENT_TRUE_GENDER = "True Gender"
+TREATMENT_FALSE_GENDER = "False Gender"
+
 SESSION_CONFIGS = [
     {
-        'name': 'False_Gender_Experiment_Apps',
+        'name': 'Gender_Game_No_Gender',
         'num_demo_participants': 2,
         'app_sequence': ['gender_intro', 'gender_stage_game'],
+        'treatment': TREATMENT_NO_GENDER,
+    },
+    {
+        'name': 'Gender_Game_True_Gender',
+        'num_demo_participants': 2,
+        'app_sequence': ['gender_intro', 'gender_stage_game'],
+        'treatment': TREATMENT_TRUE_GENDER,
+    },
+    {
+        'name': 'Gender_Game_False_Gender',
+        'num_demo_participants': 2,
+        'app_sequence': ['gender_intro', 'gender_stage_game'],
+        'treatment': TREATMENT_FALSE_GENDER,
     },
 ]
 # see the end of this file for the inactive session configs

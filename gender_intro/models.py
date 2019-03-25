@@ -3,6 +3,9 @@ from otree.api import (
     Currency as c, currency_range,
 )
 
+from globals import Globals
+from settings import ALLOW_BLANKS, TREATMENT_NO_GENDER, TREATMENT_TRUE_GENDER, TREATMENT_FALSE_GENDER
+
 from collections import Counter
 import itertools
 
@@ -38,8 +41,8 @@ def make_currency_field(label):
 def make_gender_field(label):
     return models.IntegerField(blank=True,
                                choices=[
-                                   [1, 'Male'],
-                                   [2, 'Female'],
+                                   [Constants.MALE, 'Male'],
+                                   [Constants.FEMALE, 'Female'],
                                ],
                                widget=widgets.RadioSelectHorizontal
                                )
@@ -59,7 +62,6 @@ def make_yn_field(label):
                                widget=widgets.RadioSelect
                                )
 
-
 ###################
 # CONSTANTS CLASS #
 ###################
@@ -71,6 +73,15 @@ class Constants(BaseConstants):
 
     rounds = 5
 
+    # Gender for survey widgets
+    MALE = 1
+    FEMALE = 2
+
+    male_names = ['Jacob', 'William', 'Michael', 'James', 'Bruce', 'Ethan', 'Alexander', 'Daniel', 'Elijah',
+                  'Benjamin', 'Matthew', 'David', 'Anthony', 'Joseph', 'Joshua', 'Andrew']
+    female_names = ['Sophia', 'Emma', 'Olivia', 'Emily', 'Abigail', 'Elizabeth', 'Charlotte', 'Chloe',  'Aubrey',
+                    'Natalie', 'Grace', 'Zoey', 'Hannah']
+
     instructions_template = 'gender_intro/Instructions_Full.html'
 
     rating_label_dict = {
@@ -80,30 +91,33 @@ class Constants(BaseConstants):
         3: 'Somewhat Socially Appropriate',
         4: 'Very Socially Appropriate'
     }
-    
+
     # Monetary amounts
     endowment = c(3)
     prize = c(0.5)
     participation = c(5)
 
-    # Screennames for treatments
-    names = []
-    ordering = models.StringField()
-    names1 = ['Jacob', 'William', 'Michael', 'Sophia', 'Elizabeth']
-    # James, Bruce, Ethan, Alexander, Daniel, Elijah, Benjamin, Matthew, David, Anthony, Joseph, Joshua, Andrew
-    names2 = ['Amy', 'Emily', 'Michelle', 'James', 'Daniel']
-    # For Between-Subject version, need subjects to each get a single name for the entire experiment:
-    names3 = ['Jacob', 'Jacob', 'Jacob', 'Jacob', 'Jacob']
-    names4 = ['Amy', 'Amy', 'Amy', 'Amy', 'Amy']
-    # Sophia, Emma, Olivia, Emily, Abigail, Elizabeth, Charlotte, Chloe,  Aubrey,  Natalie, Grace, Zoey, Hannah,
-    # Lillian, Allison, Samantha
-    # names3 = ['Cameron', 'Jamie', 'Taylor', 'Riley', 'Casey']
-    # names4 = ['Player B', 'Player F', 'Player E', 'Player D', 'Player G']
-    # names5 = ['Orange Player', 'Yellow Player', 'Purple Player', 'Green Player', 'Grey Player']
-    # Peyton, Taylor, Jordan, Ryan, Devon, Harper, Madison, Addison
-    # Jayden, Rowan, Emerson, Avery, Kasey, Devon, Casey, Parker, Bailey, Harley, Quinn, Mackenzie, Dakota,
-    # Logan, Cameron, Taylor, Jordan, Ryan, Morgan, Devin
-    # Kendall, Logan,
+
+class ScreennameFetcher:
+    male_names = iter(Constants.male_names)
+    female_names = iter(Constants.female_names)
+
+    @staticmethod
+    def get_next_name(treatment, male_participant):
+        if treatment == TREATMENT_NO_GENDER:
+            return None
+
+        if treatment == TREATMENT_FALSE_GENDER:
+            male_screenname = not male_participant
+        elif treatment == TREATMENT_TRUE_GENDER:
+            male_screenname = male_participant
+        else:
+            raise Exception(f"Invalid treatment: {treatment}")
+
+        if male_screenname:
+            return next(ScreennameFetcher.male_names)
+        else:
+            return next(ScreennameFetcher.female_names)
 
 
 # Needed below to implement a Perfect Strangers matching.
@@ -137,17 +151,6 @@ class Subsession(BaseSubsession):
         self.set_group_matrix(fd[self.round_number - 1])
         print(self.get_group_matrix())
 
-        # Creating Balanced Treatments -- half of the groups get each ordering:
-        #    def creating_session(self):
-        ordering = itertools.cycle(['ordering1', 'ordering2'])
-        for g in self.get_groups():
-            decider = g.get_player_by_id(1)
-            decider.participant.vars['ordering'] = next(ordering)
-            if decider.participant.vars['ordering'] == 'ordering1':
-                decider.participant.vars['names'] = Constants.names1
-            if decider.participant.vars['ordering'] == 'ordering2':
-                decider.participant.vars['names'] = Constants.names2
-
     # Session-Level Variables for calculating the practice-ratings mode
     modal_p_rating = models.IntegerField()
 
@@ -180,7 +183,6 @@ class Group(BaseGroup):
 
     # Screennames
     name = models.StringField()
-    names = Constants.names
 
     # Treatments: Orderings of Screennames (M, M, M, F, F or F, F, F, M, M)
     ordering = models.StringField()
@@ -263,6 +265,12 @@ class Group(BaseGroup):
     #################
     # Group Methods #
     #################
+
+    def get_decider(self):
+        return self.get_player_by_role(Globals.DECIDER)
+
+    def get_receiver(self):
+        return self.get_player_by_role(Globals.RECEIVER)
 
     def set_practice_payoffs(self):
         decider = self.get_player_by_role('decider')
@@ -366,36 +374,6 @@ class Group(BaseGroup):
                 p.participant.vars['rating5'] = self.rating
                 p.participant.vars['ratinglabel5'] = self.ratinglabel
 
-    def get_names(self):
-        p1 = self.get_player_by_id(1)
-        #        self.ordering = p1.participant.vars['ordering']
-        self.names = p1.participant.vars['names']
-        p1.participant.vars['name1'] = self.names[0]
-        p1.participant.vars['name2'] = self.names[1]
-        p1.participant.vars['name3'] = self.names[2]
-        p1.participant.vars['name4'] = self.names[3]
-        p1.participant.vars['name5'] = self.names[4]
-        if self.round_number == 1:
-            p1.participant.vars['name'] = self.names[0]
-        if self.round_number == 2:
-            p1.participant.vars['name'] = self.names[1]
-        if self.round_number == 3:
-            p1.participant.vars['name'] = self.names[2]
-        if self.round_number == 4:
-            p1.participant.vars['name'] = self.names[3]
-        if self.round_number == 5:
-            p1.participant.vars['name'] = self.names[4]
-        if self.round_number == 1:
-            self.name = p1.participant.vars['name1']
-        if self.round_number == 2:
-            self.name = p1.participant.vars['name2']
-        if self.round_number == 3:
-            self.name = p1.participant.vars['name3']
-        if self.round_number == 4:
-            self.name = p1.participant.vars['name4']
-        if self.round_number == 5:
-            self.name = p1.participant.vars['name5']
-
     def get_partner(self):
         return self.get_others_in_group()[0]
 
@@ -405,9 +383,10 @@ class Group(BaseGroup):
 ################
 
 class Player(BasePlayer):
+
     # Survey Questions
-    age = models.IntegerField(blank=True, label='What is your age?')
-    year = models.IntegerField(blank=True,
+    age = models.IntegerField(blank=ALLOW_BLANKS, label='What is your age?')
+    year = models.IntegerField(blank=ALLOW_BLANKS,
                                choices=[
                                    [1, 'Freshman'],
                                    [2, 'Sophomore'],
@@ -419,6 +398,7 @@ class Player(BasePlayer):
                                widget=widgets.RadioSelect
                                )
     major = make_string_field('What is your major?')
+    gender = make_gender_field('What is your gender?')
 
     krupka_1 = make_rating_field('Take the wallet')
     krupka_2 = make_rating_field('Ask others nearby if the wallet belongs to them')
@@ -483,7 +463,6 @@ class Player(BasePlayer):
 
     # Screennames
     name = models.StringField()
-    names = Constants.names
     ordering = models.StringField()
 
     # Round variables
@@ -503,7 +482,6 @@ class Player(BasePlayer):
     Male = models.StringField()
     Female = models.StringField()
     Other = models.StringField()
-    gender = make_gender_field('What is your gender?')
     genderlabel1 = models.StringField()
     genderlabel2 = models.StringField()
     genderlabel3 = models.StringField()
