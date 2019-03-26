@@ -27,16 +27,39 @@ SESSION_CONFIGS = [
         'treatment': TREATMENT_NO_GENDER,
     },
     {
+        'name': 'Gender_Game_No_Gender_Bots',
+        'num_demo_participants': 2,
+        'app_sequence': ['gender_intro', 'gender_stage_game'],
+        'treatment': TREATMENT_NO_GENDER,
+        'use_browser_bots': True,
+    },
+    {
         'name': 'Gender_Game_True_Gender',
         'num_demo_participants': 2,
         'app_sequence': ['gender_intro', 'gender_stage_game'],
         'treatment': TREATMENT_TRUE_GENDER,
+        'use_browser_bots': False,
+    },
+    {
+        'name': 'Gender_Game_True_Gender_Bots',
+        'num_demo_participants': 2,
+        'app_sequence': ['gender_intro', 'gender_stage_game'],
+        'treatment': TREATMENT_TRUE_GENDER,
+        'use_browser_bots': True,
     },
     {
         'name': 'Gender_Game_False_Gender',
         'num_demo_participants': 2,
         'app_sequence': ['gender_intro', 'gender_stage_game'],
         'treatment': TREATMENT_FALSE_GENDER,
+        'use_browser_bots': False,
+    },
+    {
+        'name': 'Gender_Game_False_Gender_Bots',
+        'num_demo_participants': 2,
+        'app_sequence': ['gender_intro', 'gender_stage_game'],
+        'treatment': TREATMENT_FALSE_GENDER,
+        'use_browser_bots': True,
     },
 ]
 # see the end of this file for the inactive session configs
