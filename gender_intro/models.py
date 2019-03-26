@@ -152,16 +152,6 @@ class Subsession(BaseSubsession):
         print(self.get_group_matrix())
 
     # Session-Level Variables for calculating the practice-ratings mode
-    modal_p_rating = models.IntegerField()
-
-    modal_rating = models.IntegerField()
-    modal_rating_p00 = models.IntegerField()
-    modal_rating_p05 = models.IntegerField()
-    modal_rating_p10 = models.IntegerField()
-    modal_rating_p15 = models.IntegerField()
-    modal_rating_p20 = models.IntegerField()
-    modal_rating_p25 = models.IntegerField()
-    modal_rating_p30 = models.IntegerField()
 
 
 ###############
@@ -377,6 +367,19 @@ class Group(BaseGroup):
     def get_partner(self):
         return self.get_others_in_group()[0]
 
+    def fetch_practice_rating(self):
+        rating_dict = {
+            None: None,
+            c(0): self.p_rating00,
+            c(0.5): self.p_rating05,
+            c(1): self.p_rating10,
+            c(1.5): self.p_rating15,
+            c(2): self.p_rating20,
+            c(2.5): self.p_rating25,
+            c(3): self.p_rating30
+        }
+        return rating_dict[self.p_taken]
+
 
 ################
 # PLAYER CLASS #
@@ -471,42 +474,10 @@ class Player(BasePlayer):
     offer = make_currency_field('')
 
     message = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
-    message1 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
-    message2 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
-    message3 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
-    message4 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
-    message5 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
-
-    # Gender variables
-
-    Male = models.StringField()
-    Female = models.StringField()
-    Other = models.StringField()
-    genderlabel1 = models.StringField()
-    genderlabel2 = models.StringField()
-    genderlabel3 = models.StringField()
-    genderlabel4 = models.StringField()
-    genderlabel5 = models.StringField()
-    genderCP1 = make_gender_field(label="")
-    genderCP2 = make_gender_field('')
-    genderCP3 = make_gender_field('')
-    genderCP4 = make_gender_field('')
-    genderCP5 = make_gender_field('')
-
-    # Checking gender guesses for correctness
-    guess1_is_correct = models.BooleanField()
-    guess2_is_correct = models.BooleanField(blank=False)
-    guess3_is_correct = models.BooleanField(blank=False)
-    guess4_is_correct = models.BooleanField(blank=False)
-    guess5_is_correct = models.BooleanField(blank=False)
 
     # Checking whether subject's rating matched the modal rating
     p_mode_matched = models.BooleanField()
     mode_matched = models.BooleanField()
-
-    # Other Variables
-
-    cumulative_payoff = models.IntegerField()
 
     ##################
     # Player Methods #
@@ -530,7 +501,7 @@ class Player(BasePlayer):
         self.q6_is_correct = (self.taken_question_1 == 3)
         self.q7_is_correct = (self.role_question == 2)
 
-    def get_practice_prizes(self):
+    def record_practice_payoff(self):
         self.payoff = (self.q1_is_correct + self.q2_is_correct + self.q3_is_correct
                        + self.q5_is_correct + self.q6_is_correct + self.q7_is_correct) * Constants.prize
 
@@ -551,7 +522,7 @@ class Player(BasePlayer):
 
     # Checking whether subject's rating matched the modal rating
     def p_mode_match(self):
-        if self.group.p_rating == self.group.modal_p_rating:
+        if self.group.p_rating == self.group.p_modal_rating:
             self.p_mode_matched = True
             self.payoff = Constants.prize
 

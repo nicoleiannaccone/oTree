@@ -1,5 +1,7 @@
 from ._builtin import Page, WaitPage
 from .models import ScreennameFetcher, Constants
+import collections
+import decimal
 
 from settings import INCLUDE_GENDER_INTRO
 
@@ -115,9 +117,9 @@ class Practice_Question_2(Page):
 class Comprehension_Results(Page):
     def vars_for_template(self):
         self.player.check_comprehension()
-        self.player.get_practice_prizes()
+        self.player.record_practice_payoff()
         return{
-            'payoff': self.participant.payoff,
+            'payoff': self.player.payoff,
         }
 
 class PracticeRound(Page):
@@ -159,30 +161,46 @@ class Practice_Message(Page):
     def is_displayed(self):
         return self.player.id_in_group == 2 and self.round_number==1
 
-    # def before_next_page(self):
-    #     self.group.get_my_messages()
-
 class Practice_Wait_Page(WaitPage):
     wait_for_all_groups = True
 
+class ResultRow:
+    def __init__(self, p_took, p_offered, p_rating, p_modal_rating):
+        self.p_took = p_took
+        self.p_offered = p_offered
+        self.p_rating = p_rating
+        self.p_rating_label = Constants.rating_label_dict[p_rating]
+        self.p_modal_rating = p_modal_rating
+        self.p_modal_rating_label = Constants.rating_label_dict[p_modal_rating]
+
+
 class Practice_Results(Page):
     def vars_for_template(self):
-        decider = self.group.get_player_by_role('decider')
-        receiver = self.group.get_player_by_role('receiver')
-        self.group.get_practice_offer()
-        self.group.get_modal_p_ratings()
-        self.player.p_mode_match()
-        self.player.get_gender()
+        receiver_practice_ratings = {}
+        for v in 0, 0.5, 1, 1.5, 2, 2.5, 3:
+            receiver_practice_ratings[v]= list()
+        for g in self.subsession.get_groups():
+            x = g
+            receiver_practice_ratings[0].append(x.p_rating00)
+            receiver_practice_ratings[0.5].append(x.p_rating05)
+            receiver_practice_ratings[1].append(x.p_rating10)
+            receiver_practice_ratings[1.5].append(x.p_rating15)
+            receiver_practice_ratings[2].append(x.p_rating20)
+            receiver_practice_ratings[2.5].append(x.p_rating25)
+            receiver_practice_ratings[3].append(x.p_rating30)
+
+        g = self.group
+        p_took = g.p_taken
+        p_offered = None if (g.p_taken is None) else ( 3 - g.p_taken)
+        p_rating = g.fetch_practice_rating()
+        rating_list = receiver_practice_ratings.get(decimal.Decimal(g.p_taken), None)
+        p_modal_rating = collections.Counter(rating_list).most_common(1)[0][0] if rating_list else None
+        rr = ResultRow(p_took, p_offered, p_rating, p_modal_rating)
+
         return {
-            'my_gender': self.player.gender,
-            'gender': self.participant.vars['gender'],
-            'genderD0': decider.participant.vars.get('gender', 0),
-            'genderR0': receiver.participant.vars.get('gender', 0),
-            'other_player_gender': self.player.other_player().gender
+            'result_row': rr,
         }
 
-    def is_displayed(self):
-        return self.round_number == 1
 #
 #class ShuffleWaitPage(WaitPage):
 #    wait_for_all_groups = True

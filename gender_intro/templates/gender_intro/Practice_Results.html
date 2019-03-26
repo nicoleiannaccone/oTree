@@ -6,17 +6,18 @@
 {% block content %}
 
 
+
 <table class="table">
     <tr>
         <th>
-            {% if player.id_in_group == 1 %}
+            {% if player.role == 'decider' %}
             You took:
             {% else %}
             Decider took:
             {% endif %}
         </th>
         <th>
-            {% if player.id_in_group == 1 %}
+            {% if player.role == 'decider' %}
             You left:
             {% else %}
             Decider left:
@@ -28,35 +29,30 @@
         <th>
             Modal Rating:
         </th>
-        <th>
-            Receiver's Message:
-        </th>
     </tr>
     <tr>
         <td>
-            {{ group.p_taken }}
+            {{ result_row.p_took }}
         </td>
         <td>
-            {{ group.practice_offer }}
+            {{ result_row.p_offered }}
         </td>
         <td>
-            {{ group.ratinglabel }}
+            {{ result_row.p_rating }}
         </td>
         <td>
-            {{ group.practice_mode_rating_label }}
-        </td>
-        <td>
-            {{ group.p_message }}
+            {{ result_row.p_modal_rating }}
         </td>
     </tr>
 </table>
 
+
         {% if player.id_in_group == 1 %}
-            <p> You decided to take <strong>{{ group.p_taken }}</strong> of the Receiver's endowment for yourself.
+            <p> You decided to take <strong>{{ result_row.p_took }}</strong> of the Receiver's endowment for yourself.
             </p>
             <p>
-                The most common rating that Receivers gave to an allocation of this amount was {{ group.modal_p_rating }}.
-                Your Receiver rated this choice as <strong>{{ group.ratinglabel }}</strong>, and wrote you the following message:
+                The most common rating that Receivers gave to an allocation of this amount was {{ result_row.p_modal_rating }}.
+                Your Receiver rated this choice as <strong>{{ result_row.p_rating }}</strong>, and wrote you the following message:
             </p>
             <p>
             <strong>{{ group.p_message }}</strong>
@@ -64,21 +60,21 @@
         {% endif %}
 
         {% if player.id_in_group == 2 %}
-            <p> Your Decider decided to take <strong>{{ group.p_taken }}</strong> of your {{ Constants.endowment }}
+            <p> Your Decider decided to take <strong>{{ result_row.p_took }}</strong> of your {{ Constants.endowment }}
                 endowment.
             </p>
             <p>
-                You rated this choice as <strong>{{ group.ratinglabel }}</strong>.
+                You rated this choice as <strong>{{ result_row.p_rating}}</strong>.
             </p>
             <p>
-                The most common rating that other Receivers assigned to an allocation of the amount {{ group.p_taken }}
-                taken by your Decider was <strong> {{ group.practice_mode_rating_label }} </strong>.
+                The most common rating that other Receivers assigned to an allocation of the amount {{ result_row.p_took }}
+                taken by your Decider was <strong> {{ result_row.p_modal_rating }} </strong>.
                 {% if player.p_mode_matched == True %}
-                <p> Since your own rating, {{ group.ratinglabel }}, matched the most common rating,
-                    {{ group.practice_mode_rating_label }},  you win a prize of {{ Constants.prize }}. </p>
+                <p> Since your own rating, {{ result_row.p_rating }}, matched the most common rating,
+                    {{ result_row.p_modal_rating }},  you win a prize of {{ Constants.prize }}. </p>
                 {% else %}
-                <p> Your rating of the amount your Decider took, {{ group.p_rating }}, did not match the most common
-                    rating assigned to an allocation of that amount, {{ group.modal_p_rating }}. </p>
+                <p> Your rating of the amount your Decider took, {{ result_row.p_rating }}, did not match the most common
+                    rating assigned to an allocation of that amount, {{ result_row.p_modal_rating }}. </p>
                 {% endif %}
             </p>
         {% endif %}
