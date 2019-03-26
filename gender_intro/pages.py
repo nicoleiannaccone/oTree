@@ -7,6 +7,14 @@ from globals import Globals
 from settings import INCLUDE_GENDER_INTRO
 
 
+def add_back_button_html(page: Page):
+    if page.request.POST.get('back'):
+        if page.request.POST.get('back')[0] == '1':
+            page._is_frozen = False
+            page._index_in_pages -= 2
+            page.participant._index_in_pages -= 2
+
+
 class Introduction(Page):
     pass
 
@@ -20,7 +28,8 @@ class Instructions2(Page):
 
 
 class Instructions3(Page):
-    pass
+    def before_next_page(self):
+        add_back_button_html(self)
 
 
 class Instructions4(Page):
@@ -40,11 +49,7 @@ class InstructionsKrupka1(Page):
     form_fields = ['krupka_1', 'krupka_2', 'krupka_3', 'krupka_4']
 
     def before_next_page(self):
-        if self.request.POST.get('back'):
-            if self.request.POST.get('back')[0] == '1':
-                self._is_frozen = False
-                self._index_in_pages -= 2
-                self.participant._index_in_pages -= 2
+        add_back_button_html(self)
 
 
 class PreSurvey(Page):
