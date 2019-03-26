@@ -83,14 +83,6 @@ class Constants(BaseConstants):
 
     instructions_template = 'gender_intro/Instructions_Full.html'
 
-    rating_label_dict = {
-        None: 'None appropriate',
-        1: 'Very Socially Inappropriate',
-        2: 'Somewhat Socially Inappropriate',
-        3: 'Somewhat Socially Appropriate',
-        4: 'Very Socially Appropriate'
-    }
-
     # Monetary amounts
     endowment = c(3)
     prize = c(0.5)
@@ -299,21 +291,6 @@ class Group(BaseGroup):
                     attr_value = getattr(self, "modal_rating%d_%d" % (j, i))
                     setattr(self, attr_name, attr_value)
 
-    # Nicole made these two rating labelers - the modal one returns None Appropriate
-    def label_rating(self):
-        return Constants.rating_label_dict[self.rating]
-
-        # TODO: Fix this, Nicole. Why "None Appropriate"?
-
-    def label_modal_rating(self):
-        modal_rating_label_dict = {
-            None: 'None appropriate',
-            1: 'Very Socially Inappropriate',
-            2: 'Somewhat Socially Inappropriate',
-            3: 'Somewhat Socially Appropriate',
-            4: 'Very Socially Appropriate'
-        }
-        return modal_rating_label_dict[self.modal_rating]
 
     def fetch_rating(self):
         rating_dict = {
@@ -341,14 +318,7 @@ class Group(BaseGroup):
         }
         self.rating = rating_dict[self.taken]
 
-        rating_label_dict = {
-            None: 'Did not rate',
-            1: 'Very Socially Inappropriate',
-            2: 'Somewhat Socially Inappropriate',
-            3: 'Somewhat Socially Appropriate',
-            4: 'Very Socially Appropriate'
-        }
-        self.ratinglabel = rating_label_dict[self.rating]
+        self.ratinglabel = Globals.rating_label_dict[self.rating]
 
     # TODO: Andrew-based code - get_offer
     def get_offer(self):

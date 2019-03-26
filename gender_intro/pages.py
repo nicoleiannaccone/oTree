@@ -3,6 +3,7 @@ from .models import ScreennameFetcher, Constants
 import collections
 import decimal
 
+from globals import Globals
 from settings import INCLUDE_GENDER_INTRO
 
 
@@ -164,14 +165,15 @@ class Practice_Message(Page):
 class Practice_Wait_Page(WaitPage):
     wait_for_all_groups = True
 
+
 class ResultRow:
     def __init__(self, p_took, p_offered, p_rating, p_modal_rating):
         self.p_took = p_took
         self.p_offered = p_offered
         self.p_rating = p_rating
-        self.p_rating_label = Constants.rating_label_dict[p_rating]
+        self.p_rating_label = Globals.rating_label_dict[p_rating]
         self.p_modal_rating = p_modal_rating
-        self.p_modal_rating_label = Constants.rating_label_dict[p_modal_rating]
+        self.p_modal_rating_label = Globals.rating_label_dict[p_modal_rating]
 
 
 class Practice_Results(Page):
@@ -191,11 +193,15 @@ class Practice_Results(Page):
 
         g = self.group
         p_took = g.p_taken
-        p_offered = None if (g.p_taken is None) else ( 3 - g.p_taken)
+        p_offered = None if (g.p_taken is None) else (3 - g.p_taken)
         p_rating = g.fetch_practice_rating()
         rating_list = receiver_practice_ratings.get(decimal.Decimal(g.p_taken), None)
         p_modal_rating = collections.Counter(rating_list).most_common(1)[0][0] if rating_list else None
         rr = ResultRow(p_took, p_offered, p_rating, p_modal_rating)
+
+        if self.player == self.group.get_decider():
+            if p_rating == p_modal_rating:
+                self.player.payoff = self.player.payoff + Constants.prize
 
         return {
             'result_row': rr,
