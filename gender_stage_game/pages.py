@@ -11,7 +11,7 @@ from globals import Globals
 class D_Name(Page):
 
     def is_displayed(self):
-        return self.player.id_in_group == 1
+        return self.player.is_decider()
 
     def vars_for_template(self):
         return {
@@ -21,7 +21,7 @@ class D_Name(Page):
 
 class Wait_Page(WaitPage):
     def is_displayed(self):
-        return self.player.id_in_group == 2
+        return self.player.is_decider()
 
 
 class D_Take(Page):
@@ -29,7 +29,7 @@ class D_Take(Page):
     form_fields = ['taken']
 
     def is_displayed(self):
-        return self.player.id_in_group == 1
+        return self.player.is_receiver()
 
     def vars_for_template(self):
         return {
@@ -42,7 +42,7 @@ class D_Take(Page):
 
 class D_Wait_Page(WaitPage):
     def is_displayed(self):
-        return self.player.id_in_group == 1
+        return self.player.is_receiver()
 
 
 class R_Rating(Page):
@@ -50,7 +50,7 @@ class R_Rating(Page):
     form_fields = ['rating00', 'rating05', 'rating10', 'rating15', 'rating20', 'rating25', 'rating30']
 
     def is_displayed(self):
-        return self.player.id_in_group == 2
+        return self.player.is_receiver()
 
     def vars_for_template(self):
         return {
@@ -69,7 +69,7 @@ class R_Message(Page):
     form_fields = ['message']  # this means player.message1
 
     def is_displayed(self):
-        return self.player.id_in_group == 2
+        return self.player.is_receiver()
 
     def before_next_page(self):
         self.group.get_my_messages()
@@ -82,13 +82,14 @@ class R_Message(Page):
 
 class Message_WaitPage(WaitPage):
     def is_displayed(self):
-        return self.player.id_in_group == 1
+        return self.player.is_receiver()
 
 
 class ResultsWaitPage(WaitPage):
     wait_for_all_groups = True
-    # def is_displayed(self):
-    #     return self.round_number == Constants.num_rounds
+
+    def is_displayed(self):
+        return self.round_number == Constants.num_rounds
 
 
 class ResultRow:

@@ -185,6 +185,12 @@ class Player(BasePlayer):
     def get_partner(self):
         return self.get_others_in_group()[0]
 
+    def is_decider(self):
+        return self.id_in_group == 1
+
+    def is_receiver(self):
+        return self.id_in_group == 2
+
     def record_cumulative_payoffs(self):
         self.cumulative_payoff = sum([p.payoff for p in self.in_all_rounds()])
 

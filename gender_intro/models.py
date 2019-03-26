@@ -284,6 +284,12 @@ class Player(BasePlayer):
         if self.id_in_group == 2:
             return 'receiver'
 
+    def is_decider(self):
+        return self.id_in_group == 1
+
+    def is_receiver(self):
+        return self.id_in_group == 2
+
     def other_player(self):
         return self.get_others_in_group()[0]
 

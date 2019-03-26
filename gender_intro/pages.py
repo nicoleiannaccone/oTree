@@ -8,66 +8,32 @@ from settings import INCLUDE_GENDER_INTRO
 
 
 class Introduction(Page):
-    def is_displayed(self):
-        return self.round_number == 1
+    pass
 
 
 class Instructions1(Page):
-    def is_displayed(self):
-        return self.round_number == 1
+    pass
 
 
 class Instructions2(Page):
-    def is_displayed(self):
-        return self.round_number == 1
+    pass
 
 
 class Instructions3(Page):
-    def before_next_page(self):
-        if self.request.POST.get('back'):
-            if self.request.POST.get('back')[0] == '1':
-                self._is_frozen = False
-                self._index_in_pages -= 2
-                self.participant._index_in_pages -= 2
-
-    def is_displayed(self):
-        return self.round_number == 1
+    pass
 
 
 class Instructions4(Page):
-    def before_next_page(self):
-        if self.request.POST.get('back'):
-            if self.request.POST.get('back')[0] == '1':
-                self._is_frozen = False
-                self._index_in_pages -= 2
-                self.participant._index_in_pages -= 2
-
-    def is_displayed(self):
-        return self.round_number == 1
+    pass
 
 
 class Instructions5(Page):
-    def before_next_page(self):
-        if self.request.POST.get('back'):
-            if self.request.POST.get('back')[0] == '1':
-                self._is_frozen = False
-                self._index_in_pages -= 2
-                self.participant._index_in_pages -= 2
-
-    def is_displayed(self):
-        return self.round_number == 1
+    pass
 
 
 class Instructions6(Page):
-    def before_next_page(self):
-        if self.request.POST.get('back'):
-            if self.request.POST.get('back')[0] == '1':
-                self._is_frozen = False
-                self._index_in_pages -= 2
-                self.participant._index_in_pages -= 2
+    pass
 
-    def is_displayed(self):
-        return self.round_number == 1
 
 class InstructionsKrupka1(Page):
     form_model = 'player'
@@ -79,9 +45,6 @@ class InstructionsKrupka1(Page):
                 self._is_frozen = False
                 self._index_in_pages -= 2
                 self.participant._index_in_pages -= 2
-
-    def is_displayed(self):
-        return self.round_number == 1
 
 
 class PreSurvey(Page):
@@ -105,24 +68,15 @@ class PracticeQuestion0(Page):
     form_model = 'player'
     form_fields = ['offer_question_1', 'taken_question_1']
 
-    def is_displayed(self):
-        return self.round_number == 1
-
 
 class PracticeQuestion1(Page):
     form_model = 'player'
     form_fields = ['question1', 'question2', 'question3']
 
-    def is_displayed(self):
-        return self.round_number == 1
-
 
 class PracticeQuestion2(Page):
     form_model = 'player'
     form_fields = ['role_question']
-
-    def is_displayed(self):
-        return self.round_number == 1
 
 
 class ComprehensionResults(Page):
@@ -139,7 +93,7 @@ class PracticeTake(Page):
     form_fields = ['p_taken']
 
     def is_displayed(self):
-        return self.player == self.group.get_decider() and self.round_number == 1
+        return self.player.is_decider() and self.round_number == 1
 
 
 class PracticeRating(Page):
@@ -147,15 +101,12 @@ class PracticeRating(Page):
     form_fields = ['p_rating00', 'p_rating05', 'p_rating10', 'p_rating15', 'p_rating20', 'p_rating25', 'p_rating30']  # this means player.rating1
 
     def is_displayed(self):
-        return self.player == self.group.get_receiver() and self.round_number == 1
+        return self.player.is_receiver() and self.round_number == 1
 
 
 class PracticeWaitPage(WaitPage):
     def after_all_players_arrive(self):
         self.group.record_practice_rating()
-
-    def is_displayed(self):
-        return self.round_number == 1
 
 
 class PracticeMessage(Page):
@@ -163,7 +114,7 @@ class PracticeMessage(Page):
     form_fields = ['p_message'] # this means player.message1
 
     def is_displayed(self):
-        return self.player.id_in_group == 2 and self.round_number==1
+        return self.player.is_receiver() and self.round_number == 1
 
 
 class ResultRow:
@@ -206,16 +157,6 @@ class PracticeResults(Page):
         return {
             'result_row': rr,
         }
-
-#
-#class ShuffleWaitPage(WaitPage):
-#    wait_for_all_groups = True
-#
-#    def after_all_players_arrive(self):
-#        self.subsession.do_my_shuffle()
-#
-#    def is_displayed(self):
-#        return self.round_number == 1
 
 
 page_sequence = [
