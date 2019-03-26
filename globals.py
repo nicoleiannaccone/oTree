@@ -3,7 +3,11 @@ class Globals:
     DECIDER = "decider"
     RECEIVER = "receiver"
 
-    rating_label_dict = {
+    # Gender for survey widgets
+    MALE = 1
+    FEMALE = 2
+
+    RATING_LABEL_DICT = {
         None: 'None appropriate',
         1: 'Very Socially Inappropriate',
         2: 'Somewhat Socially Inappropriate',

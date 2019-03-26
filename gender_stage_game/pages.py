@@ -11,7 +11,7 @@ from globals import Globals
 class D_Name(Page):
 
     def is_displayed(self):
-        return self.player.id_in_group == 1
+        return self.player.is_decider()
 
     def vars_for_template(self):
         return {
@@ -21,7 +21,7 @@ class D_Name(Page):
 
 class Wait_Page(WaitPage):
     def is_displayed(self):
-        return self.player.id_in_group == 2
+        return self.player.is_decider()
 
 
 class D_Take(Page):
@@ -29,7 +29,7 @@ class D_Take(Page):
     form_fields = ['taken']
 
     def is_displayed(self):
-        return self.player.id_in_group == 1
+        return self.player.is_receiver()
 
     def vars_for_template(self):
         return {
@@ -37,22 +37,20 @@ class D_Take(Page):
         }
 
     def before_next_page(self):
-        self.group.get_offer()
-        self.player.get_gender()
-        self.player.set_payoffs()
+        self.group.record_payoffs()
 
 
 class D_Wait_Page(WaitPage):
     def is_displayed(self):
-        return self.player.id_in_group == 1
+        return self.player.is_receiver()
 
 
 class R_Rating(Page):
     form_model = 'group'
-    form_fields = ['rating00', 'rating05', 'rating10', 'rating15', 'rating20', 'rating25', 'rating30']  # this means
+    form_fields = ['rating00', 'rating05', 'rating10', 'rating15', 'rating20', 'rating25', 'rating30']
 
     def is_displayed(self):
-        return self.player.id_in_group == 2
+        return self.player.is_receiver()
 
     def vars_for_template(self):
         return {
@@ -60,33 +58,10 @@ class R_Rating(Page):
         }
 
 
-class D_Self_Rating_M(Page):
-    form_model = 'group'
-    form_fields = ['mselfrating00', 'mselfrating05', 'mselfrating10', 'mselfrating15', 'mselfrating20', 'mselfrating25',
-                   'mselfrating30']  # this means
-
-    def is_displayed(self):
-        return self.player.id_in_group == 1 and self.round_number == Constants.num_rounds
-
-
-class D_Self_Rating_F(Page):
-    form_model = 'group'
-    form_fields = ['fselfrating00', 'fselfrating05', 'fselfrating10', 'fselfrating15', 'fselfrating20', 'fselfrating25',
-                   'fselfrating30']  # this means
-
-    def is_displayed(self):
-        return self.player.id_in_group == 1 and self.round_number == Constants.num_rounds
-
-
 class RoundWaitPage(WaitPage):
     def after_all_players_arrive(self):
-        self.group.set_payoffs()
-        self.group.get_rating()
-        self.group.get_offer()
-        self.group.get_my_rating()
-        return {
-            'offer': Constants.endowment - self.group.taken,
-        }
+        self.group.record_rating()
+        self.group.record_payoffs()
 
 
 class R_Message(Page):
@@ -94,7 +69,7 @@ class R_Message(Page):
     form_fields = ['message']  # this means player.message1
 
     def is_displayed(self):
-        return self.player.id_in_group == 2
+        return self.player.is_receiver()
 
     def before_next_page(self):
         self.group.get_my_messages()
@@ -107,22 +82,14 @@ class R_Message(Page):
 
 class Message_WaitPage(WaitPage):
     def is_displayed(self):
-        return self.player.id_in_group == 1
+        return self.player.is_receiver()
 
 
 class ResultsWaitPage(WaitPage):
     wait_for_all_groups = True
-    # def is_displayed(self):
-    #     return self.round_number == Constants.num_rounds
 
-
-class Test(Page):
     def is_displayed(self):
-        print("First I did this")
         return self.round_number == Constants.num_rounds
-
-    def after_all_players_arrive(self):
-        print("I did this")
 
 
 class ResultRow:
@@ -132,9 +99,9 @@ class ResultRow:
         self.took = took
         self.offered = offered
         self.rating = rating
-        self.rating_label = Globals.rating_label_dict[rating]
+        self.rating_label = Globals.RATING_LABEL_DICT[rating]
         self.modal_rating = modal_rating
-        self.modal_rating_label = Globals.rating_label_dict[modal_rating]
+        self.modal_rating_label = Globals.RATING_LABEL_DICT[modal_rating]
 
 
 class Results(Page):
@@ -169,89 +136,6 @@ class Results(Page):
 
         return {
             'result_table': result_table,
-        }
-
-
-class Results2(Page):
-    form_model = 'player'
-    form_fields = ['genderCP1', 'genderCP2', 'genderCP3', 'genderCP4', 'genderCP5']  # this means player.rating1
-
-    def is_displayed(self):
-        return self.round_number == Constants.num_rounds
-
-    def before_next_page(self):
-        self.group.check_gender()  # For P1, guess1_is_correct returns True if p1.genderCP1 equals p2.gender.
-
-    def vars_for_template(self):
-        #        self.group.get_names()
-        #        self.group.get_my_messages()
-        #        self.player.get_offer()
-        #        self.player.get_payoffs()
-        self.group.get_rating()
-        self.group.get_my_rating()
-        decider = self.group.get_player_by_role('decider')
-        return {
-            'took1': self.participant.vars.get('taken1', 0),
-            'took2': self.participant.vars.get('taken2', 0),
-            'took3': self.participant.vars.get('taken3', 0),
-            'took4': self.participant.vars.get('taken4', 0),
-            'took5': self.participant.vars.get('taken5', 0),
-            'payoff': self.participant.payoff,
-            'offered1': self.participant.vars.get('offer1', 0),
-            'offered2': self.participant.vars.get('offer2', 0),
-            'offered3': self.participant.vars.get('offer3', 0),
-            'offered4': self.participant.vars.get('offer4', 0),
-            'offered5': self.participant.vars.get('offer5', 0),
-            'rated1': self.participant.vars.get('ratinglabel1', 0),
-            'rated2': self.participant.vars.get('ratinglabel2', 0),
-            'rated3': self.participant.vars.get('ratinglabel3', 0),
-            'rated4': self.participant.vars.get('ratinglabel4', 0),
-            'rated5': self.participant.vars.get('ratinglabel5', 0),
-            'message1': self.participant.vars.get('message1', 0),
-            'message2': self.participant.vars.get('message2', 0),
-            'message3': self.participant.vars.get('message3', 0),
-            'message4': self.participant.vars.get('message4', 0),
-            'message5': self.participant.vars.get('message5', 0),
-            'name_1': decider.participant.vars.get('name1', 0),
-            'name_2': decider.participant.vars.get('name2', 0),
-            'name_3': decider.participant.vars.get('name3', 0),
-            'name_4': decider.participant.vars.get('name4', 0),
-            'name_5': decider.participant.vars.get('name5', 0),
-        }
-
-
-#######################################################################################################################
-# Post-Game: Survey
-class PostSurvey(Page):
-    form_model = 'player'
-    form_fields = ['genderCP1', 'genderCP2', 'genderCP3', 'genderCP4',
-                   'genderCP5']  # For some reason when I elicit gender in the pre-survey it disappears by the time the post-survey rolls around
-
-    def is_displayed(self):
-        # Only do the survey after the last round, and only for the dictator
-        return self.round_number == Constants.num_rounds and self.group.get_player_by_role('receiver') == self.player
-
-    #    def before_next_page(self):
-    #        self.player.get_gender() # Set participants' gender equal to self.gender and participants' "genderCP1" equal to self.genderCP1
-    #        self.player.check_gender_guess() # For P1, guess1_is_correct returns True if p1.genderCP1 equals p2.gender.
-    #        self.player.check_gender()
-
-    def vars_for_template(self):
-        p1 = self.group.get_player_by_id(1)
-        return {
-            'gender': self.participant.vars.get('gender', 0),
-            'my_gender': self.player.gender,
-
-            # 'other_player_gender': self.player.other_player().gender,
-
-            # 'genderCP1': self.participant.vars.get('genderCP1', 0),
-
-            # 'name_1': p1.participant.vars.get('name1', 0),
-            # I might need to use participant vars because of re-matching screwing with "self.name"
-            # 'name_2': p1.participant.vars.get('name2', 0),
-            # 'name_3': p1.participant.vars.get('name3', 0),
-            # 'name_4': p1.participant.vars.get('name4', 0),
-            # 'name_5': p1.participant.vars.get('name5', 0),
         }
 
 
