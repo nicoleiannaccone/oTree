@@ -1,3 +1,6 @@
+import typing
+import math
+import random
 from otree.api import (
     models, widgets, BaseConstants, BaseSubsession, BaseGroup, BasePlayer,
     Currency as c, currency_range,
@@ -72,16 +75,15 @@ def make_yn_field(label):
 class Constants(BaseConstants):
     name_in_url = 'WebGames'
     players_per_group = 2
-
     num_rounds = 1
     round_numbers = list(range(1, num_rounds + 1))
 
     instructions_template = 'gender_intro/InstructionsFull.html'
 
     # Monetary amounts
-    endowment = c(3)
-    prize = c(0.5)
-    participation = c(5)
+    endowment = c(Globals.ENDOWMENT)
+    mode_match_prize = c(Globals.MODE_MATCH_PRIZE)
+    participation_payment = c(Globals.PARTICIPATION_PAYMENT)
 
 
 # Needed below to implement a Perfect Strangers matching.
@@ -108,10 +110,49 @@ class Subsession(BaseSubsession):
     # From https://groups.google.com/forum/#!msg/otree/rciCzbTqSfQ/XC-T7oZrEAAJ
     def creating_session(self):
         if self.round_number == 1:
+            self.session.vars['payoff round'] = 1 + math.floor(random.uniform(0, 1) * Constants.num_rounds)
             self.session.vars['full_data'] = [i for i in shifter(self.get_group_matrix())]
         fd = self.session.vars['full_data']
         self.set_group_matrix(fd[self.round_number - 1])
-        print(self.get_group_matrix())
+
+
+################
+# PLAYER CLASS #
+################
+
+class Player(BasePlayer):
+
+    # Player Methods
+    def get_partner(self):
+        return self.get_others_in_group()[0]
+
+    def is_decider(self):
+        return self.id_in_group == 1
+
+    def is_receiver(self):
+        return self.id_in_group == 2
+
+    def role(self):
+        if self.id_in_group == 1:
+            return 'decider'
+        if self.id_in_group == 2:
+            return 'receiver'
+
+    def record_total_payoff(self):
+        total_payoff = Globals.PARTICIPATION_PAYMENT
+
+        p = self.in_round(self.session.vars['payoff round'])
+        if p.is_receiver():
+            total_payoff += Globals.ENDOWMENT - p.group.taken
+            if p.group.modal_rating == p.group.rating:
+                total_payoff += Globals.MODE_MATCH_PRIZE
+        else:
+            total_payoff += p.group.taken
+
+        self.participant.vars['total_payoff'] = total_payoff
+
+    def get_screenname(self):
+        return self.participant.vars['screenname']
 
 
 ###############
@@ -125,17 +166,18 @@ class Group(BaseGroup):
     # Amount taken by dictator
     taken = make_take_field()
 
-    # Dictator's offer to receiver
-    offer = models.CurrencyField()
-
     # Receiver ratings of dictator's possible choices
-    rating00 = make_rating_field('$0.00')
-    rating05 = make_rating_field('$0.50')
-    rating10 = make_rating_field('$1.00')
-    rating15 = make_rating_field('$1.50')
-    rating20 = make_rating_field('$2.00')
-    rating25 = make_rating_field('$2.50')
-    rating30 = make_rating_field('$3.00')
+    rating00 = make_rating_field(0)
+    rating01 = make_rating_field(1)
+    rating02 = make_rating_field(2)
+    rating03 = make_rating_field(3)
+    rating04 = make_rating_field(4)
+    rating05 = make_rating_field(5)
+    rating06 = make_rating_field(6)
+    rating07 = make_rating_field(7)
+    rating08 = make_rating_field(8)
+    rating09 = make_rating_field(9)
+    rating10 = make_rating_field(10)
 
     # Receiver's rating of dictator's actual choice
     rating = models.IntegerField()
@@ -148,58 +190,16 @@ class Group(BaseGroup):
     # Group Methods #
     #################
 
-    def get_decider(self):
-        return self.get_player_by_role(Globals.DECIDER)
+    def get_decider(self) -> Player:
+        return typing.cast(Player, self.get_player_by_role(Globals.DECIDER))
 
-    def get_receiver(self):
-        return self.get_player_by_role(Globals.RECEIVER)
-
-    def record_payoffs(self):
-        self.get_decider().payoff = self.taken
-        self.get_receiver().payoff = Constants.endowment - self.taken
+    def get_receiver(self) -> Player:
+        return typing.cast(Player, self.get_player_by_role(Globals.RECEIVER))
 
     def record_rating(self):
-        rating_dict = {
-            None: None,
-            c(0): self.rating00,
-            c(0.5): self.rating05,
-            c(1): self.rating10,
-            c(1.5): self.rating15,
-            c(2): self.rating20,
-            c(2.5): self.rating25,
-            c(3): self.rating30
-        }
+        rating_dict = {None: None}
+        for amt in range(0, Globals.ENDOWMENT + Globals.TAKE_INCREMENT, Globals.TAKE_INCREMENT):
+            rating_dict[c(amt)] = getattr(self, 'rating%02d' % amt)
         self.rating = rating_dict[self.taken]
         self.rating_label = Globals.RATING_LABEL_DICT[self.rating]
-
-
-################
-# PLAYER CLASS #
-################
-
-class Player(BasePlayer):
-
-    cumulative_payoff = models.CurrencyField()
-
-    # Player Methods
-    def get_partner(self):
-        return self.get_others_in_group()[0]
-
-    def is_decider(self):
-        return self.id_in_group == 1
-
-    def is_receiver(self):
-        return self.id_in_group == 2
-
-    def record_cumulative_payoffs(self):
-        self.cumulative_payoff = sum([p.payoff for p in self.in_all_rounds()])
-
-    def role(self):
-        if self.id_in_group == 1:
-            return 'decider'
-        if self.id_in_group == 2:
-            return 'receiver'
-
-    def get_screenname(self):
-        return self.participant.vars['screenname']
 
