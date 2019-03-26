@@ -146,6 +146,7 @@ class Group(BaseGroup):
 
     # Amount taken by dictator
     p_taken = make_currency_field('')
+    p_offered = models.CurrencyField()
 
     # Receiver's ratings of dictator's possible choices
     p_rating00 = make_rating_field('$0.00')
@@ -172,6 +173,15 @@ class Group(BaseGroup):
 
     def get_receiver(self):
         return self.get_player_by_role(Globals.RECEIVER)
+
+    def record_offer(self):
+        self.p_offered = c(3) - self.p_taken
+
+    def record_practice_payoffs(self):
+        receiver = self.get_receiver()
+        decider = self.get_decider()
+        decider.payoff = decider.payoff + self.p_taken
+        receiver.payoff = receiver.payoff + self.p_offered
 
     def record_practice_rating(self):
         pr_dict = {

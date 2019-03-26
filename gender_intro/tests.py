@@ -1,14 +1,21 @@
 from otree.api import Currency as c, currency_range
 from . import pages
 from ._builtin import Bot
-from .models import Constants
+from globals import Globals
 
 
 class PlayerBot(Bot):
 
     def play_round(self):
         yield (pages.Introduction)
-        yield (pages.PreSurvey)
+
+        yield (pages.PreSurvey, {
+            'age': 18,
+            'gender': Globals.MALE,
+            'year': 2,
+            'major': "Econ"
+        })
+
         yield (pages.Instructions2)
         yield (pages.Instructions3)
         yield (pages.Instructions4)
@@ -18,8 +25,10 @@ class PlayerBot(Bot):
         yield (pages.PracticeQuestion0)
         yield (pages.PracticeQuestion1)
         yield (pages.ComprehensionResults)
+
         if self.player == self.group.get_decider():
             yield (pages.PracticeTake, {'p_taken': c(0.50)})
+
         elif self.player == self.group.get_receiver():
             yield (pages.PracticeRating, {
                 'p_rating00': 4,
@@ -33,5 +42,12 @@ class PlayerBot(Bot):
             yield (pages.PracticeMessage)
         else:
             raise Exception("Apparently I'm neither decider nor receiver")
+
 #        yield (pages.Practice_Results)
+
+        print()
+        print(self.player.role())
+        print(self.participant.vars)
+        print(self.player.payoff)
+        print(self.group.p_taken)
 

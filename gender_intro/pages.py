@@ -100,6 +100,10 @@ class PracticeTake(Page):
     def is_displayed(self):
         return self.player.is_decider() and self.round_number == 1
 
+    def before_next_page(self):
+        self.group.record_offer()
+        self.group.record_practice_payoffs()
+
 
 class PracticeRating(Page):
     form_model = 'group'
@@ -120,6 +124,11 @@ class PracticeMessage(Page):
 
     def is_displayed(self):
         return self.player.is_receiver() and self.round_number == 1
+
+
+class PracticeMessageWaitPage(WaitPage):
+    def is_displayed(self):
+        return self.player.is_decider()
 
 
 class ResultRow:
@@ -155,7 +164,7 @@ class PracticeResults(Page):
         p_modal_rating = collections.Counter(rating_list).most_common(1)[0][0] if rating_list else None
         rr = ResultRow(p_took, p_offered, p_rating, p_modal_rating)
 
-        if self.player == self.group.get_receiver():
+        if self.player.is_receiver():
             if p_rating == p_modal_rating:
                 self.player.payoff = self.player.payoff + Constants.prize
 
@@ -182,12 +191,12 @@ page_sequence = [
      PracticeRating,
      PracticeWaitPage,
      PracticeMessage,
-     PracticeWaitPage,
+     PracticeMessageWaitPage,
      PracticeResults,
 ]
 
 if not INCLUDE_GENDER_INTRO:
     page_sequence = [
         PreSurvey,
-        PreSurveyWaitPage
+        PreSurveyWaitPage,
     ]
