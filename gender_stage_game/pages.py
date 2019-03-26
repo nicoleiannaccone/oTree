@@ -36,9 +36,6 @@ class D_Take(Page):
             'name': self.participant.vars['screenname'],
         }
 
-    def before_next_page(self):
-        self.group.record_taken_payoffs()
-
 
 class D_Wait_Page(WaitPage):
     def is_displayed(self):
@@ -47,7 +44,9 @@ class D_Wait_Page(WaitPage):
 
 class R_Rating(Page):
     form_model = 'group'
-    form_fields = ['rating00', 'rating05', 'rating10', 'rating15', 'rating20', 'rating25', 'rating30']
+
+    def get_form_fields(self):
+        return ['rating%02d' % i for i in Globals.TAKE_CHOICES]
 
     def is_displayed(self):
         return self.player.is_receiver()
@@ -105,18 +104,22 @@ class Results(Page):
     def vars_for_template(self):
         receiver_ratings = {}
         for r in Constants.round_numbers:
-            for v in 0, 0.5, 1, 1.5, 2, 2.5, 3:
+            for v in range(0, 11):
                 receiver_ratings[(r, v)] = list()
         for g in self.subsession.get_groups():
             for r in Constants.round_numbers:
                 x = g.in_round(r)
                 receiver_ratings[(r, 0)].append(x.rating00)
-                receiver_ratings[(r, 0.5)].append(x.rating05)
-                receiver_ratings[(r, 1)].append(x.rating10)
-                receiver_ratings[(r, 1.5)].append(x.rating15)
-                receiver_ratings[(r, 2)].append(x.rating20)
-                receiver_ratings[(r, 2.5)].append(x.rating25)
-                receiver_ratings[(r, 3)].append(x.rating30)
+                receiver_ratings[(r, 1)].append(x.rating01)
+                receiver_ratings[(r, 2)].append(x.rating02)
+                receiver_ratings[(r, 3)].append(x.rating03)
+                receiver_ratings[(r, 4)].append(x.rating04)
+                receiver_ratings[(r, 5)].append(x.rating05)
+                receiver_ratings[(r, 6)].append(x.rating06)
+                receiver_ratings[(r, 7)].append(x.rating07)
+                receiver_ratings[(r, 8)].append(x.rating08)
+                receiver_ratings[(r, 9)].append(x.rating09)
+                receiver_ratings[(r, 10)].append(x.rating10)
 
         result_table = list()
         for round_number in Constants.round_numbers:
@@ -130,9 +133,7 @@ class Results(Page):
             rr = ResultRow(round_number, dname, took, offered, g.rating, g.modal_rating)
             result_table.append(rr)
 
-            if self.player.is_receiver():
-                if g.rating == g.modal_rating:
-                    self.player.add_to_payoff(Constants.prize)
+            self.player.record_total_payoff()
 
         return {
             'result_table': result_table,
