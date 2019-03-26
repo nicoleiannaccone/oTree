@@ -37,9 +37,7 @@ class D_Take(Page):
         }
 
     def before_next_page(self):
-        self.group.get_offer()
-        self.player.get_gender()
-        self.player.set_payoffs()
+        self.group.record_payoffs()
 
 
 class D_Wait_Page(WaitPage):
@@ -49,7 +47,7 @@ class D_Wait_Page(WaitPage):
 
 class R_Rating(Page):
     form_model = 'group'
-    form_fields = ['rating00', 'rating05', 'rating10', 'rating15', 'rating20', 'rating25', 'rating30']  # this means
+    form_fields = ['rating00', 'rating05', 'rating10', 'rating15', 'rating20', 'rating25', 'rating30']
 
     def is_displayed(self):
         return self.player.id_in_group == 2
@@ -60,33 +58,10 @@ class R_Rating(Page):
         }
 
 
-class D_Self_Rating_M(Page):
-    form_model = 'group'
-    form_fields = ['mselfrating00', 'mselfrating05', 'mselfrating10', 'mselfrating15', 'mselfrating20', 'mselfrating25',
-                   'mselfrating30']  # this means
-
-    def is_displayed(self):
-        return self.player.id_in_group == 1 and self.round_number == Constants.num_rounds
-
-
-class D_Self_Rating_F(Page):
-    form_model = 'group'
-    form_fields = ['fselfrating00', 'fselfrating05', 'fselfrating10', 'fselfrating15', 'fselfrating20', 'fselfrating25',
-                   'fselfrating30']  # this means
-
-    def is_displayed(self):
-        return self.player.id_in_group == 1 and self.round_number == Constants.num_rounds
-
-
 class RoundWaitPage(WaitPage):
     def after_all_players_arrive(self):
-        self.group.set_payoffs()
-        self.group.get_rating()
-        self.group.get_offer()
-        self.group.get_my_rating()
-        return {
-            'offer': Constants.endowment - self.group.taken,
-        }
+        self.group.record_rating()
+        self.group.record_payoffs()
 
 
 class R_Message(Page):
@@ -114,15 +89,6 @@ class ResultsWaitPage(WaitPage):
     wait_for_all_groups = True
     # def is_displayed(self):
     #     return self.round_number == Constants.num_rounds
-
-
-class Test(Page):
-    def is_displayed(self):
-        print("First I did this")
-        return self.round_number == Constants.num_rounds
-
-    def after_all_players_arrive(self):
-        print("I did this")
 
 
 class ResultRow:
@@ -223,18 +189,13 @@ class Results2(Page):
 #######################################################################################################################
 # Post-Game: Survey
 class PostSurvey(Page):
+    # TODO For some reason when I elicit gender in the pre-survey it disappears by the time the post-survey rolls around
     form_model = 'player'
-    form_fields = ['genderCP1', 'genderCP2', 'genderCP3', 'genderCP4',
-                   'genderCP5']  # For some reason when I elicit gender in the pre-survey it disappears by the time the post-survey rolls around
+    form_fields = ['genderCP1', 'genderCP2', 'genderCP3', 'genderCP4', 'genderCP5']
 
     def is_displayed(self):
         # Only do the survey after the last round, and only for the dictator
         return self.round_number == Constants.num_rounds and self.group.get_player_by_role('receiver') == self.player
-
-    #    def before_next_page(self):
-    #        self.player.get_gender() # Set participants' gender equal to self.gender and participants' "genderCP1" equal to self.genderCP1
-    #        self.player.check_gender_guess() # For P1, guess1_is_correct returns True if p1.genderCP1 equals p2.gender.
-    #        self.player.check_gender()
 
     def vars_for_template(self):
         p1 = self.group.get_player_by_id(1)

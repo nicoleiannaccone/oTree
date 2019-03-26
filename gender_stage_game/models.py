@@ -72,13 +72,8 @@ def make_yn_field(label):
 class Constants(BaseConstants):
     name_in_url = 'WebGames'
     players_per_group = 2
+
     num_rounds = 1
-
-    # Roles
-    DECIDER = "decider"
-    RECEIVER = "receiver"
-
-    rounds = 5
     round_numbers = list(range(1, num_rounds + 1))
 
     instructions_template = 'gender_intro/InstructionsFull.html'
@@ -87,12 +82,6 @@ class Constants(BaseConstants):
     endowment = c(3)
     prize = c(0.5)
     participation = c(5)
-
-    # Screennames for treatments
-    names = []
-    ordering = models.StringField()
-    names1 = ['Jacob', 'William', 'Michael', 'Sophia', 'Elizabeth']
-    names2 = ['Amy', 'Emily', 'Michelle', 'James', 'Daniel']
 
 
 # Needed below to implement a Perfect Strangers matching.
@@ -115,7 +104,6 @@ def shifter(m):
 # SUBSESSION CLASS #
 ####################
 
-
 class Subsession(BaseSubsession):
     # From https://groups.google.com/forum/#!msg/otree/rciCzbTqSfQ/XC-T7oZrEAAJ
     def creating_session(self):
@@ -130,64 +118,17 @@ class Subsession(BaseSubsession):
 # GROUP CLASS #
 ###############
 
-
 class Group(BaseGroup):
-    # Roles
-    decider = models.StringField()
-    receiver = models.StringField()
-
-    # Genders
-#    gender = models.IntegerField()
-#    gender = make_gender_field('')
 
     message = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
-    message1 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
-    message2 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
-    message3 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
-    message4 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
-    message5 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
-    p_message = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
 
-    # Screennames
-    name = models.StringField()
-    names = Constants.names
+    # Amount taken by dictator
+    taken = make_take_field()
 
-    # Treatments: Orderings of Screennames (M, M, M, F, F or F, F, F, M, M)
-    ordering = models.StringField()
-    ordering1 = models.StringField()
-    ordering2 = models.StringField()
-    ordering3 = models.StringField()
-    ordering4 = models.StringField()
-    ordering5 = models.StringField()
+    # Dictator's offer to receiver
+    offer = models.CurrencyField()
 
-    # Offers
-    offer = make_currency_field()
-    offer1 = make_currency_field()
-    offer2 = make_currency_field()
-    offer3 = make_currency_field()
-    offer4 = make_currency_field()
-    offer5 = make_currency_field()
-
-    # Ratings
-    ratings = models.IntegerField(
-        choices=[
-            [1, 'Very Inappropriate'],
-            [2, 'Somewhat Inappropriate'],
-            [3, 'Somewhat Appropriate'],
-            [4, 'Very Appropriate'],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    rating = make_rating_field('')
-    p_rating = make_rating_field('')
-    ratinglabel = models.StringField()
-    p_rating00 = make_rating_field('$0.00')
-    p_rating05 = make_rating_field('$0.50')
-    p_rating10 = make_rating_field('$1.00')
-    p_rating15 = make_rating_field('$1.50')
-    p_rating20 = make_rating_field('$2.00')
-    p_rating25 = make_rating_field('$2.50')
-    p_rating30 = make_rating_field('$3.00')
+    # Receiver ratings of dictator's possible choices
     rating00 = make_rating_field('$0.00')
     rating05 = make_rating_field('$0.50')
     rating10 = make_rating_field('$1.00')
@@ -195,37 +136,16 @@ class Group(BaseGroup):
     rating20 = make_rating_field('$2.00')
     rating25 = make_rating_field('$2.50')
     rating30 = make_rating_field('$3.00')
-    # Self-ratings
-    selfrating00 = make_rating_field('$0.00')
-    selfrating05 = make_rating_field('$0.50')
-    selfrating10 = make_rating_field('$1.00')
-    selfrating15 = make_rating_field('$1.50')
-    selfrating20 = make_rating_field('$2.00')
-    selfrating25 = make_rating_field('$2.50')
-    selfrating30 = make_rating_field('$3.00')
-    mselfrating00 = make_rating_field('$0.00')
-    mselfrating05 = make_rating_field('$0.50')
-    mselfrating10 = make_rating_field('$1.00')
-    mselfrating15 = make_rating_field('$1.50')
-    mselfrating20 = make_rating_field('$2.00')
-    mselfrating25 = make_rating_field('$2.50')
-    mselfrating30 = make_rating_field('$3.00')
-    fselfrating00 = make_rating_field('$0.00')
-    fselfrating05 = make_rating_field('$0.50')
-    fselfrating10 = make_rating_field('$1.00')
-    fselfrating15 = make_rating_field('$1.50')
-    fselfrating20 = make_rating_field('$2.00')
-    fselfrating25 = make_rating_field('$2.50')
-    fselfrating30 = make_rating_field('$3.00')
 
-    # Amount taken by Dictator in current round
-    p_taken = make_currency_field()
-    taken = make_take_field()
-    taken1 = make_currency_field()
-    taken2 = make_currency_field()
-    taken3 = make_currency_field()
-    taken4 = make_currency_field()
-    taken5 = make_currency_field()
+    # Receiver's rating of dictator's actual choice
+    rating = models.IntegerField()
+    rating_label = models.StringField()
+
+    # Most common rating of dictator's choice for all Players in Subsession
+    modal_rating = models.IntegerField()
+
+    # Receiver's guesses about the dictators' gender
+    gender_guess = make_gender_field()
 
     #################
     # Group Methods #
@@ -237,62 +157,11 @@ class Group(BaseGroup):
     def get_receiver(self):
         return self.get_player_by_role(Globals.RECEIVER)
 
-    def set_payoffs(self):
-        decider = self.get_player_by_role('decider')
-        receiver = self.get_player_by_role('receiver')
-        decider.payoff = self.taken
-        receiver.payoff = Constants.endowment - self.taken
+    def record_payoffs(self):
+        self.get_decider().payoff = self.taken
+        self.get_receiver().payoff = Constants.endowment - self.taken
 
-    # TODO: Andrew code - get_practice_rating
-    def get_practice_rating(self):
-        pr_dict = {
-            c(0): self.p_rating00,
-            c(0.5): self.p_rating05,
-            c(1): self.p_rating10,
-            c(1.5): self.p_rating15,
-            c(2): self.p_rating20,
-            c(2.5): self.p_rating25,
-            c(3): self.p_rating30
-        }
-        self.p_rating = pr_dict[self.p_taken]
-
-        rl_dict = {
-            1: 'Very Socially Inappropriate',
-            2: 'Somewhat Socially Inappropriate',
-            3: 'Somewhat Socially Appropriate',
-            4: 'Very Socially Appropriate'
-        }
-        self.ratinglabel = rl_dict[self.p_rating]
-
-    # Mode Variables:
-    modal_rating = models.IntegerField()
-
-    def modal_rating_by_round(self):
-        decider = self.get_player_by_role('decider')
-
-        for i in [1, 2]:
-            mr_dict = {}
-            for j in [1, 2, 3, 4, 5]:
-                for x in 0, 5, 10, 15, 20, 25, 30:
-                    k = c(x / 10)
-                    temp = self.in_round(j)
-                    v = getattr(temp, "modal_rating_%02d_%d" % (x, i))
-                    mr_dict[k] = v
-
-                if getattr(self, "ordering_%d" % i):
-                    taken_string = "taken%d" % j
-                    taken_value = decider.participant.vars.get(taken_string, 0)
-
-                    attr_name = "modal_rating%d_%d" % (j, i)
-                    attr_value = mr_dict[taken_value]
-                    setattr(self, attr_name, attr_value)
-
-                    attr_name = "modal_rating%d" % j
-                    attr_value = getattr(self, "modal_rating%d_%d" % (j, i))
-                    setattr(self, attr_name, attr_value)
-
-
-    def fetch_rating(self):
+    def record_rating(self):
         rating_dict = {
             None: None,
             c(0): self.rating00,
@@ -303,168 +172,8 @@ class Group(BaseGroup):
             c(2.5): self.rating25,
             c(3): self.rating30
         }
-        return rating_dict[self.taken]
-
-    # TODO: Andrew-based code - get_ratings
-    def get_rating(self):
-        rating_dict = {
-            c(0): self.rating00,
-            c(0.5): self.rating05,
-            c(1): self.rating10,
-            c(1.5): self.rating15,
-            c(2): self.rating20,
-            c(2.5): self.rating25,
-            c(3): self.rating30
-        }
         self.rating = rating_dict[self.taken]
-
-        self.ratinglabel = Globals.RATING_LABEL_DICT[self.rating]
-
-    # TODO: Andrew-based code - get_offer
-    def get_offer(self):
-        for p in self.get_players():
-            var_name1 = 'taken' + str(self.round_number)
-            p.participant.vars[var_name1] = self.taken
-            self.offer = Constants.endowment - self.taken
-            var_name2 = 'offer' + str(self.round_number)
-            p.participant.vars[var_name2] = self.offer
-            # if self.round_number == 1:
-            #     p.participant.vars['taken1'] = self.taken
-            #     self.offer = Constants.endowment - self.taken
-            #     p.participant.vars['offer1'] = self.offer
-
-    # TODO: Andrew-based code - get_my_rating
-    def get_my_rating(self):
-        for p in self.get_players():
-            var1_name = 'rating' + str(self.round_number)
-            p.participant.vars[var1_name] = self.rating
-            var2_name = 'ratinglabel' + str(self.round_number)
-            p.participant.vars[var2_name] = self.ratinglabel
-
-    def get_my_messages(self):
-        for p in self.get_players():
-            if self.round_number == 1:
-                self.message1 = self.message
-                p.participant.vars['message1'] = self.message
-            if self.round_number == 2:
-                self.message2 = self.message
-                p.participant.vars['message2'] = self.message
-            if self.round_number == 3:
-                self.message3 = self.message
-                p.participant.vars['message3'] = self.message
-            if self.round_number == 4:
-                self.message4 = self.message
-                p.participant.vars['message4'] = self.message
-            if self.round_number == 5:
-                self.message5 = self.message
-                p.participant.vars['message5'] = self.message
-
-    ###########################
-    # GROUP - Gender Guesses: #
-    ###########################
-
-    def get_partner(self):
-        return self.get_others_in_group()[0]
-
-    def check_gender(self):
-        decider = self.get_player_by_role('decider')
-        receiver = self.get_player_by_role('receiver')
-        if decider.genderCP1 == decider.participant.vars.get('gender_CP_1', 0):
-            decider.guess1_is_correct = True
-        else:
-            decider.guess1_is_correct = False
-        if receiver.genderCP1 == receiver.participant.vars.get('gender_CP_1', 0):
-            receiver.guess1_is_correct = True
-        else:
-            receiver.guess1_is_correct = False
-        if decider.genderCP2 == decider.participant.vars.get('gender_CP_2', 0):
-            decider.guess2_is_correct = True
-        else:
-            decider.guess2_is_correct = False
-        if receiver.genderCP2 == receiver.participant.vars.get('gender_CP_2', 0):
-            receiver.guess2_is_correct = True
-        else:
-            receiver.guess2_is_correct = False
-        if decider.genderCP3 == decider.participant.vars.get('gender_CP_3', 0):
-            decider.guess3_is_correct = True
-        else:
-            decider.guess3_is_correct = False
-        if receiver.genderCP3 == receiver.participant.vars.get('gender_CP_3', 0):
-            receiver.guess3_is_correct = True
-        else:
-            receiver.guess3_is_correct = False
-        if decider.genderCP4 == decider.participant.vars.get('gender_CP_4', 0):
-            decider.guess4_is_correct = True
-        else:
-            decider.guess4_is_correct = False
-        if receiver.genderCP4 == receiver.participant.vars.get('gender_CP_4', 0):
-            receiver.guess4_is_correct = True
-        else:
-            receiver.guess4_is_correct = False
-        if decider.genderCP5 == decider.participant.vars.get('gender_CP_5', 0):
-            decider.guess5_is_correct = True
-        else:
-            decider.guess5_is_correct = False
-        if receiver.genderCP5 == receiver.participant.vars.get('gender_CP_5', 0):
-            receiver.guess5_is_correct = True
-        else:
-            receiver.guess5_is_correct = False
-
-    def set_guesses(self):
-        if self.genderCP1 == 1:
-            self.genderlabel1 = 'Male'
-        if self.genderCP1 == 2:
-            self.player.genderlabel1 = 'Female'
-        if self.genderCP1 == 3:
-            self.player.genderlabel1 = 'Other'
-        if self.player.genderCP2 == 1:
-            self.player.genderlabel2 = 'Male'
-        if self.player.genderCP2 == 2:
-            self.player.genderlabel2 = 'Female'
-        if self.player.genderCP2 == 3:
-            self.player.genderlabel2 = 'Other'
-        if self.player.genderCP3 == 1:
-            self.player.genderlabel3 = 'Male'
-        if self.player.genderCP3 == 2:
-            self.player.genderlabel3 = 'Female'
-        if self.player.genderCP3 == 3:
-            self.player.genderlabel3 = 'Other'
-        if self.player.genderCP4 == 1:
-            self.player.genderlabel4 = 'Male'
-        if self.player.genderCP4 == 2:
-            self.player.genderlabel4 = 'Female'
-        if self.player.genderCP4 == 3:
-            self.player.genderlabel4 = 'Other'
-        if self.player.genderCP5 == 1:
-            self.player.genderlabel5 = 'Male'
-        if self.player.genderCP5 == 2:
-            self.player.genderlabel5 = 'Female'
-        if self.player.genderCP5 == 3:
-            self.player.genderlabel5 = 'Other'
-
-    def check_guesses(self):
-        p1 = self.get_player_by_id(1)
-        p2 = self.get_player_by_id(2)
-        if p1.genderCP1 == p2.participant.vars['gender']:
-            p1.guess1_is_correct = True
-        if p1.genderCP2 == p2.gender:
-            p1.guess2_is_correct = True
-        if p1.genderCP3 == p2.gender:
-            p1.guess3_is_correct = True
-        if p1.genderCP4 == p2.gender:
-            p1.guess4_is_correct = True
-        if p1.genderCP5 == p2.gender:
-            p1.guess5_is_correct = True
-        if p2.genderCP1 == p1.gender:
-            p2.guess1_is_correct = True
-        if p2.genderCP2 == p1.gender:
-            p2.guess2_is_correct = True
-        if p2.genderCP3 == p1.gender:
-            p2.guess3_is_correct = True
-        if p2.genderCP4 == p1.gender:
-            p2.guess4_is_correct = True
-        if p2.genderCP5 == p1.gender:
-            p2.guess5_is_correct = True
+        self.rating_label = Globals.RATING_LABEL_DICT[self.rating]
 
 
 ################
@@ -472,358 +181,22 @@ class Group(BaseGroup):
 ################
 
 class Player(BasePlayer):
-    # Survey Questions
-    age = models.IntegerField(blank=ALLOW_BLANKS, label='What is your age?')
-    year = models.IntegerField(blank=ALLOW_BLANKS,
-                               choices=[
-                                   [1, 'Freshman'],
-                                   [2, 'Sophomore'],
-                                   [3, 'Junior'],
-                                   [4, 'Senior'],
-                               ],
-                               label='What is your year in school?',
-                               widget=widgets.RadioSelect
-                               )
-    major = make_string_field('What is your major?')
 
-    # Practice Questions
-    question1 = make_yn_field('When rating a Decider with the screenname Decider A taking $X, the most common rating '
-                              'by other Receivers was "Somewhat Appropriate." If Decider A chose to take $X, would you '
-                              'win a prize for your appropriateness rating?')
-    question2 = make_yn_field('When rating a Decider with the screenname Decider A taking $Y, the most common rating by'
-                              ' other Receivers was "Somewhat Appropriate." If Decider A chose to take $Y, would you '
-                              'win a prize for your appropriateness rating?')
-    question3 = make_yn_field('When rating a Decider with the screenname Decider A taking $X, the most common rating by'
-                              ' other Receivers was "Somewhat Inappropriate." If Decider A chose to take $X, would you '
-                              'win a prize for your appropriateness rating?')
-
-    role_question = models.IntegerField(blank=ALLOW_BLANKS,
-                                        choices=[
-                                            [1, 'Receiver'],
-                                            [2, 'Decider'],
-                                            [3, 'Either Receiver or Decider: Roles are chosen randomly every round'],
-                                        ],
-                                        label=False,
-                                        widget=widgets.RadioSelect
-                                        )
-    offer_question_1 = models.IntegerField(blank=ALLOW_BLANKS,
-                                           choices=[
-                                               [1, '$X'],
-                                               [2, '$1.00 - $X'],
-                                               [3, '$3.00 - $X'],
-                                           ],
-                                           label='How much money would your matched Receiver get?',
-                                           widget=widgets.RadioSelect
-                                           )
-    taken_question_1 = models.IntegerField(blank=ALLOW_BLANKS,
-                                           choices=[
-                                               [1, '$X'],
-                                               [2, '$1.00 - $X'],
-                                               [3, '$3.00 - $X'],
-                                           ],
-                                           label='How much money did your matched Decider take?',
-                                           widget=widgets.RadioSelect
-                                           )
-
-    q1_is_correct = models.BooleanField(blank=False)
-    q2_is_correct = models.BooleanField(blank=False)
-    q3_is_correct = models.BooleanField(blank=False)
-    q4_is_correct = models.BooleanField(blank=False)
-    q5_is_correct = models.BooleanField(blank=False)
-    q6_is_correct = models.BooleanField(blank=False)
-    q7_is_correct = models.BooleanField(blank=False)
-    q8_is_correct = models.BooleanField(blank=False)
-
-    # Screennames
-    name = models.StringField()
-    names = Constants.names
-    ordering = models.StringField()
-
-    # Round variables
-    rating = make_rating_field('')
-    taken = make_currency_field()
-    offer = make_currency_field()
-
-    message = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
-    message1 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
-    message2 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
-    message3 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
-    message4 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
-    message5 = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
-
-    # Gender variables
-    Male = models.StringField()
-    Female = models.StringField()
-    Other = models.StringField()
-    gender = make_gender_field()
-    # Create labels for each numerical gender field
-    genderlabel1 = models.StringField()
-    genderlabel2 = models.StringField()
-    genderlabel3 = models.StringField()
-    genderlabel4 = models.StringField()
-    genderlabel5 = models.StringField()
-    # Used in "check gender guess", "set gender guesses" and "set guess"
-    genderCP1 = make_gender_field()
-    genderCP2 = make_gender_field()
-    genderCP3 = make_gender_field()
-    genderCP4 = make_gender_field()
-    genderCP5 = make_gender_field()
-
-    # Checking gender guesses for correctness
-    guess1_is_correct = models.BooleanField(blank=False)
-    guess2_is_correct = models.BooleanField(blank=False)
-    guess3_is_correct = models.BooleanField(blank=False)
-    guess4_is_correct = models.BooleanField(blank=False)
-    guess5_is_correct = models.BooleanField(blank=False)
-
-    mode_matched = models.BooleanField()
-    mode_matched1 = models.BooleanField()
-    mode_matched2 = models.BooleanField()
-    mode_matched3 = models.BooleanField()
-    mode_matched4 = models.BooleanField()
-    mode_matched5 = models.BooleanField()
-
-    ##################
-    # PLAYER METHODS #
-    ##################
-    # Other Variables
     cumulative_payoff = models.CurrencyField()
 
     # Player Methods
+    def get_partner(self):
+        return self.get_others_in_group()[0]
+
+    def record_cumulative_payoffs(self):
+        self.cumulative_payoff = sum([p.payoff for p in self.in_all_rounds()])
+
     def role(self):
         if self.id_in_group == 1:
             return 'decider'
         if self.id_in_group == 2:
             return 'receiver'
 
-    def other_player(self):
-        return self.get_others_in_group()[0]
-
-    def set_payoffs(self):
-        decider = self.group.get_player_by_role('decider')
-        receiver = self.group.get_player_by_role('receiver')
-        decider.payoff = self.group.taken
-        receiver.payoff = Constants.endowment - self.group.taken
-
-    def calculate_payoffs(self):
-        self.cumulative_payoff = sum([p.payoff for p in self.in_all_rounds()])
-
-    def get_survey_prizes(self):
-        self.payoff = (self.guess1_is_correct + self.guess2_is_correct + self.guess3_is_correct
-                       + self.guess4_is_correct + self.guess5_is_correct) * Constants.prize
-
     def get_screenname(self):
         return self.participant.vars['screenname']
-
-    def get_names(self):
-        if self.round_number == 1:
-            self.participant.vars['name1'] = self.group.names[0]
-            self.name = self.names[0]
-            self.group.name = self.name
-        if self.round_number == 2:
-            self.participant.vars['name2'] = self.group.names[1]
-            self.name = self.names[1]
-            self.group.name = self.name
-        if self.round_number == 3:
-            self.participant.vars['name3'] = self.group.names[2]
-            self.name = self.names[2]
-            self.group.name = self.name
-        if self.round_number == 4:
-            self.participant.vars['name4'] = self.group.names[3]
-            self.name = self.names[3]
-            self.group.name = self.name
-        if self.round_number == 5:
-            self.participant.vars['name5'] = self.group.names[4]
-            self.name = self.names[4]
-            self.group.name = self.name
-
-    def get_my_messages(self):
-        if self.round_number == 1:
-            self.message1 = self.group.message
-            self.participant.vars['message1'] = self.group.message
-        if self.round_number == 2:
-            self.message2 = self.group.message
-            self.participant.vars['message2'] = self.group.message
-        if self.round_number == 3:
-            self.message3 = self.group.message
-            self.participant.vars['message3'] = self.group.message
-        if self.round_number == 4:
-            self.message4 = self.group.message
-            self.participant.vars['message4'] = self.group.message
-        if self.round_number == 5:
-            self.message5 = self.group.message
-            self.participant.vars['message5'] = self.group.message
-
-    ######################################
-    #  PLAYER - Checking Gender Guesses: #
-    ######################################
-
-    def get_genders(self):
-        d = self.get_player_by_id(1)
-        r = self.get_player_by_id(2)
-        self.genderD1 = d.gender
-        self.genderR1 = r.gender
-
-    def get_gender(self):
-        decider = self.group.get_player_by_role('decider')
-        receiver = self.group.get_player_by_role('receiver')
-        if self.round_number == 1:
-            decider.participant.vars['gender_CP_1'] = receiver.participant.vars.get('gender', 0)
-            receiver.participant.vars['gender_CP_1'] = decider.participant.vars.get('gender', 0)
-        if self.round_number == 2:
-            decider.participant.vars['gender_CP_2'] = receiver.participant.vars.get('gender', 0)
-            receiver.participant.vars['gender_CP_2'] = decider.participant.vars.get('gender', 0)
-        if self.round_number == 3:
-            decider.participant.vars['gender_CP_3'] = receiver.participant.vars.get('gender', 0)
-            receiver.participant.vars['gender_CP_3'] = decider.participant.vars.get('gender', 0)
-        if self.round_number == 4:
-            decider.participant.vars['gender_CP_4'] = receiver.participant.vars.get('gender', 0)
-            receiver.participant.vars['gender_CP_4'] = decider.participant.vars.get('gender', 0)
-        if self.round_number == 5:
-            decider.participant.vars['gender_CP_5'] = receiver.participant.vars.get('gender', 0)
-            receiver.participant.vars['gender_CP_5'] = decider.participant.vars.get('gender', 0)
-
-    def get_gender_by_round(self):
-        if self.round_number == 1:
-            self.participant.vars['gender_1'] = self.gender
-            self.participant.vars['genderCP_1'] = self.other_player().gender
-        if self.round_number == 2:
-            self.participant.vars['gender_2'] = self.gender
-            self.participant.vars['genderCP_2'] = self.other_player().gender
-        if self.round_number == 3:
-            self.participant.vars['gender_3'] = self.gender
-            self.participant.vars['genderCP_3'] = self.other_player().gender
-        if self.round_number == 4:
-            self.participant.vars['gender_4'] = self.gender
-            self.participant.vars['genderCP_4'] = self.other_player().gender
-        if self.round_number == 5:
-            self.participant.vars['gender_5'] = self.gender
-            self.participant.vars['genderCP_5'] = self.other_player().gender
-
-    def set_gender(self):
-        if self.gender == 1:
-            self.participant.vars['Gender'] = 'Male'
-        if self.gender == 2:
-            self.participant.vars['Gender'] = 'Female'
-        if self.gender == 3:
-            self.participant.vars['Gender'] = 'Other'
-
-    def set_gender_guesses(self):
-        p1 = self.group.get_player_by_id(1)
-        p2 = self.group.get_player_by_id(2)
-        if self.genderCP1 == p1.participant.vars['gender']:
-            self.guess1_is_correct = True
-        if self.genderCP1 == p2.participant.vars['gender']:
-            self.guess1_is_correct = True
-
-    def set_guess(self):
-        if self.genderCP1 == 1:
-            self.genderlabel1 = 'Male'
-        if self.genderCP1 == 2:
-            self.genderlabel1 = 'Female'
-        if self.genderCP1 == 3:
-            self.genderlabel1 = 'Other'
-        if self.genderCP2 == 1:
-            self.genderlabel2 = 'Male'
-        if self.genderCP2 == 2:
-            self.genderlabel2 = 'Female'
-        if self.genderCP2 == 3:
-            self.genderlabel2 = 'Other'
-        if self.genderCP3 == 1:
-            self.genderlabel3 = 'Male'
-        if self.genderCP3 == 2:
-            self.genderlabel3 = 'Female'
-        if self.genderCP3 == 3:
-            self.genderlabel3 = 'Other'
-        if self.genderCP4 == 1:
-            self.genderlabel4 = 'Male'
-        if self.genderCP4 == 2:
-            self.genderlabel4 = 'Female'
-        if self.genderCP4 == 3:
-            self.genderlabel4 = 'Other'
-        if self.genderCP5 == 1:
-            self.genderlabel5 = 'Male'
-        if self.genderCP5 == 2:
-            self.genderlabel5 = 'Female'
-        if self.genderCP5 == 3:
-            self.genderlabel5 = 'Other'
-
-    def check_gender_guess(self):
-        self.participant.vars['genderCP1'] = self.genderCP1
-        self.participant.vars['genderCP2'] = self.genderCP2
-        self.participant.vars['genderCP3'] = self.genderCP3
-        self.participant.vars['genderCP4'] = self.genderCP4
-        self.participant.vars['genderCP5'] = self.genderCP5
-        p1 = self.group.get_player_by_id(1)
-        p2 = self.group.get_player_by_id(2)
-        if p1.genderCP1 == p2.gender:
-            p1.guess1_is_correct = True
-        if p1.genderCP2 == p2.gender:
-            p1.guess2_is_correct = True
-        if p1.genderCP3 == p2.gender:
-            p1.guess3_is_correct = True
-        if p1.genderCP4 == p2.gender:
-            p1.guess4_is_correct = True
-        if p1.genderCP5 == p2.gender:
-            p1.guess5_is_correct = True
-        if p2.genderCP1 == p1.gender:
-            p2.guess1_is_correct = True
-        if p2.genderCP2 == p1.gender:
-            p2.guess2_is_correct = True
-        if p2.genderCP3 == p1.gender:
-            p2.guess3_is_correct = True
-        if p2.genderCP4 == p1.gender:
-            p2.guess4_is_correct = True
-        if p2.genderCP5 == p1.gender:
-            p2.guess5_is_correct = True
-
-    def p_mode_match(self):
-        if self.group.rating == self.group.modal_rating:
-            self.mode_matched = True
-            self.payoff = Constants.prize
-
-    def mode_match(self):
-        decider = self.group.get_player_by_role('decider')
-        if self.group.ordering_1:
-            if self.round_number == 1:
-                if self.group.modal_rating1_1 == self.group.rating:
-                    self.mode_matched1 = True
-                    self.payoff = Constants.prize
-            if self.round_number == 2:
-                if self.group.modal_rating2_1 == decider.participant.vars.get('rating2', 0):
-                    self.mode_matched2 = True
-                    self.payoff = Constants.prize
-            if self.round_number == 3:
-                if self.group.modal_rating3_1 == decider.participant.vars.get('rating3', 0):
-                    self.mode_matched3 = True
-                    self.payoff = Constants.prize
-            if self.round_number == 4:
-                if self.group.modal_rating4_1 == decider.participant.vars.get('rating4', 0):
-                    self.mode_matched4 = True
-                    self.payoff = Constants.prize
-            if self.round_number == 5:
-                if self.group.modal_rating5_1 == decider.participant.vars.get('rating5', 0):
-                    self.mode_matched5 = True
-                    self.payoff = Constants.prize
-        if self.group.ordering_2:
-            if self.round_number == 1:
-                if self.group.modal_rating1_2 == decider.participant.vars.get('rating1', 0):
-                    self.mode_matched1 = True
-                    self.payoff = Constants.prize
-            if self.round_number == 2:
-                if self.group.modal_rating2_2 == decider.participant.vars.get('rating2', 0):
-                    self.mode_matched2 = True
-                    self.payoff = Constants.prize
-            if self.round_number == 3:
-                if self.group.modal_rating3_2 == decider.participant.vars.get('rating3', 0):
-                    self.mode_matched3 = True
-                    self.payoff = Constants.prize
-            if self.round_number == 4:
-                if self.group.modal_rating4_2 == decider.participant.vars.get('rating4', 0):
-                    self.mode_matched4 = True
-                    self.payoff = Constants.prize
-            if self.round_number == 5:
-                if self.group.modal_rating5_2 == decider.participant.vars.get('rating5', 0):
-                    self.mode_matched5 = True
-                    self.payoff = Constants.prize
 

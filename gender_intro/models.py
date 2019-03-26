@@ -156,7 +156,7 @@ class Group(BaseGroup):
     p_rating25 = make_rating_field('$2.50')
     p_rating30 = make_rating_field('$3.00')
 
-    # Receiver's rating of dictator's acutal choice
+    # Receiver's rating of dictator's actual choice
     p_rating = models.IntegerField()
     p_rating_label = models.StringField()
 
