@@ -132,9 +132,9 @@ class ResultRow:
         self.took = took
         self.offered = offered
         self.rating = rating
-        self.rating_label = Globals.rating_label_dict[rating]
+        self.rating_label = Globals.RATING_LABEL_DICT[rating]
         self.modal_rating = modal_rating
-        self.modal_rating_label = Globals.rating_label_dict[modal_rating]
+        self.modal_rating_label = Globals.RATING_LABEL_DICT[modal_rating]
 
 
 class Results(Page):

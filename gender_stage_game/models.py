@@ -81,7 +81,7 @@ class Constants(BaseConstants):
     rounds = 5
     round_numbers = list(range(1, num_rounds + 1))
 
-    instructions_template = 'gender_intro/Instructions_Full.html'
+    instructions_template = 'gender_intro/InstructionsFull.html'
 
     # Monetary amounts
     endowment = c(3)
@@ -318,7 +318,7 @@ class Group(BaseGroup):
         }
         self.rating = rating_dict[self.taken]
 
-        self.ratinglabel = Globals.rating_label_dict[self.rating]
+        self.ratinglabel = Globals.RATING_LABEL_DICT[self.rating]
 
     # TODO: Andrew-based code - get_offer
     def get_offer(self):
