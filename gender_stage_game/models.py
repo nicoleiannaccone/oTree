@@ -4,7 +4,7 @@ from otree.api import (
 )
 
 from globals import Globals
-from settings import ALLOW_BLANKS, TREATMENT_NO_GENDER, TREATMENT_TRUE_GENDER, TREATMENT_FALSE_GENDER
+from settings import ALLOW_BLANKS
 
 
 doc = """
@@ -143,9 +143,6 @@ class Group(BaseGroup):
 
     # Most common rating of dictator's choice for all Players in Subsession
     modal_rating = models.IntegerField()
-
-    # Receiver's guesses about the dictators' gender
-    gender_guess = make_gender_field()
 
     #################
     # Group Methods #
