@@ -29,7 +29,7 @@ class D_Take(Page):
     form_fields = ['taken']
 
     def is_displayed(self):
-        return self.player.is_receiver()
+        return self.player.is_decider()
 
     def vars_for_template(self):
         return {
@@ -42,7 +42,7 @@ class D_Take(Page):
 
 class D_Wait_Page(WaitPage):
     def is_displayed(self):
-        return self.player.is_receiver()
+        return self.player.is_decider()
 
 
 class R_Rating(Page):
@@ -56,6 +56,9 @@ class R_Rating(Page):
         return {
             'dname': self.group.get_decider().participant.vars['screenname']
         }
+
+    def before_next_page(self):
+        self.group.record_rating()
 
 
 class RoundWaitPage(WaitPage):
@@ -125,10 +128,11 @@ class Results(Page):
         result_table = list()
         for round_number in Constants.round_numbers:
             g = self.group.in_round(round_number)
+
             dname = g.get_decider().get_screenname()
             took = g.taken
             offered = None if (g.taken is None) else (c(3) - g.taken)
-            rating = g.fetch_rating()
+            rating = g.rating
             rating_list = receiver_ratings.get((round_number, decimal.Decimal(g.taken)), None)
             modal_rating = collections.Counter(rating_list).most_common(1)[0][0] if rating_list else None
             rr = ResultRow(round_number, dname, took, offered, rating, modal_rating)

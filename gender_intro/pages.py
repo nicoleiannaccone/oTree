@@ -187,4 +187,7 @@ page_sequence = [
 ]
 
 if not INCLUDE_GENDER_INTRO:
-    page_sequence = []
+    page_sequence = [
+        PreSurvey,
+        PreSurveyWaitPage
+    ]
