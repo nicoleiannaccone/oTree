@@ -84,14 +84,6 @@ class Constants(BaseConstants):
 
     instructions_template = 'gender_intro/Instructions_Full.html'
 
-    rating_label_dict = {
-        None: 'None appropriate',
-        1: 'Very Socially Inappropriate',
-        2: 'Somewhat Socially Inappropriate',
-        3: 'Somewhat Socially Appropriate',
-        4: 'Very Socially Appropriate'
-    }
-
     # Monetary amounts
     endowment = c(3)
     prize = c(0.5)
@@ -332,13 +324,7 @@ class Group(BaseGroup):
             if g.p_taken == c(3):
                 g.modal_p_rating = self.modal_rating_p30
 
-            practice_label_dict = {
-                1: 'Very Socially Inappropriate',
-                2: 'Somewhat Socially Inappropriate',
-                3: 'Somewhat Socially Appropriate',
-                4: 'Very Socially Appropriate'
-            }
-            self.practice_mode_rating_label = practice_label_dict[self.modal_p_rating] if self.modal_p_rating else None
+            self.practice_mode_rating_label = Globals.rating_label_dict[self.modal_p_rating] if self.modal_p_rating else None
 
     def get_practice_offer(self):
         for p in self.get_players():
@@ -519,12 +505,6 @@ class Player(BasePlayer):
 
     def get_payoffs(self):
         cumulative_payoff = sum([p.payoff for p in self.in_all_rounds()])
-
-    # Checking whether subject's rating matched the modal rating
-    def p_mode_match(self):
-        if self.group.p_rating == self.group.p_modal_rating:
-            self.p_mode_matched = True
-            self.payoff = Constants.prize
 
     ######################################
     #  PLAYER - Setting Players' Genders #

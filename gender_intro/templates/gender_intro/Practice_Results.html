@@ -38,10 +38,10 @@
             {{ result_row.p_offered }}
         </td>
         <td>
-            {{ result_row.p_rating }}
+            {{ result_row.p_rating_label }}
         </td>
         <td>
-            {{ result_row.p_modal_rating }}
+            {{ result_row.p_modal_rating_label }}
         </td>
     </tr>
 </table>
@@ -51,8 +51,8 @@
             <p> You decided to take <strong>{{ result_row.p_took }}</strong> of the Receiver's endowment for yourself.
             </p>
             <p>
-                The most common rating that Receivers gave to an allocation of this amount was {{ result_row.p_modal_rating }}.
-                Your Receiver rated this choice as <strong>{{ result_row.p_rating }}</strong>, and wrote you the following message:
+                The most common rating that Receivers gave to an allocation of this amount was {{ result_row.p_modal_rating_label }}.
+                Your Receiver rated this choice as <strong>{{ result_row.p_rating_label }}</strong>, and wrote you the following message:
             </p>
             <p>
             <strong>{{ group.p_message }}</strong>
@@ -64,17 +64,17 @@
                 endowment.
             </p>
             <p>
-                You rated this choice as <strong>{{ result_row.p_rating}}</strong>.
+                You rated this choice as <strong>{{ result_row.p_rating_label }}</strong>.
             </p>
             <p>
                 The most common rating that other Receivers assigned to an allocation of the amount {{ result_row.p_took }}
-                taken by your Decider was <strong> {{ result_row.p_modal_rating }} </strong>.
-                {% if player.p_mode_matched == True %}
-                <p> Since your own rating, {{ result_row.p_rating }}, matched the most common rating,
-                    {{ result_row.p_modal_rating }},  you win a prize of {{ Constants.prize }}. </p>
+                taken by your Decider was <strong> {{ result_row.p_modal_rating_label }} </strong>.
+                {% if result_row.p_rating_label == result_row.p_modal_rating_label %}
+                <p> Since your own rating, {{ result_row.p_rating_label }}, matched the most common rating,
+                    {{ result_row.p_modal_rating_label }},  you win a prize of {{ Constants.prize }}. </p>
                 {% else %}
-                <p> Your rating of the amount your Decider took, {{ result_row.p_rating }}, did not match the most common
-                    rating assigned to an allocation of that amount, {{ result_row.p_modal_rating }}. </p>
+                <p> Your rating of the amount your Decider took, {{ result_row.p_rating_label }}, did not match the most common
+                    rating assigned to an allocation of that amount, {{ result_row.p_modal_rating_label }}. </p>
                 {% endif %}
             </p>
         {% endif %}
@@ -82,7 +82,7 @@
 {% comment %}
 <p>
     -- Checking ratings -- Group.p_rating:
-{{ group.p_rating }},
+{{ group.p_rating_label }},
 Modal rating 00:
 {{ group.modal_rating_p00 }},
 Modal rating 05:

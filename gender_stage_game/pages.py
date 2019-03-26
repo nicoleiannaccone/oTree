@@ -4,6 +4,8 @@ from .models import Constants
 import collections
 import decimal
 
+from globals import Globals
+
 
 # Stage Game
 class D_Name(Page):
@@ -130,9 +132,9 @@ class ResultRow:
         self.took = took
         self.offered = offered
         self.rating = rating
-        self.rating_label = Constants.rating_label_dict[rating]
+        self.rating_label = Globals.rating_label_dict[rating]
         self.modal_rating = modal_rating
-        self.modal_rating_label = Constants.rating_label_dict[modal_rating]
+        self.modal_rating_label = Globals.rating_label_dict[modal_rating]
 
 
 class Results(Page):
