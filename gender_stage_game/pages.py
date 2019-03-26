@@ -37,7 +37,7 @@ class D_Take(Page):
         }
 
     def before_next_page(self):
-        self.group.record_payoffs()
+        self.group.record_taken_payoffs()
 
 
 class D_Wait_Page(WaitPage):
@@ -54,32 +54,25 @@ class R_Rating(Page):
 
     def vars_for_template(self):
         return {
-            'dname': self.group.get_decider().participant.vars['screenname']
+            'dname': self.group.get_decider().get_screenname()
         }
-
-    def before_next_page(self):
-        self.group.record_rating()
 
 
 class RoundWaitPage(WaitPage):
     def after_all_players_arrive(self):
         self.group.record_rating()
-        self.group.record_payoffs()
 
 
 class R_Message(Page):
     form_model = 'group'
-    form_fields = ['message']  # this means player.message1
+    form_fields = ['message']
 
     def is_displayed(self):
         return self.player.is_receiver()
 
-    def before_next_page(self):
-        self.group.get_my_messages()
-
     def vars_for_template(self):
         return {
-            'dname': self.group.get_decider().participant.vars['screenname'],
+            'dname': self.group.get_decider().get_screenname(),
         }
 
 
@@ -132,11 +125,14 @@ class Results(Page):
             dname = g.get_decider().get_screenname()
             took = g.taken
             offered = None if (g.taken is None) else (c(3) - g.taken)
-            rating = g.rating
             rating_list = receiver_ratings.get((round_number, decimal.Decimal(g.taken)), None)
-            modal_rating = collections.Counter(rating_list).most_common(1)[0][0] if rating_list else None
-            rr = ResultRow(round_number, dname, took, offered, rating, modal_rating)
+            g.modal_rating = collections.Counter(rating_list).most_common(1)[0][0] if rating_list else None
+            rr = ResultRow(round_number, dname, took, offered, g.rating, g.modal_rating)
             result_table.append(rr)
+
+            if self.player.is_receiver():
+                if g.rating == g.modal_rating:
+                    self.player.add_to_payoff(Constants.prize)
 
         return {
             'result_table': result_table,
@@ -179,6 +175,8 @@ page_sequence = [
     D_Wait_Page,
     R_Rating,
     RoundWaitPage,
+    R_Message,
+    Message_WaitPage,
     ResultsWaitPage,
     Results,
 ]

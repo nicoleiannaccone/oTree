@@ -1,3 +1,4 @@
+import typing
 from otree.api import (
     models, widgets, BaseConstants, BaseSubsession, BaseGroup, BasePlayer,
     Currency as c, currency_range,
@@ -5,9 +6,6 @@ from otree.api import (
 
 from globals import Globals
 from settings import ALLOW_BLANKS, TREATMENT_NO_GENDER, TREATMENT_TRUE_GENDER, TREATMENT_FALSE_GENDER
-
-from collections import Counter
-import itertools
 
 doc = """
 One player decides how much to take from the other
@@ -138,66 +136,6 @@ class Subsession(BaseSubsession):
         self.set_group_matrix(fd[self.round_number - 1])
 
 
-###############
-# GROUP CLASS #
-###############
-
-class Group(BaseGroup):
-
-    # Amount taken by dictator
-    p_taken = make_currency_field('')
-    p_offered = models.CurrencyField()
-
-    # Receiver's ratings of dictator's possible choices
-    p_rating00 = make_rating_field('$0.00')
-    p_rating05 = make_rating_field('$0.50')
-    p_rating10 = make_rating_field('$1.00')
-    p_rating15 = make_rating_field('$1.50')
-    p_rating20 = make_rating_field('$2.00')
-    p_rating25 = make_rating_field('$2.50')
-    p_rating30 = make_rating_field('$3.00')
-
-    # Receiver's rating of dictator's actual choice
-    p_rating = models.IntegerField()
-    p_rating_label = models.StringField()
-
-    # Receiver's message to dictator
-    p_message = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
-
-    #################
-    # Group Methods #
-    #################
-
-    def get_decider(self):
-        return self.get_player_by_role(Globals.DECIDER)
-
-    def get_receiver(self):
-        return self.get_player_by_role(Globals.RECEIVER)
-
-    def record_offer(self):
-        self.p_offered = c(3) - self.p_taken
-
-    def record_practice_payoffs(self):
-        receiver = self.get_receiver()
-        decider = self.get_decider()
-        decider.payoff = decider.payoff + self.p_taken
-        receiver.payoff = receiver.payoff + self.p_offered
-
-    def record_practice_rating(self):
-        pr_dict = {
-            None: None,
-            c(0): self.p_rating00,
-            c(0.5): self.p_rating05,
-            c(1): self.p_rating10,
-            c(1.5): self.p_rating15,
-            c(2): self.p_rating20,
-            c(2.5): self.p_rating25,
-            c(3): self.p_rating30
-        }
-        self.p_rating = pr_dict[self.p_taken] if self.p_taken else None
-        self.p_rating_label = Globals.RATING_LABEL_DICT[self.p_rating]
-
-
 ################
 # PLAYER CLASS #
 ################
@@ -303,6 +241,12 @@ class Player(BasePlayer):
     def other_player(self):
         return self.get_others_in_group()[0]
 
+    def add_to_payoff(self, amount):
+        self.payoff += amount
+        if 'payoff' not in self.participant.vars:
+            self.participant.vars['payoff'] = 0
+        self.participant.vars['payoff'] += amount
+
     # Checking practice questions for correctness
     def record_quiz_scores(self):
         self.q1_is_correct = (self.question1 == 2)
@@ -313,5 +257,65 @@ class Player(BasePlayer):
         self.q7_is_correct = (self.role_question == 2)
 
     def record_quiz_payoff(self):
-        self.payoff = (self.q1_is_correct + self.q2_is_correct + self.q3_is_correct
+        quiz_payoff = (self.q1_is_correct + self.q2_is_correct + self.q3_is_correct
                        + self.q5_is_correct + self.q6_is_correct + self.q7_is_correct) * Constants.prize
+        self.add_to_payoff(quiz_payoff)
+
+
+###############
+# GROUP CLASS #
+###############
+
+class Group(BaseGroup):
+
+    # Amount taken by dictator
+    p_taken = make_currency_field('')
+    p_offered = models.CurrencyField()
+
+    # Receiver's ratings of dictator's possible choices
+    p_rating00 = make_rating_field('$0.00')
+    p_rating05 = make_rating_field('$0.50')
+    p_rating10 = make_rating_field('$1.00')
+    p_rating15 = make_rating_field('$1.50')
+    p_rating20 = make_rating_field('$2.00')
+    p_rating25 = make_rating_field('$2.50')
+    p_rating30 = make_rating_field('$3.00')
+
+    # Receiver's rating of dictator's actual choice
+    p_rating = models.IntegerField()
+    p_rating_label = models.StringField()
+
+    # Receiver's message to dictator
+    p_message = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
+
+    #################
+    # Group Methods #
+    #################
+
+    def get_decider(self) -> Player:
+        return typing.cast(Player, self.get_player_by_role(Globals.DECIDER))
+
+    def get_receiver(self) -> Player:
+        return typing.cast(Player, self.get_player_by_role(Globals.RECEIVER))
+
+    def record_offer(self):
+        self.p_offered = c(3) - self.p_taken
+
+    def record_practice_payoffs(self):
+        self.get_decider().add_to_payoff(self.p_taken)
+        self.get_receiver().add_to_payoff(self.p_offered)
+
+    def record_practice_rating(self):
+        pr_dict = {
+            None: None,
+            c(0): self.p_rating00,
+            c(0.5): self.p_rating05,
+            c(1): self.p_rating10,
+            c(1.5): self.p_rating15,
+            c(2): self.p_rating20,
+            c(2.5): self.p_rating25,
+            c(3): self.p_rating30
+        }
+        self.p_rating = pr_dict[self.p_taken] if self.p_taken else None
+        self.p_rating_label = Globals.RATING_LABEL_DICT[self.p_rating]
+

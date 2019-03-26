@@ -166,7 +166,7 @@ class PracticeResults(Page):
 
         if self.player.is_receiver():
             if p_rating == p_modal_rating:
-                self.player.payoff = self.player.payoff + Constants.prize
+                self.player.add_to_payoff(Constants.prize)
 
         return {
             'result_row': rr,

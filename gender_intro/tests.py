@@ -43,7 +43,7 @@ class PlayerBot(Bot):
         else:
             raise Exception("Apparently I'm neither decider nor receiver")
 
-#        yield (pages.Practice_Results)
+        yield (pages.PracticeResults)
 
         print()
         print(self.player.role())

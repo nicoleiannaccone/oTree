@@ -1,3 +1,4 @@
+import typing
 from otree.api import (
     models, widgets, BaseConstants, BaseSubsession, BaseGroup, BasePlayer,
     Currency as c, currency_range,
@@ -114,6 +115,38 @@ class Subsession(BaseSubsession):
         print(self.get_group_matrix())
 
 
+################
+# PLAYER CLASS #
+################
+
+class Player(BasePlayer):
+
+    # Player Methods
+    def get_partner(self):
+        return self.get_others_in_group()[0]
+
+    def is_decider(self):
+        return self.id_in_group == 1
+
+    def is_receiver(self):
+        return self.id_in_group == 2
+
+    def add_to_payoff(self, amount):
+        self.payoff += amount
+        if 'payoff' not in self.participant.vars:
+            self.participant.vars['payoff'] = 0
+        self.participant.vars['payoff'] += amount
+
+    def role(self):
+        if self.id_in_group == 1:
+            return 'decider'
+        if self.id_in_group == 2:
+            return 'receiver'
+
+    def get_screenname(self):
+        return self.participant.vars['screenname']
+
+
 ###############
 # GROUP CLASS #
 ###############
@@ -148,15 +181,15 @@ class Group(BaseGroup):
     # Group Methods #
     #################
 
-    def get_decider(self):
-        return self.get_player_by_role(Globals.DECIDER)
+    def get_decider(self) -> Player:
+        return typing.cast(Player, self.get_player_by_role(Globals.DECIDER))
 
-    def get_receiver(self):
-        return self.get_player_by_role(Globals.RECEIVER)
+    def get_receiver(self) -> Player:
+        return typing.cast(Player, self.get_player_by_role(Globals.RECEIVER))
 
-    def record_payoffs(self):
-        self.get_decider().payoff = self.taken
-        self.get_receiver().payoff = Constants.endowment - self.taken
+    def record_taken_payoffs(self):
+        self.get_decider().add_to_payoff(self.taken)
+        self.get_receiver().add_to_payoff(Constants.endowment - self.taken)
 
     def record_rating(self):
         rating_dict = {
@@ -171,35 +204,4 @@ class Group(BaseGroup):
         }
         self.rating = rating_dict[self.taken]
         self.rating_label = Globals.RATING_LABEL_DICT[self.rating]
-
-
-################
-# PLAYER CLASS #
-################
-
-class Player(BasePlayer):
-
-    cumulative_payoff = models.CurrencyField()
-
-    # Player Methods
-    def get_partner(self):
-        return self.get_others_in_group()[0]
-
-    def is_decider(self):
-        return self.id_in_group == 1
-
-    def is_receiver(self):
-        return self.id_in_group == 2
-
-    def record_cumulative_payoffs(self):
-        self.cumulative_payoff = sum([p.payoff for p in self.in_all_rounds()])
-
-    def role(self):
-        if self.id_in_group == 1:
-            return 'decider'
-        if self.id_in_group == 2:
-            return 'receiver'
-
-    def get_screenname(self):
-        return self.participant.vars['screenname']
 
