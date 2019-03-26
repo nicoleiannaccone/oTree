@@ -199,7 +199,7 @@ class PracticeResults(Page):
         p_modal_rating = collections.Counter(rating_list).most_common(1)[0][0] if rating_list else None
         rr = ResultRow(p_took, p_offered, p_rating, p_modal_rating)
 
-        if self.player == self.group.get_decider():
+        if self.player == self.group.get_receiver():
             if p_rating == p_modal_rating:
                 self.player.payoff = self.player.payoff + Constants.prize
 
