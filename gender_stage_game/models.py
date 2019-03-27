@@ -151,6 +151,9 @@ class Player(BasePlayer):
 
         self.participant.vars['total_payoff'] = total_payoff
 
+    def get_total_payoff(self):
+        return self.participant.vars['total_payoff']
+
     def get_screenname(self):
         return self.participant.vars['screenname']
 

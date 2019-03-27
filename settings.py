@@ -22,7 +22,7 @@ TREATMENT_FALSE_GENDER = "False Gender"
 SESSION_CONFIGS = [
     {
         'name': 'Gender_Game_No_Gender',
-        'num_demo_participants': 2,
+        'num_demo_participants': 10,
         'app_sequence': ['gender_intro', 'gender_stage_game'],
         'treatment': TREATMENT_NO_GENDER,
     },
