@@ -75,7 +75,7 @@ def make_yn_field(label):
 class Constants(BaseConstants):
     name_in_url = 'WebGames'
     players_per_group = 2
-    num_rounds = 1
+    num_rounds = 5
     round_numbers = list(range(1, num_rounds + 1))
 
     instructions_template = 'gender_intro/InstructionsFull.html'
@@ -162,6 +162,7 @@ class Player(BasePlayer):
 # GROUP CLASS #
 ###############
 
+
 class Group(BaseGroup):
 
     message = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
@@ -193,6 +194,10 @@ class Group(BaseGroup):
     # Group Methods #
     #################
 
+    @property
+    def offer(self):
+        return Globals.ENDOWMENT - self.taken
+
     def get_decider(self) -> Player:
         return typing.cast(Player, self.get_player_by_role(Globals.DECIDER))
 
@@ -201,7 +206,7 @@ class Group(BaseGroup):
 
     def record_rating(self):
         rating_dict = {None: None}
-        for amt in range(0, Globals.ENDOWMENT + Globals.TAKE_INCREMENT, Globals.TAKE_INCREMENT):
+        for amt in Globals.TAKE_CHOICES:
             rating_dict[c(amt)] = getattr(self, 'rating%02d' % amt)
         self.rating = rating_dict[self.taken]
         self.rating_label = Globals.RATING_LABEL_DICT[self.rating]

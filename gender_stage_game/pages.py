@@ -101,6 +101,9 @@ class ResultRow:
 
 class Results(Page):
 
+    def is_displayed(self):
+        return self.round_number == Constants.num_rounds
+
     def vars_for_template(self):
         receiver_ratings = {}
         for r in Constants.round_numbers:
