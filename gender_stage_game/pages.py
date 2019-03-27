@@ -136,7 +136,7 @@ class Results(Page):
             rr = ResultRow(round_number, dname, took, offered, g.rating, g.modal_rating)
             result_table.append(rr)
 
-            self.player.record_total_payoff()
+        self.player.record_total_payoff()
 
         for round_number in Constants.round_numbers:
             self.player.in_round(round_number).participant_vars_dump = str(self.participant.vars)

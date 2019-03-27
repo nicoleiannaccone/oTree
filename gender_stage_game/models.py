@@ -142,20 +142,20 @@ class Player(BasePlayer):
             return 'receiver'
 
     def record_total_payoff(self):
-        total_payoff = Globals.PARTICIPATION_PAYMENT
+        total_game_payoff = Globals.PARTICIPATION_PAYMENT
 
         p = self.in_round(self.session.vars['payoff round'])
         if p.is_receiver():
-            total_payoff += Globals.ENDOWMENT - p.group.taken
+            total_game_payoff += Globals.ENDOWMENT - p.group.taken
             if p.group.modal_rating == p.group.rating:
-                total_payoff += Globals.MODE_MATCH_PRIZE
+                total_game_payoff += Globals.MODE_MATCH_PRIZE
         else:
-            total_payoff += p.group.taken
+            total_game_payoff += p.group.taken
 
-        self.participant.vars['total_payoff'] = total_payoff
+        self.participant.payoff += total_game_payoff
 
     def get_total_payoff(self):
-        return self.participant.vars['total_payoff']
+        return self.participant.payoff
 
     def get_screenname(self):
         return self.participant.vars['screenname']
