@@ -7,8 +7,6 @@ from otree.api import (
 )
 
 from globals import Globals
-from settings import ALLOW_BLANKS
-
 
 doc = """
 One player decides how much to take from the other player, given their screenname and observability of their choice.
@@ -21,7 +19,7 @@ One player decides how much to take from the other player, given their screennam
 
 
 def make_rating_field(label):
-    return models.IntegerField(blank=ALLOW_BLANKS,
+    return models.IntegerField(blank=Globals.ALLOW_BLANKS,
                                choices=[
                                    [1, 'Very Inappropriate'],
                                    [2, 'Somewhat Inappropriate'],
@@ -34,7 +32,7 @@ def make_rating_field(label):
 
 
 def make_currency_field():
-    return models.CurrencyField(blank=ALLOW_BLANKS,
+    return models.CurrencyField(blank=Globals.ALLOW_BLANKS,
                                 choices=currency_range(c(0), Constants.endowment, c(0.5)),
                                 )
 
@@ -44,7 +42,7 @@ def make_take_field():
 
 
 def make_gender_field():
-    return models.IntegerField(blank=ALLOW_BLANKS,
+    return models.IntegerField(blank=Globals.ALLOW_BLANKS,
                                choices=[
                                    [1, 'Male'],
                                    [2, 'Female'],
@@ -54,11 +52,11 @@ def make_gender_field():
 
 
 def make_string_field(label):
-    return models.StringField(blank=ALLOW_BLANKS, label=label)
+    return models.StringField(blank=Globals.ALLOW_BLANKS, label=label)
 
 
 def make_yn_field(label):
-    return models.IntegerField(blank=ALLOW_BLANKS,
+    return models.IntegerField(blank=Globals.ALLOW_BLANKS,
                                choices=[
                                    [1, 'Yes'],
                                    [2, 'No'],
@@ -75,7 +73,7 @@ def make_yn_field(label):
 class Constants(BaseConstants):
     name_in_url = 'WebGames'
     players_per_group = 2
-    num_rounds = 1
+    num_rounds = 5
     round_numbers = list(range(1, num_rounds + 1))
 
     instructions_template = 'gender_intro/InstructionsFull.html'
@@ -122,6 +120,9 @@ class Subsession(BaseSubsession):
 
 class Player(BasePlayer):
 
+    participant_vars_dump = models.StringField()
+    treatment = models.StringField()
+
     # Player Methods
     def get_partner(self):
         return self.get_others_in_group()[0]
@@ -139,20 +140,20 @@ class Player(BasePlayer):
             return 'receiver'
 
     def record_total_payoff(self):
-        total_payoff = Globals.PARTICIPATION_PAYMENT
+        total_game_payoff = Globals.PARTICIPATION_PAYMENT
 
         p = self.in_round(self.session.vars['payoff round'])
         if p.is_receiver():
-            total_payoff += Globals.ENDOWMENT - p.group.taken
+            total_game_payoff += Globals.ENDOWMENT - p.group.taken
             if p.group.modal_rating == p.group.rating:
-                total_payoff += Globals.MODE_MATCH_PRIZE
+                total_game_payoff += Globals.MODE_MATCH_PRIZE
         else:
-            total_payoff += p.group.taken
+            total_game_payoff += p.group.taken
 
-        self.participant.vars['total_payoff'] = total_payoff
+        self.participant.payoff += total_game_payoff
 
     def get_total_payoff(self):
-        return self.participant.vars['total_payoff']
+        return self.participant.payoff
 
     def get_screenname(self):
         return self.participant.vars['screenname']
@@ -162,9 +163,10 @@ class Player(BasePlayer):
 # GROUP CLASS #
 ###############
 
+
 class Group(BaseGroup):
 
-    message = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
+    message = models.LongStringField(blank=Globals.ALLOW_BLANKS, label="Your message:")
 
     # Amount taken by dictator
     taken = make_take_field()
@@ -193,6 +195,10 @@ class Group(BaseGroup):
     # Group Methods #
     #################
 
+    @property
+    def offer(self):
+        return Globals.ENDOWMENT - self.taken
+
     def get_decider(self) -> Player:
         return typing.cast(Player, self.get_player_by_role(Globals.DECIDER))
 
@@ -201,8 +207,7 @@ class Group(BaseGroup):
 
     def record_rating(self):
         rating_dict = {None: None}
-        for amt in range(0, Globals.ENDOWMENT + Globals.TAKE_INCREMENT, Globals.TAKE_INCREMENT):
+        for amt in Globals.TAKE_CHOICES:
             rating_dict[c(amt)] = getattr(self, 'rating%02d' % amt)
         self.rating = rating_dict[self.taken]
         self.rating_label = Globals.RATING_LABEL_DICT[self.rating]
-

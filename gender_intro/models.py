@@ -5,7 +5,6 @@ from otree.api import (
 from otree.models import BaseGroup, BaseSubsession
 
 from globals import Globals
-from settings import ALLOW_BLANKS, TREATMENT_NO_GENDER, TREATMENT_TRUE_GENDER, TREATMENT_FALSE_GENDER
 
 doc = """
 One player decides how much to take from the other
@@ -18,7 +17,7 @@ player, given their screenname and observability of their choice.
 ###########
 
 def make_rating_field(label):
-    return models.IntegerField(blank=ALLOW_BLANKS,
+    return models.IntegerField(blank=Globals.ALLOW_BLANKS,
                                choices=[
                                    [1, 'Very Inappropriate'],
                                    [2, 'Somewhat Inappropriate'],
@@ -31,13 +30,13 @@ def make_rating_field(label):
 
 
 def make_currency_field(label):
-    return models.CurrencyField(blank=ALLOW_BLANKS,
+    return models.CurrencyField(blank=Globals.ALLOW_BLANKS,
                                 choices=currency_range(c(0), Globals.ENDOWMENT, Globals.TAKE_INCREMENT)
                                 )
 
 
 def make_gender_field(label):
-    return models.IntegerField(blank=ALLOW_BLANKS,
+    return models.IntegerField(blank=Globals.ALLOW_BLANKS,
                                choices=[
                                    [Globals.MALE, 'Male'],
                                    [Globals.FEMALE, 'Female'],
@@ -47,11 +46,11 @@ def make_gender_field(label):
 
 
 def make_string_field(label):
-    return models.StringField(blank=ALLOW_BLANKS, label=label)
+    return models.StringField(blank=Globals.ALLOW_BLANKS, label=label)
 
 
 def make_yn_field(label):
-    return models.IntegerField(blank=ALLOW_BLANKS,
+    return models.IntegerField(blank=Globals.ALLOW_BLANKS,
                                choices=[
                                    [1, 'Yes'],
                                    [2, 'No'],
@@ -90,12 +89,12 @@ class ScreennameFetcher:
 
     @staticmethod
     def get_next_name(treatment, male_participant):
-        if treatment == TREATMENT_NO_GENDER:
+        if treatment == Globals.TREATMENT_NO_GENDER:
             return None
 
-        if treatment == TREATMENT_FALSE_GENDER:
+        if treatment == Globals.TREATMENT_FALSE_GENDER:
             male_screenname = not male_participant
-        elif treatment == TREATMENT_TRUE_GENDER:
+        elif treatment == Globals.TREATMENT_TRUE_GENDER:
             male_screenname = male_participant
         else:
             raise Exception(f"Invalid treatment: {treatment}")
@@ -113,8 +112,8 @@ class ScreennameFetcher:
 class Player(BasePlayer):
 
     # Survey Questions
-    age = models.IntegerField(blank=ALLOW_BLANKS, label='What is your age?')
-    year = models.IntegerField(blank=ALLOW_BLANKS,
+    age = models.IntegerField(blank=Globals.ALLOW_BLANKS, label='What is your age?')
+    year = models.IntegerField(blank=Globals.ALLOW_BLANKS,
                                choices=[
                                    [1, 'Freshman'],
                                    [2, 'Sophomore'],
@@ -150,7 +149,7 @@ class Player(BasePlayer):
         'other Receivers was "Somewhat Inappropriate." If Decider A chose to take $Z, would you win a prize for your '
         'appropriateness rating?')
 
-    role_question = models.IntegerField(blank=ALLOW_BLANKS,
+    role_question = models.IntegerField(blank=Globals.ALLOW_BLANKS,
                                         choices=[
                                             [1, 'Receiver'],
                                             [2, 'Decider'],
@@ -159,7 +158,7 @@ class Player(BasePlayer):
                                         label=False,
                                         widget=widgets.RadioSelect
                                         )
-    offer_question_1 = models.IntegerField(blank=ALLOW_BLANKS,
+    offer_question_1 = models.IntegerField(blank=Globals.ALLOW_BLANKS,
                                            choices=[
                                                [1, '$X'],
                                                [2, '$1.00 - $X'],
@@ -168,7 +167,7 @@ class Player(BasePlayer):
                                            label='How much money would your matched Receiver get?',
                                            widget=widgets.RadioSelect
                                            )
-    taken_question_1 = models.IntegerField(blank=ALLOW_BLANKS,
+    taken_question_1 = models.IntegerField(blank=Globals.ALLOW_BLANKS,
                                            choices=[
                                                [1, '$Y'],
                                                [2, '$1.00 - $Y'],
@@ -207,7 +206,7 @@ class Player(BasePlayer):
         quiz_payoff = (self.q1_is_correct + self.q2_is_correct + self.q3_is_correct
                        + self.q5_is_correct + self.q6_is_correct + self.q7_is_correct) * Constants.prize_per_question
         self.payoff = quiz_payoff
-        self.participant.vars['payoff'] = quiz_payoff
+        self.participant.payoff += quiz_payoff
 
 
 class Group(BaseGroup):

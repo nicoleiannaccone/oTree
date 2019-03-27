@@ -4,6 +4,7 @@ from os import environ
 # in SESSION_CONFIGS, except those that explicitly override it.
 # the session config can be accessed from methods in your apps as self.session.config,
 # e.g. self.session.config['participation_fee']
+from globals import Globals
 
 SESSION_CONFIG_DEFAULTS = {
     'real_world_currency_per_point': 1.00,
@@ -12,53 +13,47 @@ SESSION_CONFIG_DEFAULTS = {
 }
 
 # Testing flags
-ALLOW_BLANKS = True
-INCLUDE_GENDER_INTRO = True
-
-TREATMENT_NO_GENDER = "No Gender"
-TREATMENT_TRUE_GENDER = "True Gender"
-TREATMENT_FALSE_GENDER = "False Gender"
 
 SESSION_CONFIGS = [
     {
         'name': 'Gender_Game_No_Gender',
         'num_demo_participants': 10,
         'app_sequence': ['gender_intro', 'gender_stage_game'],
-        'treatment': TREATMENT_NO_GENDER,
+        'treatment': Globals.TREATMENT_NO_GENDER,
     },
     {
         'name': 'Gender_Game_No_Gender_Bots',
         'num_demo_participants': 2,
         'app_sequence': ['gender_intro', 'gender_stage_game'],
-        'treatment': TREATMENT_NO_GENDER,
+        'treatment': Globals.TREATMENT_NO_GENDER,
         'use_browser_bots': True,
     },
     {
         'name': 'Gender_Game_True_Gender',
         'num_demo_participants': 2,
         'app_sequence': ['gender_intro', 'gender_stage_game'],
-        'treatment': TREATMENT_TRUE_GENDER,
+        'treatment': Globals.TREATMENT_TRUE_GENDER,
         'use_browser_bots': False,
     },
     {
         'name': 'Gender_Game_True_Gender_Bots',
         'num_demo_participants': 2,
         'app_sequence': ['gender_intro', 'gender_stage_game'],
-        'treatment': TREATMENT_TRUE_GENDER,
+        'treatment': Globals.TREATMENT_TRUE_GENDER,
         'use_browser_bots': True,
     },
     {
         'name': 'Gender_Game_False_Gender',
         'num_demo_participants': 2,
         'app_sequence': ['gender_intro', 'gender_stage_game'],
-        'treatment': TREATMENT_FALSE_GENDER,
+        'treatment': Globals.TREATMENT_FALSE_GENDER,
         'use_browser_bots': False,
     },
     {
         'name': 'Gender_Game_False_Gender_Bots',
         'num_demo_participants': 2,
         'app_sequence': ['gender_intro', 'gender_stage_game'],
-        'treatment': TREATMENT_FALSE_GENDER,
+        'treatment': Globals.TREATMENT_FALSE_GENDER,
         'use_browser_bots': True,
     },
 ]

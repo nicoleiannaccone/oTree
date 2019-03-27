@@ -2,7 +2,6 @@ from ._builtin import Page, WaitPage
 from .models import ScreennameFetcher
 
 from globals import Globals
-from settings import INCLUDE_GENDER_INTRO
 
 
 def add_back_button_html(page: Page):
@@ -107,7 +106,7 @@ page_sequence = [
      ComprehensionResults,
 ]
 
-if not INCLUDE_GENDER_INTRO:
+if not Globals.INCLUDE_GENDER_INTRO:
     page_sequence = [
         PreSurvey,
         PreSurveyWaitPage,
