@@ -41,6 +41,7 @@ class PlayerBot(Bot):
 
         print()
         print(self.group.rating)
+        print(self.group.modal_rating)
         print(self.player.role())
         print(self.participant.vars)
         print(self.group.taken)

@@ -29,3 +29,10 @@ class Globals:
 
     ALLOW_BLANKS = True
     INCLUDE_GENDER_INTRO = True
+
+
+    MALE_NAMES = ['Jacob', 'William', 'Michael', 'James', 'Bruce', 'Ethan', 'Alexander', 'Daniel', 'Elijah',
+                  'Benjamin', 'Matthew', 'David', 'Anthony', 'Joseph', 'Joshua', 'Andrew']
+    FEMALE_NAMES = ['Sophia', 'Emma', 'Olivia', 'Emily', 'Elizabeth', 'Charlotte', 'Chloe',  'Aubrey',
+                    'Natalie', 'Grace', 'Zoey', 'Hannah']
+    NAMES = MALE_NAMES + FEMALE_NAMES

@@ -5,7 +5,11 @@
 
 {% block content %}
     <p>
+        {% if gender %}
     In this round your screenname is <strong> {{ name }}</strong>.
+        {% else %}
+        In this round you are the Decider.
+        {% endif %}
     </p>
 
     <p>

@@ -71,7 +71,7 @@ class Constants(BaseConstants):
 
     male_names = ['Jacob', 'William', 'Michael', 'James', 'Bruce', 'Ethan', 'Alexander', 'Daniel', 'Elijah',
                   'Benjamin', 'Matthew', 'David', 'Anthony', 'Joseph', 'Joshua', 'Andrew']
-    female_names = ['Sophia', 'Emma', 'Olivia', 'Emily', 'Abigail', 'Elizabeth', 'Charlotte', 'Chloe',  'Aubrey',
+    female_names = ['Sophia', 'Emma', 'Olivia', 'Emily', 'Elizabeth', 'Charlotte', 'Chloe',  'Aubrey',
                     'Natalie', 'Grace', 'Zoey', 'Hannah']
 
     instructions_template = 'gender_intro/InstructionsFull.html'

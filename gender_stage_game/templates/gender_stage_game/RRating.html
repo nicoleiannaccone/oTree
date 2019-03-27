@@ -5,7 +5,7 @@
 
 {% block content %}
 <p>
-    You are the <strong>Receiver</strong>. You have been matched with a Decider, <strong>{{ dname }}</strong>.
+    You are the <strong>Receiver</strong>. You have been matched with a Decider<strong>{{ d_name }}</strong>.
 </p>
 <p>
     You have received an endowment of {{ Constants.endowment }} this round.
@@ -19,13 +19,13 @@ appropriate.
 </p>
 <p>
     If your rating matches the most common rating other Receivers assigned to
-    an amount of that size taken by Decider {{ dname }}, you will win a prize of {{ Constants.mode_match_prize }}.
+    an amount of that size taken by {{ dname }}, you will win a prize of {{ Constants.mode_match_prize }}.
 </p>
 
-<h4>Rate the Social Appropriateness of Each Decision {{ dname }} could make: </h4>
+<h4>Rate the Social Appropriateness of Each Decision {{ Dname }} could make: </h4>
 <table class="table">
     <tr>
-        <th> {{ dname}}'s Decision
+        <th> {{ Dname}}'s Decision
         </th>
         <th>
             Appropriateness Rating
@@ -33,7 +33,7 @@ appropriate.
     </tr>
     {% for field in form %}
         <tr>
-            <th> If {{dname}} took {{ field.label }}</th>
+            <th> If {{Dname}} took {{ field.label }}</th>
             {% for choice in field %}
                 <td>{{ choice }}</td>
             {% endfor %}

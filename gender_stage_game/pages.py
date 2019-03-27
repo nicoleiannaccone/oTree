@@ -32,6 +32,7 @@ class DTake(Page):
     def vars_for_template(self):
         return {
             'name': self.participant.vars['screenname'],
+            'gender': self.session.config['treatment'] != Globals.TREATMENT_NO_GENDER
         }
 
 
@@ -53,12 +54,16 @@ class RRating(Page):
         treatment = self.session.config['treatment']
         if treatment == Globals.TREATMENT_NO_GENDER:
             return {
-                'dname': 'the dictator'
+                'dname': 'their Decider',
+                'd_name': '',
+                'Dname': 'Decider',
             }
         elif (treatment == Globals.TREATMENT_TRUE_GENDER
               or treatment == Globals.TREATMENT_FALSE_GENDER):
             return {
-                'dname': self.group.get_decider().get_screenname()
+                'dname': self.group.get_decider().get_screenname(),
+                'd_name': self.group.get_decider().get_screenname(),
+                'Dname': self.group.get_decider().get_screenname(),
             }
 
 
@@ -93,8 +98,8 @@ class ResultsWaitPage(WaitPage):
 
 
 class ResultRow:
-    def __init__(self, round_numberxx, dname, took, offered, rating, modal_rating):
-        self.round_number = round_numberxx
+    def __init__(self, round_number, dname, took, offered, rating, modal_rating):
+        self.round_number = round_number
         self.dname = dname
         self.took = took
         self.offered = offered
@@ -103,8 +108,11 @@ class ResultRow:
         self.modal_rating = modal_rating
         self.modal_rating_label = Globals.RATING_LABEL_DICT[modal_rating]
 
+    def __str__(self):
+        return "%d %012s %4.2f %4.2f %40s %40s" % (self.round_number, self.dname, self.took, self.offered,
+                                                   self.rating_label, self.modal_rating_label)
 
-class Results(Page):
+class ResultsOld(Page):
 
     def is_displayed(self):
         return self.round_number == Constants.num_rounds
@@ -151,6 +159,58 @@ class Results(Page):
             'result_table': result_table,
         }
 
+class Results(Page):
+
+    def is_displayed(self):
+        return self.round_number == Constants.num_rounds
+
+    def vars_for_template(self):
+        receiver_ratings = {}
+        for n in Globals.NAMES:
+        # for round_number in Constants.round_numbers:
+            for v in range(0, 11):
+                receiver_ratings[(n, v)] = list()
+        for g in self.subsession.get_groups():
+            for n in Globals.NAMES:
+            # for round_number in Constants.round_numbers:
+                if g.get_decider().get_screenname() == n:
+                    x = g
+                    # x = g.in_round(r)
+                    receiver_ratings[(n, 0)].append(x.rating00)
+                    receiver_ratings[(n, 1)].append(x.rating01)
+                    receiver_ratings[(n, 2)].append(x.rating02)
+                    receiver_ratings[(n, 3)].append(x.rating03)
+                    receiver_ratings[(n, 4)].append(x.rating04)
+                    receiver_ratings[(n, 5)].append(x.rating05)
+                    receiver_ratings[(n, 6)].append(x.rating06)
+                    receiver_ratings[(n, 7)].append(x.rating07)
+                    receiver_ratings[(n, 8)].append(x.rating08)
+                    receiver_ratings[(n, 9)].append(x.rating09)
+                    receiver_ratings[(n, 10)].append(x.rating10)
+
+        result_table = list()
+        for round_number in Constants.round_numbers:
+            g = self.group.in_round(round_number)
+            dname = g.get_decider().get_screenname()
+            took = g.taken
+            offered = g.offer
+            rating_list = receiver_ratings.get((dname, decimal.Decimal(g.taken)), None)
+            g.modal_rating = collections.Counter(rating_list).most_common(1)[0][0] if rating_list else None
+            rr = ResultRow(round_number, dname, took, offered, g.rating, g.modal_rating)
+            result_table.append(rr)
+
+        for rr in result_table:
+            print(rr)
+
+        self.player.record_total_payoff()
+
+        for round_number in Constants.round_numbers:
+            self.player.in_round(round_number).participant_vars_dump = str(self.participant.vars)
+            self.player.in_round(round_number).treatment = self.session.config['treatment']
+
+        return {
+            'result_table': result_table,
+        }
 
 class SurveyWaitPage(WaitPage):
     def is_displayed(self):

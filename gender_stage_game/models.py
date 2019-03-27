@@ -84,6 +84,8 @@ class Constants(BaseConstants):
     participation_payment = c(Globals.PARTICIPATION_PAYMENT)
 
 
+    gender = False
+
 # Needed below to implement a Perfect Strangers matching.
 # From https://groups.google.com/forum/#!msg/otree/rciCzbTqSfQ/XC-T7oZrEAAJ
 # What it does: it shifts each second member in each group to the right by one.

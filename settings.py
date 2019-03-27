@@ -17,7 +17,7 @@ SESSION_CONFIG_DEFAULTS = {
 SESSION_CONFIGS = [
     {
         'name': 'Gender_Game_No_Gender',
-        'num_demo_participants': 10,
+        'num_demo_participants': 2,
         'app_sequence': ['gender_intro', 'gender_stage_game'],
         'treatment': Globals.TREATMENT_NO_GENDER,
     },
