@@ -11,7 +11,7 @@ class PlayerBot(Bot):
     def play_round(self):
         print(f'Round: {self.round_number}')
         if self.player.is_decider():
-            yield (pages.D_Take, {
+            yield (pages.DTake, {
                 'taken': c(1.00)
             })
 
@@ -19,7 +19,7 @@ class PlayerBot(Bot):
             my_index = PlayerBot.bot_index
             PlayerBot.bot_index += 1
             print(f"My Index: {my_index}")
-            yield (pages.R_Rating, {
+            yield (pages.RRating, {
                 'rating00': my_index % 4 + 1,
                 'rating01': my_index % 4 + 1,
                 'rating02': my_index % 4 + 1,
@@ -32,7 +32,7 @@ class PlayerBot(Bot):
                 'rating09': my_index % 4 + 1,
                 'rating10': my_index % 4 + 1,
             })
-            yield (pages.R_Message, {
+            yield (pages.RMessage, {
                 'message': 'Thanks for the money!'
             })
 

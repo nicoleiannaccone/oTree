@@ -213,4 +213,3 @@ class Group(BaseGroup):
             rating_dict[c(amt)] = getattr(self, 'rating%02d' % amt)
         self.rating = rating_dict[self.taken]
         self.rating_label = Globals.RATING_LABEL_DICT[self.rating]
-

@@ -1,4 +1,4 @@
-from otree.api import Currency as c, currency_range
+from otree.api import Currency as c
 from ._builtin import Page, WaitPage
 from .models import Constants
 import collections
@@ -7,8 +7,11 @@ import decimal
 from globals import Globals
 
 
-# Stage Game
-class D_Name(Page):
+####################
+# Stage Game Pages #
+####################
+
+class DName(Page):
 
     def is_displayed(self):
         return self.player.is_decider()
@@ -19,12 +22,7 @@ class D_Name(Page):
         }
 
 
-class Wait_Page(WaitPage):
-    def is_displayed(self):
-        return self.player.is_decider()
-
-
-class D_Take(Page):
+class DTake(Page):
     form_model = 'group'
     form_fields = ['taken']
 
@@ -37,12 +35,12 @@ class D_Take(Page):
         }
 
 
-class D_Wait_Page(WaitPage):
-    def is_displayed(self):
+class DWaitPage(WaitPage):
+    def is_displayed(self: Page):
         return self.player.is_decider()
 
 
-class R_Rating(Page):
+class RRating(Page):
     form_model = 'group'
 
     def get_form_fields(self):
@@ -62,7 +60,7 @@ class RoundWaitPage(WaitPage):
         self.group.record_rating()
 
 
-class R_Message(Page):
+class RMessage(Page):
     form_model = 'group'
     form_fields = ['message']
 
@@ -75,8 +73,8 @@ class R_Message(Page):
         }
 
 
-class Message_WaitPage(WaitPage):
-    def is_displayed(self):
+class MessageWaitPage(WaitPage):
+    def is_displayed(self: Page):
         return self.player.is_receiver()
 
 
@@ -152,7 +150,7 @@ class SurveyWaitPage(WaitPage):
         return self.round_number == Constants.num_rounds
 
 
-class Survey_Results(Page):
+class SurveyResults(Page):
     def is_displayed(self):
         return self.round_number == Constants.num_rounds
 
@@ -179,12 +177,12 @@ class Survey_Results(Page):
 
 
 page_sequence = [
-    D_Take,
-    D_Wait_Page,
-    R_Rating,
+    DTake,
+    DWaitPage,
+    RRating,
     RoundWaitPage,
-    R_Message,
-    Message_WaitPage,
+    RMessage,
+    MessageWaitPage,
     ResultsWaitPage,
     Results,
 ]
