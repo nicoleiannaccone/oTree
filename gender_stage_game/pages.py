@@ -19,6 +19,7 @@ class DName(Page):
     def vars_for_template(self):
         return {
             'name': self.participant.vars['screenname'],
+            'gender': self.session.config['treatment'] != Globals.TREATMENT_NO_GENDER
         }
 
 
@@ -80,9 +81,18 @@ class RMessage(Page):
         return self.player.is_receiver()
 
     def vars_for_template(self):
-        return {
-            'dname': self.group.get_decider().get_screenname(),
-        }
+        treatment = self.session.config['treatment']
+        if treatment == Globals.TREATMENT_NO_GENDER:
+            return {
+                'dname': '',
+            }
+        elif (treatment == Globals.TREATMENT_TRUE_GENDER
+              or treatment == Globals.TREATMENT_FALSE_GENDER):
+            return {
+                'dname': self.group.get_decider().get_screenname(),
+            }
+
+
 
 
 class MessageWaitPage(WaitPage):
@@ -244,6 +254,7 @@ class SurveyResults(Page):
 
 
 page_sequence = [
+    DName,
     DTake,
     DWaitPage,
     RRating,

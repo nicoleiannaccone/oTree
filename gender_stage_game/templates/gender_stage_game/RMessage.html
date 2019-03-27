@@ -7,10 +7,10 @@
 
 {% block content %}
     <p>
-        Your Round {{ player.round_number }} Decider, <strong> {{ dname }}</strong>, decided to take <strong>{{ group.taken }}</strong> of your endowment.
+        Your Round {{ player.round_number }} Decider <strong> {{ dname }}</strong> decided to take <strong>{{ group.taken }}</strong> of your endowment.
     </p>
     <p>
-        The message you write below will be anonymously displayed to your Round {{ player.round_number }} Decider
+        The message you write below will be anonymously displayed to your Round {{ player.round_number }} Decider {{ dname }}
         at the end of the experiment:
             {% formfield group.message %}
 

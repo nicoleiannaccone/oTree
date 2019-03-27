@@ -12,15 +12,26 @@
     {% endif %}
     You will keep this role for the entire experiment.
 </p>
+
+{% if gender %}
 <p>
     All Deciders are assigned a screenname in each round to help Receivers rate the appropriateness of their chosen allocations and write them messages. Receivers do not receive screennames.
 </p>
 <p>
     For the following round your screenname will be <strong> {{ name }}. </strong>
 </p>
+{% endif %}
 <p>
-    On the next screen, you will choose how much to take from your Receiver's endowment. While you do this, your Receiver will learn that your screenname is {{ name }}
-    and will be asked to rate how socially appropriate it would be if a Decider named {{ name }} took each potential
+    On the next screen, you will choose how much to take from your Receiver's endowment.
+    While you do this, your Receiver will
+    {% if gender %}
+    learn that your screenname is {{ name }} and will
+    {% endif %}
+    be asked to rate how socially appropriate it would be if a Decider
+    {% if gender %}
+    named {{ name }}
+    {% endif %}
+    took each potential
     amount between $0 and {{ Constants.endowment }}, in increments of $0.50.
 </p>
 {% next_button %}

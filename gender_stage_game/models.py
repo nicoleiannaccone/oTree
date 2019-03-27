@@ -83,9 +83,6 @@ class Constants(BaseConstants):
     mode_match_prize = c(Globals.MODE_MATCH_PRIZE)
     participation_payment = c(Globals.PARTICIPATION_PAYMENT)
 
-
-    gender = False
-
 # Needed below to implement a Perfect Strangers matching.
 # From https://groups.google.com/forum/#!msg/otree/rciCzbTqSfQ/XC-T7oZrEAAJ
 # What it does: it shifts each second member in each group to the right by one.
@@ -174,17 +171,17 @@ class Group(BaseGroup):
     taken = make_take_field()
 
     # Receiver ratings of dictator's possible choices
-    rating00 = make_rating_field(0)
-    rating01 = make_rating_field(1)
-    rating02 = make_rating_field(2)
-    rating03 = make_rating_field(3)
-    rating04 = make_rating_field(4)
-    rating05 = make_rating_field(5)
-    rating06 = make_rating_field(6)
-    rating07 = make_rating_field(7)
-    rating08 = make_rating_field(8)
-    rating09 = make_rating_field(9)
-    rating10 = make_rating_field(10)
+    rating00 = make_rating_field(c(0))
+    rating01 = make_rating_field(c(1))
+    rating02 = make_rating_field(c(2))
+    rating03 = make_rating_field(c(3))
+    rating04 = make_rating_field(c(4))
+    rating05 = make_rating_field(c(5))
+    rating06 = make_rating_field(c(6))
+    rating07 = make_rating_field(c(7))
+    rating08 = make_rating_field(c(8))
+    rating09 = make_rating_field(c(9))
+    rating10 = make_rating_field(c(10))
 
     # Receiver's rating of dictator's actual choice
     rating = models.IntegerField()
