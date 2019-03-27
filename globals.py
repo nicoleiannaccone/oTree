@@ -23,3 +23,9 @@ class Globals:
         4: 'Very Socially Appropriate'
     }
 
+    TREATMENT_NO_GENDER = "No Gender"
+    TREATMENT_TRUE_GENDER = "True Gender"
+    TREATMENT_FALSE_GENDER = "False Gender"
+
+    ALLOW_BLANKS = True
+    INCLUDE_GENDER_INTRO = True

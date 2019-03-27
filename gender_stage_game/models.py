@@ -7,8 +7,6 @@ from otree.api import (
 )
 
 from globals import Globals
-from settings import ALLOW_BLANKS
-
 
 doc = """
 One player decides how much to take from the other player, given their screenname and observability of their choice.
@@ -21,7 +19,7 @@ One player decides how much to take from the other player, given their screennam
 
 
 def make_rating_field(label):
-    return models.IntegerField(blank=ALLOW_BLANKS,
+    return models.IntegerField(blank=Globals.ALLOW_BLANKS,
                                choices=[
                                    [1, 'Very Inappropriate'],
                                    [2, 'Somewhat Inappropriate'],
@@ -34,7 +32,7 @@ def make_rating_field(label):
 
 
 def make_currency_field():
-    return models.CurrencyField(blank=ALLOW_BLANKS,
+    return models.CurrencyField(blank=Globals.ALLOW_BLANKS,
                                 choices=currency_range(c(0), Constants.endowment, c(0.5)),
                                 )
 
@@ -44,7 +42,7 @@ def make_take_field():
 
 
 def make_gender_field():
-    return models.IntegerField(blank=ALLOW_BLANKS,
+    return models.IntegerField(blank=Globals.ALLOW_BLANKS,
                                choices=[
                                    [1, 'Male'],
                                    [2, 'Female'],
@@ -54,11 +52,11 @@ def make_gender_field():
 
 
 def make_string_field(label):
-    return models.StringField(blank=ALLOW_BLANKS, label=label)
+    return models.StringField(blank=Globals.ALLOW_BLANKS, label=label)
 
 
 def make_yn_field(label):
-    return models.IntegerField(blank=ALLOW_BLANKS,
+    return models.IntegerField(blank=Globals.ALLOW_BLANKS,
                                choices=[
                                    [1, 'Yes'],
                                    [2, 'No'],
@@ -168,7 +166,7 @@ class Player(BasePlayer):
 
 class Group(BaseGroup):
 
-    message = models.LongStringField(blank=ALLOW_BLANKS, label="Your message:")
+    message = models.LongStringField(blank=Globals.ALLOW_BLANKS, label="Your message:")
 
     # Amount taken by dictator
     taken = make_take_field()

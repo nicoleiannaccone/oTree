@@ -50,9 +50,16 @@ class RRating(Page):
         return self.player.is_receiver()
 
     def vars_for_template(self):
-        return {
-            'dname': self.group.get_decider().get_screenname()
-        }
+        treatment = self.session.config['treatment']
+        if treatment == Globals.TREATMENT_NO_GENDER:
+            return {
+                'dname': 'the dictator'
+            }
+        elif (treatment == Globals.TREATMENT_TRUE_GENDER
+              or treatment == Globals.TREATMENT_FALSE_GENDER):
+            return {
+                'dname': self.group.get_decider().get_screenname()
+            }
 
 
 class RoundWaitPage(WaitPage):
