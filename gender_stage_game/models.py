@@ -122,6 +122,9 @@ class Subsession(BaseSubsession):
 
 class Player(BasePlayer):
 
+    participant_vars_dump = models.StringField()
+    treatment = models.StringField()
+
     # Player Methods
     def get_partner(self):
         return self.get_others_in_group()[0]

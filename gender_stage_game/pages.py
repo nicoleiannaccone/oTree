@@ -138,6 +138,10 @@ class Results(Page):
 
             self.player.record_total_payoff()
 
+        for round_number in Constants.round_numbers:
+            self.player.in_round(round_number).participant_vars_dump = str(self.participant.vars)
+            self.player.in_round(round_number).treatment = self.session.config['treatment']
+
         return {
             'result_table': result_table,
         }
