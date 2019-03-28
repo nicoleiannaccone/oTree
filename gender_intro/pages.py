@@ -28,6 +28,10 @@ class Instructions3(Page):
     def before_next_page(self):
         add_back_button_html(self)
 
+    def vars_for_template(self):
+        return{
+            'gender': self.session.config['treatment'] != Globals.TREATMENT_NO_GENDER
+        }
 
 class Instructions4(Page):
     pass

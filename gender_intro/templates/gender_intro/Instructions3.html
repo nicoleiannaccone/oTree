@@ -5,6 +5,7 @@
 
 {% block content %}
 
+{% if gender %}
 Screennames
 <ul>
         <li>
@@ -16,8 +17,11 @@ Screennames
         encouraged to write and rate freely when evaluating their Deciders' allocation decisions.
         </li>
 </ul>
+{% else %}
+All players are anonymous - you will never be identified to other players in the session.
+{% endif %}
 
 {% next_button %}
-<button class="btn btn-primary" name="back" value="1">Back</button>
+<button class="btn" name="back" value="1">Back</button>
 
 {% endblock %}
