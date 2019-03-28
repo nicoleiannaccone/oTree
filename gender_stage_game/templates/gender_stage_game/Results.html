@@ -13,6 +13,7 @@
         <th>
             Round:
         </th>
+        {% if not hide_dnames %}
         <th>
             {% if player.role == 'decider' %}
             Your Screenname
@@ -20,6 +21,7 @@
             Decider's Screenname
             {% endif %}
         </th>
+        {% endif %}
         <th>
             {% if player.role == 'decider' %}
             You took:
@@ -50,9 +52,11 @@
         <td>
             {{ r.round_number }}
         </td>
+        {% if not hide_dnames %}
         <td>
             {{ r.dname }}
         </td>
+        {% endif %}
         <td>
             {{ r.took }}
         </td>

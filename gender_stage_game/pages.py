@@ -170,6 +170,7 @@ class Results(Page):
 
         return {
             'result_table': result_table,
+            'hide_dnames': self.session.config['treatment'] == Globals.TREATMENT_NO_GENDER
         }
 
 

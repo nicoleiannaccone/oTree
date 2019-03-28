@@ -90,11 +90,11 @@ class ScreennameFetcher:
 
     @staticmethod
     def get_next_name(treatment, male_participant):
-        if treatment == Globals.TREATMENT_NO_GENDER:
-            return None
 
         if treatment == Globals.TREATMENT_FALSE_GENDER:
             male_screenname = not male_participant
+        elif treatment == Globals.TREATMENT_NO_GENDER:
+            male_screenname = male_participant
         elif treatment == Globals.TREATMENT_TRUE_GENDER:
             male_screenname = male_participant
         else:
