@@ -11,19 +11,23 @@
     Imagine that you are a <strong>Receiver</strong>.
 </p>
 <p>
-    You have been matched with a Decider with the screenname <strong>Decider A</strong>.
+    You have been matched with a Decider
+    {% if gender %}
+    with the screenname <strong>Decider A</strong>
+    {% endif %}
+    .
 </p>
 <p>
-    When asked to rate the social appropriateness of each amount Decider A could decide to take from your endowment,
+    Assume that when asked to rate the social appropriateness of each amount the Decider could decide to take from your endowment,
     you gave the following ratings:
 </p>
 
 <table class="table">
     <tr>
-        <th> Decider A's Decision
+        <th> If Decider {% if gender %} A {% endif %} Took:
         </th>
         <th>
-            Your Rating
+            Your Appropriateness Rating
         </th>
     </tr>
     <tr>
@@ -42,7 +46,11 @@
 
 <p>
 </p>
-{% formfield player.question1 %}
+{% if gender %}
+    {% formfield player.question1 %}
+{% else %}
+    {% formfield player.question1_NoGender %}
+{% endif %}
 {% formfield player.question2 %}
 {% formfield player.question3 %}
 

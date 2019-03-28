@@ -73,8 +73,12 @@ class PracticeQuestion0(Page):
 
 class PracticeQuestion1(Page):
     form_model = 'player'
-    form_fields = ['question1', 'question2', 'question3']
+    form_fields = ['question1', 'question1_NoGender', 'question2', 'question3']
 
+    def vars_for_template(self):
+        return{
+            'gender': self.session.config['treatment'] != Globals.TREATMENT_NO_GENDER
+        }
 
 class PracticeQuestion2(Page):
     form_model = 'player'

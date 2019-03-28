@@ -133,15 +133,18 @@ class Player(BasePlayer):
     krupka_4 = make_rating_field('Give the wallet to the shop manager')
 
     # Practice Questions
+    question1_NoGender = make_yn_field(
+        'When rating a Decider taking $X, the most common rating by other Receivers was '
+        '"Somewhat Appropriate." If the Decider chose to take $X and this round was chosen for payment, would you win a prize for your appropriateness rating?')
     question1 = make_yn_field(
         'When rating a Decider with the screenname Decider A taking $X, the most common rating by other Receivers was '
-        '"Somewhat Appropriate." If Decider A chose to take $X, would you win a prize for your appropriateness rating?')
+        '"Somewhat Appropriate." If Decider A chose to take $X and this round was chosen for payment, would you win a prize for your appropriateness rating?')
     question2 = make_yn_field(
         'When rating a Decider with the screenname Decider A taking $Y, the most common rating by other Receivers was '
-        '"Somewhat Appropriate." If Decider A chose to take $Y, would you win a prize for your appropriateness rating?')
+        '"Somewhat Appropriate." If Decider A chose to take $Y and this round was chosen for payment, would you win a prize for your appropriateness rating?')
     question3 = make_yn_field(
         'When rating a Decider with the screenname Decider A taking $X, the most common rating by other Receivers was '
-        '"Somewhat Inappropriate." If Decider A chose to take $X, would you win a prize for your appropriateness '
+        '"Somewhat Inappropriate." If Decider A chose to take $X and this round was chosen for payment, would you win a prize for your appropriateness '
         'rating?')
     question4 = make_yn_field(
         'When rating a Decider with the screenname Decider A taking $Z, the most common rating by other Receivers was '

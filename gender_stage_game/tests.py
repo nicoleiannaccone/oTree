@@ -11,6 +11,7 @@ class PlayerBot(Bot):
     def play_round(self):
         print(f'Round: {self.round_number}')
         if self.player.is_decider():
+            yield (pages.DName)
             yield (pages.DTake, {
                 'taken': c(1.00)
             })
