@@ -2,58 +2,18 @@
 {% load otree static %}
 
 {% block title %}
-    Practice Question
+    Practice Question 1
 {% endblock %}
 
 {% block content %}
 
 <p>
-    Imagine that you are a <strong>Receiver</strong>.
+    Imagine that in Round 1 you are assigned the role of <strong>Decider</strong>.
 </p>
 <p>
-    You have been matched with a Decider
-    {% if gender %}
-    with the screenname <strong>Decider A</strong>
-    {% endif %}
-    .
+    What role will you play in Round 2?
 </p>
-<p>
-    Assume that when asked to rate the social appropriateness of each amount the Decider could decide to take from your endowment,
-    you gave the following ratings:
-</p>
-
-<table class="table">
-    <tr>
-        <th> If Decider {% if gender %} A {% endif %} Took:
-        </th>
-        <th>
-            Your Appropriateness Rating
-        </th>
-    </tr>
-    <tr>
-        <td> $X </td>
-        <td> Somewhat Inappropriate </td>
-    </tr>
-    <tr>
-        <td> $Y </td>
-        <td> Somewhat Appropriate </td>
-    </tr>
-    <tr>
-        <td> $Z </td>
-        <td> Very Appropriate </td>
-    </tr>
-</table>
-
-<p>
-</p>
-{% if gender %}
-    {% formfield player.question1 %}
-{% else %}
-    {% formfield player.question1_NoGender %}
-{% endif %}
-{% formfield player.question2 %}
-{% formfield player.question3 %}
-
+{% formfield player.role_question %}
     {% next_button %}
 
 {% endblock %}

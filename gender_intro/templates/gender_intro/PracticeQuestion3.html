@@ -1,0 +1,97 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Practice Questions 4-6
+{% endblock %}
+
+{% block content %}
+
+<p>
+    Imagine that you are a <strong>Receiver</strong>.
+</p>
+<p>
+    You have been matched with a Decider
+    {% if gender %}
+    with the screenname <strong>Decider A</strong>
+    {% endif %}
+    .
+</p>
+<p>
+    Assume that when asked to rate the social appropriateness of each amount the Decider could decide to take from your endowment,
+    you gave the following ratings:
+</p>
+
+<table class="table">
+    <tr>
+        <th> If Decider {% if gender %} A {% endif %} Took:
+        </th>
+        <th>
+            Your Appropriateness Rating
+        </th>
+    </tr>
+    <tr>
+        <td> $X </td>
+        <td> Somewhat Inappropriate </td>
+    </tr>
+    <tr>
+        <td> $Y </td>
+        <td> Somewhat Appropriate </td>
+    </tr>
+    <tr>
+        <td> $Z </td>
+        <td> Very Appropriate </td>
+    </tr>
+</table>
+
+<p>
+    When rating a Decider
+    {% if gender %}
+    with the screenname Decider A
+    {% endif %}
+    taking $X, the most common rating by other Receivers
+    was "Somewhat Appropriate." If
+    {% if gender %}
+    Decider A
+    {% else %}
+    the Decider
+    {% endif %}
+    chose to take $X and this round was chosen for payment, would you win a prize for your appropriateness rating?
+
+</p>
+{% formfield player.question1 %}
+<p>
+    When rating a Decider
+    {% if gender %}
+    with the screenname Decider A
+    {% endif %}
+    taking $Y, the most common rating by other Receivers
+    was "Somewhat Appropriate." If
+    {% if gender %}
+    Decider A
+    {% else %}
+    the Decider
+    {% endif %}
+    chose to take $Y and this round was chosen for payment, would you win a prize for your appropriateness rating?
+</p>
+{% formfield player.question2 %}
+<p>
+    When rating a Decider
+    {% if gender %}
+    with the screenname Decider A
+    {% endif %}
+    taking $X, the most common rating by other Receivers
+    was "Somewhat Inappropriate." If
+    {% if gender %}
+    Decider A
+    {% else %}
+    the Decider
+    {% endif %}
+    chose to take $X and this round was chosen for payment, would you win a prize for your appropriateness rating?
+
+</p>
+{% formfield player.question3 %}
+
+    {% next_button %}
+
+{% endblock %}
