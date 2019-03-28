@@ -40,7 +40,7 @@ class Globals:
     TREATMENT_FALSE_GENDER = "False Gender"
 
     ALLOW_BLANKS = True
-    INCLUDE_GENDER_INTRO = True
+    INCLUDE_GENDER_INTRO = False
 
 
     MALE_NAMES = ['Jacob', 'William', 'Michael', 'James', 'Bruce', 'Ethan', 'Alexander', 'Daniel', 'Elijah',

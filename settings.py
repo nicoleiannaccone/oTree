@@ -30,7 +30,7 @@ SESSION_CONFIGS = [
     },
     {
         'name': 'Gender_Game_True_Gender',
-        'num_demo_participants': 10,
+        'num_demo_participants': 6,
         'app_sequence': ['gender_intro', 'gender_stage_game'],
         'treatment': Globals.TREATMENT_TRUE_GENDER,
         'use_browser_bots': False,

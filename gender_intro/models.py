@@ -78,6 +78,7 @@ class Constants(BaseConstants):
 
     # Monetary amounts
     endowment = c(Globals.ENDOWMENT)
+    increment = c(Globals.TAKE_INCREMENT)
     mode_match_prize = c(Globals.MODE_MATCH_PRIZE)
     prize_per_question = c(Globals.PRIZE_PER_QUESTION)
     participation = c(Globals.PARTICIPATION_PAYMENT)
