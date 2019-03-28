@@ -7,7 +7,8 @@ from globals import Globals
 class PlayerBot(Bot):
 
     def play_round(self):
-        yield (pages.Introduction)
+        if Globals.INCLUDE_GENDER_INTRO:
+            yield (pages.Introduction)
 
         yield (pages.PreSurvey, {
             'age': 18,
@@ -16,21 +17,22 @@ class PlayerBot(Bot):
             'major': "Econ"
         })
 
-        yield (pages.Instructions2)
-        yield (pages.Instructions3)
-        yield (pages.Instructions4)
-        yield (pages.Instructions5)
-        yield (pages.Instructions6)
-        yield (pages.PracticeQuestion2, {
-            'role_question': 2
-        })
-        yield (pages.PracticeQuestion0, {
-            'offer_question_1': 3,
-            'taken_question_1': 3
-        })
-        yield (pages.PracticeQuestion1, {
-            'question2': 1,
-            'question3': 1,
-        })
-        yield (pages.ComprehensionResults)
+        if Globals.INCLUDE_GENDER_INTRO:
+            yield (pages.Instructions2)
+            yield (pages.Instructions3)
+            yield (pages.Instructions4)
+            yield (pages.Instructions5)
+            yield (pages.Instructions6)
+            yield (pages.PracticeQuestion2, {
+                'role_question': 2
+            })
+            yield (pages.PracticeQuestion0, {
+                'offer_question_1': 3,
+                'taken_question_1': 3
+            })
+            yield (pages.PracticeQuestion1, {
+                'question2': 1,
+                'question3': 1,
+            })
+            yield (pages.ComprehensionResults)
 
