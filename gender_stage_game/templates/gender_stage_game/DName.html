@@ -15,10 +15,8 @@
 
 {% if gender %}
 <p>
-    All Deciders are assigned a screenname in each round to help Receivers rate the appropriateness of their chosen allocations and write them messages. Receivers do not receive screennames.
-</p>
-<p>
-    For the following round your screenname will be <strong> {{ name }}. </strong>
+    All Deciders are assigned a screenname to help Receivers rate the appropriateness of their chosen allocations and write them messages. Receivers do not receive screennames.
+    Your screenname is <strong> {{ name }}. </strong>
 </p>
 {% endif %}
 <p>
@@ -27,12 +25,12 @@
     {% if gender %}
     learn that your screenname is {{ name }} and will
     {% endif %}
-    be asked to rate how socially appropriate it would be if a Decider
+    be asked to rate how socially appropriate it would be if
     {% if gender %}
-    named {{ name }}
+    {{ name }}
     {% endif %}
     took each potential
-    amount between $0 and {{ Constants.endowment }}, in increments of $0.50.
+    amount between $0 and {{ Constants.endowment }}, in increments of {{ Constants.increment}}.
 </p>
 {% next_button %}
     <!-- Button trigger modal -->

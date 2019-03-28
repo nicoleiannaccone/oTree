@@ -58,6 +58,7 @@ class RRating(Page):
                 'dname': 'their Decider',
                 'd_name': '',
                 'Dname': 'Decider',
+                'D_name': 'the Decider',
             }
         elif (treatment == Globals.TREATMENT_TRUE_GENDER
               or treatment == Globals.TREATMENT_FALSE_GENDER):
@@ -65,6 +66,7 @@ class RRating(Page):
                 'dname': self.group.get_decider().get_screenname(),
                 'd_name': self.group.get_decider().get_screenname(),
                 'Dname': self.group.get_decider().get_screenname(),
+                'D_name': self.group.get_decider().get_screenname(),
             }
 
 

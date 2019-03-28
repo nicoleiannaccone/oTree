@@ -35,7 +35,11 @@
             {% endif %}
         </th>
         <th>
+            {% if player.role == 'decider' %}
             Receiver's Rating:
+            {% else %}
+            Your Rating:
+            {% endif %}
         </th>
         <th>
             Modal Rating:

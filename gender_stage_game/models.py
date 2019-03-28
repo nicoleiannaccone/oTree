@@ -38,7 +38,7 @@ def make_currency_field():
 
 
 def make_take_field():
-    return models.CurrencyField(choices=currency_range(c(0), Constants.endowment, c(0.5)))  # Drop-Down Menu version
+    return models.CurrencyField(choices=currency_range(c(0), Constants.endowment, Globals.TAKE_INCREMENT))  # Drop-Down Menu version
 
 
 def make_gender_field():
@@ -82,6 +82,8 @@ class Constants(BaseConstants):
     endowment = c(Globals.ENDOWMENT)
     mode_match_prize = c(Globals.MODE_MATCH_PRIZE)
     participation_payment = c(Globals.PARTICIPATION_PAYMENT)
+    increment = c(Globals.TAKE_INCREMENT)
+    prize_per_question = c(Globals.PRIZE_PER_QUESTION)
 
 # Needed below to implement a Perfect Strangers matching.
 # From https://groups.google.com/forum/#!msg/otree/rciCzbTqSfQ/XC-T7oZrEAAJ

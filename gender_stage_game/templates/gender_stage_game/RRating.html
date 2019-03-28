@@ -5,21 +5,25 @@
 
 {% block content %}
 <p>
-    You are the <strong>Receiver</strong>. You have been matched with a Decider <strong>{{ d_name }}</strong>.
+    You are the <strong>Receiver</strong>.
+</p>
+<p>
+    You have been matched with a new Decider <strong>{{ d_name }}</strong>.
 </p>
 <p>
     You have received an endowment of {{ Constants.endowment }} this round.
 </p>
 <p>
-    The table below presents a list of the possible choices available to the Decider. For each of the
+    The table below presents a list of the possible choices available to {{ D_name }}. For each of the
 choices, you should indicate whether you believe choosing that option is very socially
 inappropriate, somewhat socially inappropriate, somewhat socially appropriate, or very socially
 appropriate.
-    Recall that by socially appropriate we mean behavior that most people agree is the "correct" or "ethical" thing to do.
+    Recall that by socially appropriate we mean behavior that most people agree is the "correct" or "proper" thing to do.
 </p>
 <p>
     If your rating matches the most common rating other Receivers assigned to
-    an amount of that size taken by {{ dname }}, you will win a prize of {{ Constants.mode_match_prize }}.
+    an amount of that size taken by {{ dname }} and this round is chosen for payment,
+    you will win a prize of {{ Constants.mode_match_prize }}.
 </p>
 
 <h4>Rate the Social Appropriateness of Each Decision {{ Dname }} could make: </h4>
