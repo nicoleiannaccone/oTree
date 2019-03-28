@@ -1,3 +1,6 @@
+import decimal
+
+
 class Globals:
 
     # Group roles
@@ -13,7 +16,16 @@ class Globals:
     MODE_MATCH_PRIZE = 0.5
     PRIZE_PER_QUESTION = 0.5
     PARTICIPATION_PAYMENT = 5
+
     TAKE_CHOICES = list(range(0, ENDOWMENT + TAKE_INCREMENT, TAKE_INCREMENT))
+
+    @staticmethod
+    def rating_field_name(amount_taken):
+        from otree.api import Currency
+        if type(amount_taken) is Currency:
+            amount_taken = decimal.Decimal(amount_taken)
+        assert amount_taken == int(amount_taken), 'Amount taken must be a whole number'
+        return "rating%02d" % amount_taken
 
     RATING_LABEL_DICT = {
         None: 'None appropriate',

@@ -13,7 +13,7 @@ class PlayerBot(Bot):
         if self.player.is_decider():
             yield (pages.DName)
             yield (pages.DTake, {
-                'taken': c(1.00)
+                'taken': c(self.round_number)
             })
 
         if self.player.is_receiver():
