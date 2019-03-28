@@ -1,21 +1,17 @@
+import collections
 import typing
 import math
 import random
 from otree.api import (
-    models, widgets, BaseConstants, BaseSubsession, BaseGroup, BasePlayer,
-    Currency as c, currency_range,
-)
+    models, BaseConstants, BaseSubsession, BaseGroup, BasePlayer,
+    Currency as c, widgets, currency_range)
 
 from globals import Globals
 
 doc = """
-One player decides how much to take from the other player, given their screenname and observability of their choice.
+One player decides how much to take from the other player, given their screenname and observability
+of their choice.
 """
-
-
-###########
-# METHODS #
-###########
 
 
 def make_rating_field(label):
@@ -66,9 +62,47 @@ def make_yn_field(label):
                                )
 
 
-###################
-# CONSTANTS CLASS #
-###################
+def shifter(m):
+    """
+    Needed below to implement a Perfect Strangers matching.
+    From https://groups.google.com/forum/#!msg/otree/rciCzbTqSfQ/XC-T7oZrEAAJ
+    What it does: it shifts each second member in each group to the right by one.
+    That guarantees that no one plays with the same game in two subsequent rounds,
+    and each members holds his/her position within in a group.
+    """
+
+    group_size_err_msg = 'This code will not correctly work for group size not equal 2'
+    assert Constants.players_per_group == 2, group_size_err_msg
+    m = [[i.id_in_subsession for i in l] for l in m]
+    f_items = [i[0] for i in m]
+    s_items = [i[1] for i in m]
+    for i in range(Constants.num_rounds):
+        yield [[i, j] for i, j in zip(f_items, s_items)]
+        s_items = [s_items[-1]] + s_items[:-1]
+
+
+def get_modal_ratings(subsession_rounds, decider_name):
+    """
+    Determine the most common ratings assigned by the named dictator's receivers, aggregated over
+    the entire treatment session.
+    """
+
+    # Find all the groups that had the named decider (in any round)
+    groups = [sub.get_group_with_decider(decider_name) for sub in subsession_rounds]
+
+    # Collect all ratings assigned to that decider's possible choices
+    ratings = {amount: [] for amount in Globals.TAKE_CHOICES}
+    for group in groups:    # type: Group
+        for amount in Globals.TAKE_CHOICES:
+            rating = group.get_rating_for_amount_taken(amount)
+            ratings[amount].append(rating)
+
+    # Find the modal rating assigned to each choice
+    modal_ratings = {}
+    for amount in Globals.TAKE_CHOICES:
+        modal_ratings[amount] = collections.Counter(ratings[amount]).most_common(1)[0][0]
+    return modal_ratings
+
 
 class Constants(BaseConstants):
     name_in_url = 'WebGames'
@@ -85,25 +119,6 @@ class Constants(BaseConstants):
     increment = c(Globals.TAKE_INCREMENT)
     prize_per_question = c(Globals.PRIZE_PER_QUESTION)
 
-# Needed below to implement a Perfect Strangers matching.
-# From https://groups.google.com/forum/#!msg/otree/rciCzbTqSfQ/XC-T7oZrEAAJ
-# What it does: it shifts each second member in each group to the right by one.
-# That guarantees that no one plays with the same game in two subsequent rounds,
-# and each members holds his/her position within in a group.
-def shifter(m):
-    group_size_err_msg = 'This code will not correctly work for group size not equal 2'
-    assert Constants.players_per_group == 2, group_size_err_msg
-    m = [[i.id_in_subsession for i in l] for l in m]
-    f_items = [i[0] for i in m]
-    s_items = [i[1] for i in m]
-    for i in range(Constants.num_rounds):
-        yield [[i, j] for i, j in zip(f_items, s_items)]
-        s_items = [s_items[-1]] + s_items[:-1]
-
-
-####################
-# SUBSESSION CLASS #
-####################
 
 class Subsession(BaseSubsession):
     # From https://groups.google.com/forum/#!msg/otree/rciCzbTqSfQ/XC-T7oZrEAAJ
@@ -114,10 +129,16 @@ class Subsession(BaseSubsession):
         fd = self.session.vars['full_data']
         self.set_group_matrix(fd[self.round_number - 1])
 
+    def get_group_with_decider(self, decider_name):
+        matching_groups = [group for group in self.get_groups()
+                           if group.get_decider().get_screenname() == decider_name]
+        if len(matching_groups) == 0:
+            raise Exception(f"No decider named {decider_name} found in this subsession.")
+        elif len(matching_groups) > 1:
+            raise Exception(f"More than one decider named {decider_name} found in this subsession.")
+        else:
+            return matching_groups[0]
 
-################
-# PLAYER CLASS #
-################
 
 class Player(BasePlayer):
 
@@ -158,11 +179,6 @@ class Player(BasePlayer):
 
     def get_screenname(self):
         return self.participant.vars['screenname']
-
-
-###############
-# GROUP CLASS #
-###############
 
 
 class Group(BaseGroup):
@@ -206,9 +222,11 @@ class Group(BaseGroup):
     def get_receiver(self) -> Player:
         return typing.cast(Player, self.get_player_by_role(Globals.RECEIVER))
 
+    def get_rating_for_amount_taken(self, amount):
+        rating_field_name = Globals.rating_field_name(amount)
+        return getattr(self, rating_field_name)
+
     def record_rating(self):
-        rating_dict = {None: None}
-        for amt in Globals.TAKE_CHOICES:
-            rating_dict[c(amt)] = getattr(self, 'rating%02d' % amt)
-        self.rating = rating_dict[self.taken]
+        self.rating = self.get_rating_for_amount_taken(self.taken)
         self.rating_label = Globals.RATING_LABEL_DICT[self.rating]
+
