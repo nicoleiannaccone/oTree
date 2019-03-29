@@ -1,7 +1,7 @@
 {% extends "global/Page.html" %}
 {% load otree %}
 
-{% block title %}Social Appropriateness{% endblock %}
+{% block title %}Round {{ player.round_number }}: Social Appropriateness Rating{% endblock %}
 
 {% block content %}
 <p>
@@ -11,7 +11,7 @@
     You have been matched with a new Decider <strong>{{ d_name }}</strong>.
 </p>
 <p>
-    You have received an endowment of {{ Constants.endowment }} this round.
+    In this round, round {{ player.round_number }}, you have received an endowment of <strong>{{ Constants.endowment }}</strong>.
 </p>
 <p>
     The table below presents a list of the possible choices available to {{ D_name }}. For each of the
@@ -23,7 +23,7 @@ appropriate.
 <p>
     If your rating matches the most common rating other Receivers assigned to
     an amount of that size taken by {{ dname }} and this round is chosen for payment,
-    you will win a prize of {{ Constants.mode_match_prize }}.
+    you will win a prize of <strong>{{ Constants.mode_match_prize }}</strong>.
 </p>
 
 <h4>Rate the Social Appropriateness of Each Decision {{ Dname }} could make: </h4>

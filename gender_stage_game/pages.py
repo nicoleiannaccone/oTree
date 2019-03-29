@@ -13,7 +13,7 @@ from globals import Globals
 class DName(Page):
 
     def is_displayed(self):
-        return self.player.is_decider() and self.round_number == 1
+        return self.player.is_decider() and self.round_number == 1 and self.session.config['treatment'] != Globals.TREATMENT_NO_GENDER
 
     def vars_for_template(self):
         return {
@@ -188,35 +188,16 @@ class Results(Page):
         }
 
 
+class PostSurvey(Page):
+    form_model = 'player'
+    form_fields = ['second_order_gender_guess']
+
+    def is_displayed(self):
+        return self.round_number == Constants.num_rounds
+
 class SurveyWaitPage(WaitPage):
     def is_displayed(self):
         return self.round_number == Constants.num_rounds
-
-
-class SurveyResults(Page):
-    def is_displayed(self):
-        return self.round_number == Constants.num_rounds
-
-    def vars_for_template(self):
-        decider = self.group.get_player_by_role('decider')
-        receiver = self.group.get_player_by_role('receiver')
-        self.player.get_gender()
-        self.group.check_gender()
-        self.player.set_guess()  # This just puts a label "Male" on gender 1 and a label "Female" on gender 2
-        self.player.get_survey_prizes()
-        self.player.get_payoffs()
-        return {
-            'gender': self.participant.vars.get('gender', 0),
-            'genderCP1': self.participant.vars.get('genderCP1', 0),
-            'gender_D1': decider.participant.vars.get('gender_D1', 0),
-            'gender_R1': receiver.participant.vars.get('gender_R1', 0),
-            'my_gender': self.player.gender,
-            'genderD1': decider.participant.vars.get('gender', 0),
-            'genderR1': receiver.participant.vars.get('gender', 0),
-            'gender_CP': self.player.other_player().gender,
-            'gender_CP_1': self.participant.vars.get('gender_CP_1', 0),
-            'payoff': self.participant.payoff,
-        }
 
 
 page_sequence = [

@@ -35,7 +35,7 @@ def make_currency_field():
 
 def make_take_field():
     return models.CurrencyField(choices=currency_range(c(0), Constants.endowment, Globals.TAKE_INCREMENT))  # Drop-Down Menu version
-
+    # return models.PositiveIntegerField(widget=widgets.Slider(attrs={'step': '1'}), min=0, max = Constants.endowment, initial=0) # Slider -- starts at 5, shows integers
 
 def make_gender_field():
     return models.IntegerField(blank=Globals.ALLOW_BLANKS,
@@ -149,6 +149,7 @@ class Player(BasePlayer):
     receiver_name = models.StringField()
     decider_name = models.StringField()
     participant_name = models.StringField()
+    second_order_gender_guess = models.IntegerField()
 
     # Player Methods
     def get_partner(self):
