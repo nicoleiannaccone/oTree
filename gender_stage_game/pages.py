@@ -118,6 +118,7 @@ class ResultsWaitPage(WaitPage):
                 for rplayer in rgroup.get_players():
                     rplayer.decider_name = dname
                     rplayer.receiver_name = rname
+                    rplayer.participant_name = rplayer.participant.vars['screenname']
 
                 # Most common ratings assigned to this decider
                 modal_ratings = get_modal_ratings(self.subsession.in_all_rounds(), dname)

@@ -148,6 +148,7 @@ class Player(BasePlayer):
     payoff_round = models.IntegerField()
     receiver_name = models.StringField()
     decider_name = models.StringField()
+    participant_name = models.StringField()
 
     # Player Methods
     def get_partner(self):
