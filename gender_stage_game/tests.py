@@ -11,7 +11,8 @@ class PlayerBot(Bot):
     def play_round(self):
         print(f'Round: {self.round_number}')
         if self.player.is_decider():
-            yield (pages.DName)
+            if self.round_number == 1:
+                yield (pages.DName)
             yield (pages.DTake, {
                 'taken': c(self.round_number)
             })
@@ -34,7 +35,7 @@ class PlayerBot(Bot):
                 'rating10': my_index % 4 + 1,
             })
             yield (pages.RMessage, {
-                'message': 'Thanks for the money!'
+                'message': 'Thanks for the money in Round ' + str(self.round_number)
             })
 
         if self.round_number == Constants.num_rounds:
@@ -46,3 +47,4 @@ class PlayerBot(Bot):
         print(self.player.role())
         print(self.participant.vars)
         print(self.group.taken)
+        print(self.participant.payoff)

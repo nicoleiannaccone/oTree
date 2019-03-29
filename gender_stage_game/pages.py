@@ -13,7 +13,7 @@ from globals import Globals
 class DName(Page):
 
     def is_displayed(self):
-        return self.player.is_decider()
+        return self.player.is_decider() and self.round_number == 1
 
     def vars_for_template(self):
         return {
@@ -110,6 +110,21 @@ class ResultsWaitPage(WaitPage):
     def after_all_players_arrive(self):
         for player in self.subsession.get_players():    # type: Player
 
+            for round_number in Constants.round_numbers:
+                rgroup = player.in_round(round_number).group
+                dname = rgroup.get_decider().get_screenname()
+                rname = rgroup.get_receiver().get_screenname()
+
+                for rplayer in rgroup.get_players():
+                    rplayer.decider_name = dname
+                    rplayer.receiver_name = rname
+
+                # Most common ratings assigned to this decider
+                modal_ratings = get_modal_ratings(self.subsession.in_all_rounds(), dname)
+
+                # Most common rating assigned to this decider's choice in this round
+                rgroup.modal_rating = modal_ratings[rgroup.taken]
+
             # Determine how much we need to pay each player
             player.record_total_payoff()
 
@@ -117,10 +132,11 @@ class ResultsWaitPage(WaitPage):
             for round_number in Constants.round_numbers:
                 rplayer = player.in_round(round_number)
                 rplayer.treatment = self.session.config['treatment']
+                rplayer.payoff_round = self.session.vars['payoff round']
 
 
 class ResultRow:
-    def __init__(self, round_number, dname, rname, took, offered, rating, modal_rating):
+    def __init__(self, round_number, dname, rname, took, offered, rating, modal_rating, message):
         self.round_number = round_number
         self.dname = dname
         self.rname = rname
@@ -130,11 +146,12 @@ class ResultRow:
         self.rating_label = Globals.RATING_LABEL_DICT[rating]
         self.modal_rating = modal_rating
         self.modal_rating_label = Globals.RATING_LABEL_DICT[modal_rating]
+        self.message = message
 
     def __str__(self):
-        return "%d %012s %012s %4.2f %4.2f %40s %40s" % (self.round_number, self.dname, self.rname,
+        return "%d %012s %012s %5.2f %5.2f %40s %40s %100s" % (self.round_number, self.dname, self.rname,
                                                          self.took, self.offered, self.rating_label,
-                                                         self.modal_rating_label)
+                                                         self.modal_rating_label, self.message)
 
 
 class Results(Page):
@@ -155,14 +172,8 @@ class Results(Page):
             dname = group.get_decider().get_screenname()
             rname = group.get_receiver().get_screenname()
 
-            # Most common ratings assigned to this decider
-            modal_ratings = get_modal_ratings(self.subsession.in_all_rounds(), dname)
-
-            # Most common rating assigned to this decider's choice in this round
-            group.modal_rating = modal_ratings[group.taken]
-
             rr = ResultRow(round_number, dname, rname, group.taken, group.offer, group.rating,
-                           group.modal_rating)
+                           group.modal_rating, group.message)
             result_table.append(rr)
 
         for rr in result_table:

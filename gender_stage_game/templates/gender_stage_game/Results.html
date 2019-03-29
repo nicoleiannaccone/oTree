@@ -74,6 +74,7 @@
 </table>
 
     {% for r in result_table %}
+        <!-- Player.id_in_group is 1 for the dictator and 2 for the receiver -->
         {% if player.id_in_group == 1 %}
         <strong> Round {{ r.round_number }} Results: </strong>
             <p> In Round {{ r.round_number }}, your screenname was  <strong> {{ r.dname}} </strong> and you decided to take
@@ -84,10 +85,9 @@
                 and wrote you the following message:
             </p>
             <p>
-            <strong>{{ group.message }}</strong>
+            <strong>{{ r.message }}</strong>
             </p>
-        {% endif %}
-        {% if player.id_in_group == 2 %}
+        {% else %}
         <strong> Round {{ r.round_number }} Earnings: </strong>
 
             <p> In Round {{ r.round_number }}, your Decider, <strong>{{ r.dname }}</strong>, took
@@ -110,121 +110,6 @@
         {% endif %}
     {% endfor %}
 
-
-
-{% comment %}
-        {% if player.id_in_group == 2 %}
-        <strong> Round 1 Earnings: </strong>
-
-            <p> In Round 1, your Decider, <strong>{{ name_D1 }}</strong>, took <strong>{{ took1 }}</strong> of your endowment. </p>
-            <p>
-                You earned <strong> {{ offered1 }} </strong> as a result of the Decider's allocation choice.
-            </p>
-            <p> You rated this choice as <strong>{{ rated1 }}</strong>. </p>
-            <p> The most common rating that other Receivers assigned to an allocation choice of {{ took1 }} by {{ name_D1 }} was
-                {% if group.ordering_1 == True %} {{ group.modal_rating1_1 }} {% endif %}
-                {% if group.ordering_2 == True %} {{ group.modal_rating1_2 }} {% endif %}
-                : {{ group.modal_rating1 }}, {{ group.modal_rating_label_1 }}. </p>
-            <p>
-                {% if player.mode_matched1 %} Since your rating <strong> matched </strong>the most common rating, you won an additional prize of {{ Constants.prize }}. </p>
-                {% endif %}
-
-            <p> Since you are in Treatment {{ ordering }}
-            {% if group.ordering_1 == True %} 1, {% endif %}
-            {% if group.ordering_2 == True %} 2, {% endif %}
-                the modal rating of the amount your Decider took in round 1, {{ took1 }}, was:
-            {% if group.ordering_1 == True %} {{ group.modal_rating1_1 }} {{ group.modal_rating }} {{ group.modal_rating_label }}. {% endif %}
-            {% if group.ordering_2 == True %} {{ group.modal_rating1_2 }} {{ group.modal_rating }} {{ group.modal_rating_label }}. {% endif %}
-                Since you rated your Decider taking this amount as {{ rated1 }}, your rating
-                {% if player.mode_matched1 %} matched {% else %} did not match {% endif %} the modal rating.
-                Therefore you
-                {% if player.mode_matched1 %} win {% else %} did not win{% endif %} a prize of {{ Constants.prize }} for this rating.
-            </p>
-            <p> Modal rating of took1, {{ took1 }}, if ordering 1 {{ group.ordering_1 }} or  names1 {{ names }} : {{ group.modal_rating1_1 }} {{ group.modal_rating }} {{ group.modal_rating_label }}</p>
-            <p> Modal rating of took1 if ordering 2 {{ group.ordering_2 }}: {{ group.modal_rating1_2 }} {{ group.modal_rating }} {{ group.modal_rating_label }} </p>
-            <p> Mode matched is {{ player.mode_matched1 }}.  Your rating of the amount your first Decider, {{ name_D1 }}, took ( {{ took1 }} ) was {{ rated1 }} {{ group.rating }}. </p>
-            {% if player.mode_matched1 == True %}
-            <p> Since your rating, {{ rated1 }}, matches the modal rating for ordering 1 {{ group.modal_rating1_1}} {{ group.modal_rating }} {{ group.modal_rating_label }} or for ordering 2 {{ group.modal_rating1_2 }} {{ group.modal_rating }} {{ group.modal_rating_label }}, you win a prize of {{ Constants.prize }}. </p>
-            {% else %}
-            <p> Since your rating, {{ rated1 }}, does not match the modal rating, {{ group.modal_rating1_1}} {{ group.modal_rating }} {{ group.modal_rating_label }}, or for ordering 2 {{ group.modal_rating1_2 }} {{ group.modal_rating }} {{ group.modal_rating_label }}, you do not win a prize of {{ Constants.prize }}. </p>
-            {% endif %}
-
-        <strong> Round 2 Earnings: </strong>
-
-            <p> In Round 2, your Decider, <strong>{{ name_D2 }}</strong>, took <strong>{{ took2 }}</strong> of your endowment. </p>
-            <p>
-                You earned <strong> {{ offered2 }} </strong> as a result of the Decider's allocation choice.
-            </p>
-            <p> You rated this choice as <strong>{{ rated2 }}</strong>. </p>
-            <p> The most common rating that other Receivers assigned to an allocation choice of {{ took2 }} by {{ name_D2 }} was
-                {% if group.ordering_1 == True %} {{ group.modal_rating2_1 }} {% endif %}
-                {% if group.ordering_2 == True %} {{ group.modal_rating2_2 }} {% endif %}
-                : {{ group.modal_rating2 }}, {{ group.modal_rating_label_2 }}. </p>
-
-            <p>
-                {% if player.mode_matched2 %} Since your rating <strong> matched </strong>the most common rating, you won an additional prize of {{ Constants.prize }}. </p>
-                {% endif %}
-
-        <strong> Round 3 Earnings: </strong>
-
-            <p> In Round 3, your Decider, <strong>{{ name_D3 }}</strong>, took <strong>{{ took3 }}</strong> of your endowment. </p>
-            <p>
-                You earned <strong> {{ offered3 }} </strong> as a result of the Decider's allocation choice.
-            </p>
-            <p> You rated this choice as <strong>{{ rated3 }}</strong>. </p>
-            <p> The most common rating that other Receivers assigned to an allocation choice of {{ took3 }} by {{ name_D3 }} was
-                {% if group.ordering_1 == True %} {{ group.modal_rating3_1 }} {% endif %}
-                {% if group.ordering_2 == True %} {{ group.modal_rating3_2 }} {% endif %}
-                : {{ group.modal_rating3 }}, {{ group.modal_rating_label_3 }}. </p>
-
-            <p>
-                {% if player.mode_matched3 %} Since your rating <strong> matched </strong>the most common rating, you won an additional prize of {{ Constants.prize }}. </p>
-                {% endif %}
-
-
-        <strong> Round 4 Earnings: </strong>
-
-            <p> In Round 4, your Decider, <strong>{{ name_D4 }}</strong>, took <strong>{{ took4 }}</strong> of your endowment. </p>
-            <p>
-                You earned <strong> {{ offered4 }} </strong> as a result of the Decider's allocation choice.
-            </p>
-            <p> You rated this choice as <strong>{{ rated4 }}</strong>. </p>
-            <p> The most common rating that other Receivers assigned to an allocation choice of {{ took4 }} by {{ name_D4 }} was
-                {% if group.ordering_1 == True %} {{ group.modal_rating4_1 }} {% endif %}
-                {% if group.ordering_2 == True %} {{ group.modal_rating4_2 }} {% endif %}
-                : {{ group.modal_rating4 }}, {{ group.modal_rating_label_4 }}. </p>
-
-            <p>
-                {% if player.mode_matched4 %} Since your rating <strong> matched </strong>the most common rating, you won an additional prize of {{ Constants.prize }}. </p>
-                {% endif %}
-
-
-        <strong> Round 5 Earnings: </strong>
-
-            <p> In Round 5, your Decider, <strong>{{ name_D5 }}</strong>, took <strong>{{ took5 }}</strong> of your endowment. </p>
-            <p>
-                You earned <strong> {{ offered5 }} </strong> as a result of the Decider's allocation choice.
-            </p>
-            <p> You rated this choice as <strong>{{ rated5 }}</strong>. </p>
-            <p> The most common rating that other Receivers assigned to an allocation choice of {{ took5 }} by {{ name_D5 }} was
-                {% if group.ordering_1 == True %} {{ group.modal_rating5_1 }} {% endif %}
-                {% if group.ordering_2 == True %} {{ group.modal_rating5_2 }} {% endif %}
-                : {{ group.modal_rating5 }}, {{ group.modal_rating_label_5 }}. </p>
-
-            <p>
-                {% if player.mode_matched5 %} Since your rating <strong> matched </strong>the most common rating, you won an additional prize of {{ Constants.prize }}. </p>
-                {% endif %}
-<p>
-    Based on the allocation decisions of your matched Deciders in rounds 1-5, your total earnings are now <strong> {{ payoff }} </strong>. If you are the Receiver, you also get
-    the prizes you earned whenever your appropriateness rating matched the most common rating given
-    by other Receivers to the allocation the Decider chose.
-</p>
-        {% endif %}
-
-    <p>
-        On the next page, you will have the opportunity to earn additional money by making some guesses about your experiment counterparts.
-    </p>
-{% endcomment %}
 
 
 

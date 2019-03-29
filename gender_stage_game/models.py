@@ -109,6 +109,7 @@ class Constants(BaseConstants):
     players_per_group = 2
     num_rounds = 5
     round_numbers = list(range(1, num_rounds + 1))
+    number_rounds = 5
 
     instructions_template = 'gender_intro/InstructionsFull.html'
 
@@ -144,6 +145,9 @@ class Player(BasePlayer):
 
     participant_vars_dump = models.StringField()
     treatment = models.StringField()
+    payoff_round = models.IntegerField()
+    receiver_name = models.StringField()
+    decider_name = models.StringField()
 
     # Player Methods
     def get_partner(self):
