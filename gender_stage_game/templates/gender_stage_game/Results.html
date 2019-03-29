@@ -73,69 +73,46 @@
     {% endfor %}
 </table>
 
-{% comment %}
+    {% for r in result_table %}
         {% if player.id_in_group == 1 %}
-        <strong> Round 1 Results: </strong>
-            <p> In Round 1, your screenname was  <strong> {{ name_1 }} </strong> and you decided to take
-            <strong>{{ took1 }}</strong> of the Receiver's endowment for yourself.
+        <strong> Round {{ r.round_number }} Results: </strong>
+            <p> In Round {{ r.round_number }}, your screenname was  <strong> {{ r.dname}} </strong> and you decided to take
+            <strong>{{ r.took }}</strong> of the Receiver's endowment for yourself.
             </p>
             <p>
-                Your Round 1 Receiver rated this choice as <strong>{{ rated1 }}</strong>, and wrote you the following message:
+                Your Round 1 Receiver rated this choice as <strong>{{ r.rating_label }}</strong>,
+                and wrote you the following message:
             </p>
             <p>
-            <strong>{{ message1 }}</strong>
-            </p>
-
-        <strong> Round 2 Results: </strong>
-            <p> In Round 2, your screenname was  <strong> {{ name_2 }} </strong> and you decided to take
-                <strong>{{ took2 }}</strong> of the Receiver's endowment for yourself, leaving {{ offered2 }} for the Receiver.
-            </p>
-            <p>
-                Your Round 2 Receiver rated this choice as <strong>{{ rated2 }}</strong>, and wrote you the following message:
-            </p>
-            <p>
-            <strong>{{ message2 }}</strong>
-            </p>
-
-        <strong> Round 3 Results: </strong>
-            <p> In Round 3, your screenname was  <strong> {{ name_3 }} </strong> and you decided to take
-                <strong>{{ took3 }}</strong> of the Receiver's endowment for yourself.
-            </p>
-            <p>
-                Your Round 3 Receiver rated this choice as <strong>{{ rated3 }}</strong>, and wrote you the following message:
-            </p>
-            <p>
-            <strong>{{ message3 }}</strong>
-            </p>
-
-        <strong> Round 4 Results: </strong>
-            <p> In Round 4, your screenname was  <strong> {{ name_4 }} </strong> and you decided to take
-                <strong>{{ took4 }}</strong> of the Receiver's endowment for yourself.
-            </p>
-            <p>
-                Your Round 4 Receiver rated this choice as <strong>{{ rated4 }}</strong>, and wrote you the following message:
-            </p>
-            <p>
-            <strong>{{ message4 }}</strong>
-            </p>
-
-        <strong> Round 5 Results: </strong>
-            <p> In Round 5, your screenname was  <strong> {{ name_5 }} </strong> and you decided to take
-                <strong>{{ took5 }}</strong> of the Receiver's endowment for yourself.
-            </p>
-            <p>
-                Your Round 5 Receiver rated this choice as <strong>{{ rated5 }}</strong>, and wrote you the following message:
-            </p>
-            <p>
-            <strong>{{ message5 }}</strong>
-            </p>
-
-        <strong> Your Earnings so far: </strong>
-            <p>
-                Based on your allocation decisions in rounds 1-5, you earned a total of {{ payoff }}.
+            <strong>{{ group.message }}</strong>
             </p>
         {% endif %}
+        {% if player.id_in_group == 2 %}
+        <strong> Round {{ r.round_number }} Earnings: </strong>
 
+            <p> In Round {{ r.round_number }}, your Decider, <strong>{{ r.dname }}</strong>, took
+                <strong>{{ r.took }}</strong> of your endowment. </p>
+            <p>
+                You earned <strong> {{ r.offered }} </strong> as a result of the Decider's allocation choice.
+            </p>
+            <p> You rated this choice as <strong>{{ r.rating_label }}</strong>. </p>
+            <p> The most common rating that other Receivers assigned to an allocation choice of {{ r.took }}
+                by {{ r.dname }} was {{ r.modal_rating_label }}
+            </p>
+
+            <p>
+                {% if r.modal_rating == r.rating and r.round_number == payoff_round %}
+                Since your rating <strong> matched </strong>the most common rating in the chosen round,
+                round {{ payoff_round }}, you won a prize of {{ Constants.mode_match_prize }}. Your total earnings
+                is therefore {{ total_game_payoff }}. </p>
+                {% endif %}
+
+        {% endif %}
+    {% endfor %}
+
+
+
+{% comment %}
         {% if player.id_in_group == 2 %}
         <strong> Round 1 Earnings: </strong>
 

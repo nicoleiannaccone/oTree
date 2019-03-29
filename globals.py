@@ -13,7 +13,7 @@ class Globals:
 
     ENDOWMENT = 10
     TAKE_INCREMENT = 1
-    MODE_MATCH_PRIZE = 0.5
+    MODE_MATCH_PRIZE = 5
     PRIZE_PER_QUESTION = 0.5
     PARTICIPATION_PAYMENT = 5
 
@@ -40,7 +40,7 @@ class Globals:
     TREATMENT_FALSE_GENDER = "False Gender"
 
     ALLOW_BLANKS = True
-    INCLUDE_GENDER_INTRO = False
+    INCLUDE_GENDER_INTRO = True
 
 
     MALE_NAMES = ['Jacob', 'William', 'Michael', 'James', 'Bruce', 'Ethan', 'Alexander', 'Daniel', 'Elijah',

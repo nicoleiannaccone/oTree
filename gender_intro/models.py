@@ -69,10 +69,10 @@ class Constants(BaseConstants):
     num_rounds = 1
     players_per_group = None
 
-    male_names = ['Jacob', 'William', 'Michael', 'James', 'Bruce', 'Ethan', 'Alexander', 'Daniel', 'Elijah',
-                  'Benjamin', 'Matthew', 'David', 'Anthony', 'Joseph', 'Joshua', 'Andrew']
-    female_names = ['Sophia', 'Emma', 'Olivia', 'Emily', 'Elizabeth', 'Charlotte', 'Chloe',  'Aubrey',
-                    'Natalie', 'Grace', 'Zoey', 'Hannah']
+    number_rounds = 5
+
+    male_names = Globals.MALE_NAMES
+    female_names = Globals.FEMALE_NAMES
 
     instructions_template = 'gender_intro/InstructionsFull.html'
 
@@ -134,24 +134,10 @@ class Player(BasePlayer):
     krupka_4 = make_rating_field('Give the wallet to the shop manager')
 
     # Practice Questions
-    question1_NoGender = make_yn_field(
-        'When rating a Decider taking $X, the most common rating by other Receivers was '
-        '"Somewhat Appropriate." If the Decider chose to take $X and this round was chosen for payment, would you win a prize for your appropriateness rating?')
-    question1 = make_yn_field(
-        'When rating a Decider with the screenname Decider A taking $X, the most common rating by other Receivers was '
-        '"Somewhat Appropriate." If Decider A chose to take $X and this round was chosen for payment, would you win a prize for your appropriateness rating?')
-    question2 = make_yn_field(
-        'When rating a Decider with the screenname Decider A taking $Y, the most common rating by other Receivers was '
-        '"Somewhat Appropriate." If Decider A chose to take $Y and this round was chosen for payment, would you win a prize for your appropriateness rating?')
-    question3 = make_yn_field(
-        'When rating a Decider with the screenname Decider A taking $X, the most common rating by other Receivers was '
-        '"Somewhat Inappropriate." If Decider A chose to take $X and this round was chosen for payment, would you win a prize for your appropriateness '
-        'rating?')
-    question4 = make_yn_field(
-        'When rating a Decider with the screenname Decider A taking $Z, the most common rating by other Receivers was '
-        '"Very Appropriate." When rating a Decider with the screenname Decider A taking $Y, the most common rating by '
-        'other Receivers was "Somewhat Inappropriate." If Decider A chose to take $Z, would you win a prize for your '
-        'appropriateness rating?')
+    question1 = make_yn_field('')
+    question2 = make_yn_field('')
+    question3 = make_yn_field('')
+    question4 = make_yn_field('')
 
     role_question = models.IntegerField(blank=Globals.ALLOW_BLANKS,
                                         choices=[

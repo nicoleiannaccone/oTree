@@ -23,14 +23,15 @@ class PlayerBot(Bot):
             yield (pages.Instructions4)
             yield (pages.Instructions5)
             yield (pages.Instructions6)
-            yield (pages.PracticeQuestion2, {
+            yield (pages.PracticeQuestion1, {
                 'role_question': 2
             })
-            yield (pages.PracticeQuestion0, {
+            yield (pages.PracticeQuestion2, {
                 'offer_question_1': 3,
                 'taken_question_1': 3
             })
-            yield (pages.PracticeQuestion1, {
+            yield (pages.PracticeQuestion3, {
+                'question1': 2,
                 'question2': 1,
                 'question3': 1,
             })

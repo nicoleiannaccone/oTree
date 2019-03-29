@@ -159,10 +159,10 @@ class Results(Page):
             modal_ratings = get_modal_ratings(self.subsession.in_all_rounds(), dname)
 
             # Most common rating assigned to this decider's choice in this round
-            modal_rating = modal_ratings[group.taken]
+            group.modal_rating = modal_ratings[group.taken]
 
             rr = ResultRow(round_number, dname, rname, group.taken, group.offer, group.rating,
-                           modal_rating)
+                           group.modal_rating)
             result_table.append(rr)
 
         for rr in result_table:
@@ -170,7 +170,9 @@ class Results(Page):
 
         return {
             'result_table': result_table,
-            'hide_dnames': self.session.config['treatment'] == Globals.TREATMENT_NO_GENDER
+            'hide_dnames': self.session.config['treatment'] == Globals.TREATMENT_NO_GENDER,
+            'payoff_round': self.session.vars['payoff round'],
+            'total_game_payoff': self.participant.payoff
         }
 
 
