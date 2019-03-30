@@ -1,3 +1,5 @@
+import time
+
 from otree.api import Currency as c, currency_range
 from . import pages
 from ._builtin import Bot
@@ -39,6 +41,7 @@ class PlayerBot(Bot):
             })
 
         if self.round_number == Constants.num_rounds:
+            time.sleep(100)
             yield (pages.Results)
 
         print()
