@@ -2,7 +2,7 @@ from otree.api import Currency as c, currency_range
 from . import pages
 from ._builtin import Bot
 from .models import Constants
-
+from globals import Globals
 
 class PlayerBot(Bot):
 
@@ -11,7 +11,7 @@ class PlayerBot(Bot):
     def play_round(self):
         print(f'Round: {self.round_number}')
         if self.player.is_decider():
-            if self.round_number == 1:
+            if self.round_number == 1 and self.session.config['treatment'] != Globals.TREATMENT_NO_GENDER:
                 yield (pages.DName)
             yield (pages.DTake, {
                 'taken': c(self.round_number)
