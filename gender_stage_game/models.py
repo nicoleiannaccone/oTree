@@ -193,6 +193,7 @@ class Group(BaseGroup):
 
     # Amount taken by dictator
     taken = make_take_field()
+    offer = models.CurrencyField()
 
     # Receiver ratings of dictator's possible choices
     rating00 = make_rating_field(c(0))
@@ -217,10 +218,6 @@ class Group(BaseGroup):
     #################
     # Group Methods #
     #################
-
-    @property
-    def offer(self):
-        return Globals.ENDOWMENT - self.taken
 
     def get_decider(self) -> Player:
         return typing.cast(Player, self.get_player_by_role(Globals.DECIDER))

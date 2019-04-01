@@ -35,6 +35,9 @@ class DTake(Page):
             'gender': self.session.config['treatment'] != Globals.TREATMENT_NO_GENDER
         }
 
+    def before_next_page(self):
+        self.group.offer = Globals.ENDOWMENT - self.group.taken
+
 
 class DWaitPage(WaitPage):
     def is_displayed(self: Page):

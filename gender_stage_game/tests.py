@@ -41,7 +41,8 @@ class PlayerBot(Bot):
             })
 
         if self.round_number == Constants.num_rounds:
-            time.sleep(100)
+            if self.session.config['use_browser_bots']:
+                time.sleep(100)
             yield (pages.Results)
 
         print()
