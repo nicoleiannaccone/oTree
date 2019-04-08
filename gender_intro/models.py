@@ -151,8 +151,8 @@ class Player(BasePlayer):
     offer_question_1 = models.IntegerField(blank=Globals.ALLOW_BLANKS,
                                            choices=[
                                                [1, '$X'],
-                                               [2, '$1.00 - $X'],
-                                               [3, '$3.00 - $X'],
+                                               [2, '$5.00 - $X'],
+                                               [3, '$10.00 - $X'],
                                            ],
                                            label='How much money would your matched Receiver get?',
                                            widget=widgets.RadioSelect
@@ -161,7 +161,7 @@ class Player(BasePlayer):
                                            choices=[
                                                [1, '$Y'],
                                                [2, '$1.00 - $Y'],
-                                               [3, '$3.00 - $Y'],
+                                               [3, '$10.00 - $Y'],
                                            ],
                                            label='How much money did your matched Decider take?',
                                            widget=widgets.RadioSelect
