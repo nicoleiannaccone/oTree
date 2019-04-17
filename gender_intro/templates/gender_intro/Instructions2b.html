@@ -1,0 +1,49 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Instructions{% endblock %}
+
+{% block content %}
+<p>
+    <u> The Decider's Choice: </u>
+</p>
+
+<ul>
+    <li>
+        In each of the {{ Constants.number_rounds }} rounds, the Receiver is given an endowment of <strong>{{ Constants.endowment }}</strong>.
+    </li>
+    <li>
+        The Decider will then have the opportunity to <strong>take</strong> any part of the Receiver's {{ Constants.endowment }}
+        endowment.
+    </li>
+</ul>
+
+<p>
+    <u> The Payoff Round: </u>
+</p>
+<ul>
+    <li>
+        Of the {{ Constants.number_rounds }} rounds, <strong> one </strong> round will be chosen randomly for <strong> payment</strong>.
+    </li>
+</ul>
+
+
+<p>
+    <u> The Receiver's Earnings: </u>
+</p>
+
+<ul>
+    <li>
+        After the Decider chooses how much to take from the Receiver's {{ Constants.endowment }} endowment, the Receiver is left with whatever money <strong> remains. </strong>
+    </li>
+        <ul>
+            <li>
+                So if the <strong>Decider chooses to take $X </strong> of the Receiver's {{ Constants.endowment }},
+                and if that round is chosen for payment, then the <strong> Receiver keeps {{ Constants.endowment }} - $X </strong> and the Decider gets $X.
+            </li>
+            </ul>
+</ul>
+
+{% next_button %}
+
+{% endblock %}

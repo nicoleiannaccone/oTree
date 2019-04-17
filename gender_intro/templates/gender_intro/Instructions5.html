@@ -4,8 +4,8 @@
 {% block title %}Instructions{% endblock %}
 
 {% block content %}
-<strong> Rating the Decider's Choices: </strong>
-<ol>
+<u> Rating the Decider's Choices: </u>
+<ul>
     <li> While Deciders are choosing how much of the Receiver's {{ Constants.endowment }} endowment to take,
         Receivers will be asked to rate the appropriateness of each potential choice the Decider could make. </li>
     <li> That is, the Receiver will be asked, for each possible amount the Decider might take,
@@ -17,13 +17,20 @@
         then someone else might be angry at that individual for doing so. </li>
     <li> The Receiver will not see the actual allocation their Decider chosen until <strong> after </strong> they have rated each
         possible allocation choice the Decider could make. </li>
-</ol>
+</ul>
 
-<p> <strong> Prizes: </strong> </p>
-    <p> After all {{ Constants.number_rounds }} rounds have been played, Receivers will earn prizes for their ratings using the following rule:
-        Receivers earn a {{ Constants.mode_match_prize }} prize for the randomly selected round if the rating they
-        assigned to the allocation the Decider actually made matched the most common rating given to that
-        allocation by all other Receivers matched with a Decider with that screenname.
+<p>
+    <u> Prizes: </u>
+</p>
+    <p> After all {{ Constants.number_rounds }} rounds have been played, one round -- the <strong> payoff round </strong> -- will be randomly selected for payment.
+        In this payoff round, Receivers may earn a <strong>{{ Constants.mode_match_prize }} prize </strong> for their rating <strong> <u> if </u> </strong>:
+    </p>
+    <p>
+        ...the rating they assigned...
+        ...to the allocation the Decider actually made...
+        ...matched the <strong> most common rating </strong> given to that
+        allocation...
+        ...by the other Receivers who also got matched with that Decider over the course of the experiment's {{ Constants.number_rounds }}.
     </p>
 
 {% next_button %}

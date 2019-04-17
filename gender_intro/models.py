@@ -123,7 +123,7 @@ class Player(BasePlayer):
                                    [5, 'Other'],
                                ],
                                label='What is your year in school?',
-                               widget=widgets.RadioSelect
+                               widget=widgets.RadioSelectHorizontal
                                )
     major = make_string_field('What is your major?')
     gender = make_gender_field('What is your gender?')

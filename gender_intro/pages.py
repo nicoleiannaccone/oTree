@@ -21,7 +21,13 @@ class Instructions1(Page):
 
 
 class Instructions2(Page):
-    pass
+    def before_next_page(self):
+        add_back_button_html(self)
+
+
+class Instructions2b(Page):
+    def before_next_page(self):
+        add_back_button_html(self)
 
 
 class Instructions3(Page):
@@ -34,15 +40,19 @@ class Instructions3(Page):
         }
 
 class Instructions4(Page):
-    pass
+    def before_next_page(self):
+        add_back_button_html(self)
 
 
 class Instructions5(Page):
-    pass
+    def before_next_page(self):
+        add_back_button_html(self)
 
 
 class Instructions6(Page):
-    pass
+    def before_next_page(self):
+        add_back_button_html(self)
+
 
 
 class InstructionsKrupka1(Page):
@@ -103,6 +113,7 @@ page_sequence = [
      PreSurvey,
      PreSurveyWaitPage,
      Instructions2,
+     Instructions2b,
      Instructions3,
      Instructions4,
      Instructions5,
