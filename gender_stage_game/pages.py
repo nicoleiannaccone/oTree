@@ -198,19 +198,36 @@ class PostSurvey(Page):
     def is_displayed(self):
         return self.round_number == Constants.num_rounds
 
+
+class Survey(Page):
+    form_model = 'player'
+    form_fields = ['gender','genderCP1', 'genderCP2','genderCP3','genderCP4','genderCP5']
+
+    def is_displayed(self):
+        return self.round_number == Constants.num_rounds
+
+    def before_next_page(self):
+        self.player.cache_gender()
+        self.player.check_gender_guess()
+
 class SurveyWaitPage(WaitPage):
     def is_displayed(self):
         return self.round_number == Constants.num_rounds
 
+class SurveyResults(Page):
+    pass
 
 page_sequence = [
-    DName,
-    DTake,
-    DWaitPage,
-    RRating,
-    RoundWaitPage,
-    RMessage,
-    MessageWaitPage,
-    ResultsWaitPage,
-    Results,
+    # DName,
+    # DTake,
+    # DWaitPage,
+    # RRating,
+    # RoundWaitPage,
+    # RMessage,
+    # MessageWaitPage,
+    # ResultsWaitPage,
+    # Results,
+    Survey,
+    SurveyWaitPage,
+    SurveyResults,
 ]

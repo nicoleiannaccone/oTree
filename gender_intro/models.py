@@ -198,7 +198,6 @@ class Player(BasePlayer):
     #     self.payoff = quiz_payoff
     #     self.participant.payoff += quiz_payoff
 
-
 class Group(BaseGroup):
     pass
 

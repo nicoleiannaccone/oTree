@@ -8,60 +8,64 @@
 {% block content %}
 
     <p>
-        You guessed your Round 1 counterpart's gender to be <strong>{{ player.genderCP1 }}, {{ player.genderlabel1 }}</strong>.
+        You guessed your Round 1 counterpart's gender to be <strong>{{ player.genderCP1 }}</strong>.
     </p>
     <p>
         This guess was
-        {% if player.guess1_is_correct %} <strong> correct</strong>, so you win {{ Constants.prize }} for this guess.
+        {% if player.guess1_is_correct %} <strong> correct</strong>, so you win {{ Constants.prize_per_question }} for this guess.
         {% else %}  <strong> incorrect</strong>.
         {% endif %}
     </p>
 
 
     <p>
-        You guessed your Round 2 counterpart's gender to be <strong>{{ player.genderlabel2 }}</strong>.
+        You guessed your Round 2 counterpart's gender to be <strong>{{ player.genderCP2 }}</strong>.
     </p>
     <p>
         This guess was
-        {% if player.guess2_is_correct %} <strong> correct</strong>, so you win {{ Constants.prize }} for this guess.
+        {% if player.guess2_is_correct %} <strong> correct</strong>, so you win {{ Constants.prize_per_question }} for this guess.
         {% else %}  <strong> incorrect</strong>.
         {% endif %}
     </p>
 
 
     <p>
-        You guessed your Round 3 counterpart's gender to be <strong>{{ player.genderlabel3 }}</strong>.
+        You guessed your Round 3 counterpart's gender to be <strong>{{ player.genderCP3 }}</strong>.
     </p>
     <p>
         This guess was
-        {% if player.guess3_is_correct %} <strong> correct</strong>, so you win {{ Constants.prize }} for this guess.
+        {% if player.guess3_is_correct %} <strong> correct</strong>, so you win {{ Constants.prize_per_question }} for this guess.
         {% else %}  <strong> incorrect</strong>.
         {% endif %}
     </p>
 
     <p>
-        You guessed your Round 4 counterpart's gender to be <strong> {{ player.genderlabel4 }}</strong>.
+        You guessed your Round 4 counterpart's gender to be <strong> {{ player.genderCP4 }}</strong>.
     </p>
     <p>
         This guess was
-        {% if player.guess4_is_correct %} <strong> correct</strong>, so you win {{ Constants.prize }} for this guess.
+        {% if player.guess4_is_correct %} <strong> correct</strong>, so you win {{ Constants.prize_per_question }} for this guess.
         {% else %}  <strong> incorrect</strong>.
         {% endif %}
     </p>
 
     <p>
-        You guessed your Round 5 counterpart's gender to be <strong>{{ player.genderlabel5 }}</strong>.
+        You guessed your Round 5 counterpart's gender to be {{ player.genderCP5 }}:
+        {% if player.genderCP5 == 1 %} <strong> Male </strong>.
+        {% elif player.genderCP5 == 2 %}  <strong> Female </strong>.
+        {% else %} no guess.
+        {% endif %}
     </p>
     <p>
         This guess was
-        {% if player.guess5_is_correct %} <strong> correct</strong>, so you win {{ Constants.prize }} for this guess.
+        {% if player.guess5_is_correct %} <strong> correct</strong>, so you win {{ Constants.prize_per_question }} for this guess.
         {% else %}  <strong> incorrect</strong>.
         {% endif %}
     </p>
-
+{% comment %}
 Your overall earnings for these bonus guesses was {{ player.payoff }}, so your total earnings for the experiment is now {{ player.cumulative_payoff }}.
 
-{% comment %}
+
 <ul>
     <li> Player.gender: {{ player.gender }} </li>
     <li>    Participant.var gender: {{ gender }} </li>

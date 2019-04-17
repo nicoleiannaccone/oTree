@@ -187,6 +187,43 @@ class Player(BasePlayer):
         return self.participant.vars['screenname']
 
 
+    # Fields for caching gender guesses about each Counterpart
+    gender = make_gender_field()
+    genderCP1 = make_gender_field()
+    genderCP2 = make_gender_field()
+    genderCP3 = make_gender_field()
+    genderCP4 = make_gender_field()
+    genderCP5 = make_gender_field()
+
+    # Checking gender guesses for correctness
+    guess1_is_correct = models.BooleanField(blank=False)
+    guess2_is_correct = models.BooleanField(blank=False)
+    guess3_is_correct = models.BooleanField(blank=False)
+    guess4_is_correct = models.BooleanField(blank=False)
+    guess5_is_correct = models.BooleanField(blank=False)
+
+    # Pull value of 'gender' from the Intro app, where is was saved into a participant variable
+    def cache_gender(self):
+        self.gender = self.participant.vars['gender']
+
+    # Check whether gender guess of CP is CP's true gender
+    def check_gender_guess(self):
+        p1 = self.group.get_player_by_id(1)
+        p2 = self.group.get_player_by_id(2)
+
+        p1.guess1_is_correct = p1.genderCP1 == p2.gender
+        p1.guess2_is_correct = p1.genderCP2 == p2.gender
+        p1.guess3_is_correct = p1.genderCP3 == p2.gender
+        p1.guess4_is_correct = p1.genderCP4 == p2.gender
+        p1.guess5_is_correct = p1.genderCP5 == p2.gender
+
+        p2.guess1_is_correct = p2.genderCP1 == p1.gender
+        p2.guess2_is_correct = p2.genderCP2 == p1.gender
+        p2.guess3_is_correct = p2.genderCP3 == p1.gender
+        p2.guess4_is_correct = p2.genderCP4 == p1.gender
+        p2.guess5_is_correct = p2.genderCP5 == p1.gender
+
+
 class Group(BaseGroup):
 
     message = models.LongStringField(blank=Globals.ALLOW_BLANKS, label="Your message:")
