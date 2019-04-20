@@ -19,6 +19,7 @@ class PlayerBot(Bot):
 
         if Globals.INCLUDE_GENDER_INTRO:
             yield (pages.Instructions2)
+            yield (pages.Instructions2b)
             yield (pages.Instructions3)
             yield (pages.Instructions4)
             yield (pages.Instructions5)

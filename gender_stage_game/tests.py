@@ -41,6 +41,14 @@ class PlayerBot(Bot):
             })
 
         if self.round_number == Constants.num_rounds:
+            yield (pages.Survey, {
+                'genderCP1': Globals.MALE,
+                'genderCP2': 2,
+                'genderCP3': 1,
+                'genderCP4': 2,
+                'genderCP5': 1,
+            })
+            yield (pages.SurveyResults)
             if self.session.config['use_browser_bots']:
                 time.sleep(100)
             yield (pages.Results)

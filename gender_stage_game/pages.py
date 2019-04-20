@@ -215,19 +215,20 @@ class SurveyWaitPage(WaitPage):
         return self.round_number == Constants.num_rounds
 
 class SurveyResults(Page):
-    pass
+    def is_displayed(self):
+        return self.round_number == Constants.num_rounds
 
 page_sequence = [
-    # DName,
-    # DTake,
-    # DWaitPage,
-    # RRating,
-    # RoundWaitPage,
-    # RMessage,
-    # MessageWaitPage,
-    # ResultsWaitPage,
-    # Results,
+    DName,
+    DTake,
+    DWaitPage,
+    RRating,
+    RoundWaitPage,
+    RMessage,
+    MessageWaitPage,
     Survey,
     SurveyWaitPage,
     SurveyResults,
+    ResultsWaitPage,
+    Results,
 ]

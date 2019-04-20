@@ -35,30 +35,31 @@ SESSION_CONFIGS = [
         'treatment': Globals.TREATMENT_FALSE_GENDER,
         'use_browser_bots': False,
     },
+    {
+        'name': 'Gender_Game_No_Gender_Bots',
+        'num_demo_participants': 2,
+        'app_sequence': ['gender_intro', 'gender_stage_game'],
+        'treatment': Globals.TREATMENT_NO_GENDER,
+        'use_browser_bots': True,
+    },
+    {
+        'name': 'Gender_Game_False_Gender_Bots',
+        'num_demo_participants': 4,
+        'app_sequence': ['gender_intro', 'gender_stage_game'],
+        'treatment': Globals.TREATMENT_FALSE_GENDER,
+        'use_browser_bots': True,
+    },
+    {
+        'name': 'Gender_Game_True_Gender_Bots',
+        'num_demo_participants': 2,
+        'app_sequence': ['gender_intro', 'gender_stage_game'],
+        'treatment': Globals.TREATMENT_TRUE_GENDER,
+        'use_browser_bots': True,
+    },
 ]
 # see the end of this file for the inactive session configs
 
-# {
-#     'name': 'Gender_Game_No_Gender_Bots',
-#     'num_demo_participants': 2,
-#     'app_sequence': ['gender_intro', 'gender_stage_game'],
-#     'treatment': Globals.TREATMENT_NO_GENDER,
-#     'use_browser_bots': True,
-# },
-# {
-#     'name': 'Gender_Game_False_Gender_Bots',
-#     'num_demo_participants': 4,
-#     'app_sequence': ['gender_intro', 'gender_stage_game'],
-#     'treatment': Globals.TREATMENT_FALSE_GENDER,
-#     'use_browser_bots': True,
-# },
-# {
-#     'name': 'Gender_Game_True_Gender_Bots',
-#     'num_demo_participants': 2,
-#     'app_sequence': ['gender_intro', 'gender_stage_game'],
-#     'treatment': Globals.TREATMENT_TRUE_GENDER,
-#     'use_browser_bots': True,
-# },
+
 
 # ISO-639 code
 # for example: de, fr, ja, ko, zh-hans
