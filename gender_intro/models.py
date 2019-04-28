@@ -192,9 +192,12 @@ class Player(BasePlayer):
         self.q6_is_correct = (self.taken_question_1 == 3)
         self.q7_is_correct = (self.role_question == 2)
 
-    # def record_quiz_payoff(self):
-    #     quiz_payoff = (self.q1_is_correct + self.q2_is_correct + self.q3_is_correct
-    #                    + self.q5_is_correct + self.q6_is_correct + self.q7_is_correct) * Constants.prize_per_question
+    quiz_score = models.IntegerField()
+
+    def quiz_score(self):
+        self.quiz_score = (self.q1_is_correct + self.q2_is_correct + self.q3_is_correct
+                        + self.q5_is_correct + self.q6_is_correct + self.q7_is_correct)
+
     #     self.payoff = quiz_payoff
     #     self.participant.payoff += quiz_payoff
 

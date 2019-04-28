@@ -102,7 +102,7 @@ class PracticeQuestion1(Page):
 class ComprehensionResults(Page):
     def vars_for_template(self):
         self.player.record_quiz_scores()
-        # self.player.record_quiz_payoff()
+        self.player.quiz_score()
         return{
             'payoff': self.player.payoff,
         }
